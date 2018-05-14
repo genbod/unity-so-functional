@@ -17,6 +17,12 @@ public class RealTimeCounts : MonoBehaviour {
 
     [SerializeField]
     private GameObject[] Dials;
+
+    [SerializeField]
+    private GameObject SourcesPanel;
+
+    [SerializeField]
+    private GameObject SourceItemPrefab;
     
     // Use this for initialization
     void Start()
@@ -66,9 +72,32 @@ public class RealTimeCounts : MonoBehaviour {
 
                 for (int i = 0; i < Dials.Length; i++)
                 {
-                    Dials[i].transform.Find("Title").GetComponent<Text>().text = _percentages[i].source;
-                    Dials[i].transform.Find("Number").GetComponent<Text>().text = _percentages[i].count.ToString("#,#", CultureInfo.InvariantCulture);
-                    Dials[i].transform.Find("Radial_PFB/Fill").GetComponent<Image>().fillAmount = _percentages[i].percent;
+                    if (i < _percentages.Count)
+                    {
+                        Dials[i].SetActive(true);
+                        Dials[i].transform.Find("Title").GetComponent<Text>().text = _percentages[i].source;
+                        Dials[i].transform.Find("Number").GetComponent<Text>().text = _percentages[i].count.ToString("#,#", CultureInfo.InvariantCulture);
+                        Dials[i].transform.Find("Radial_PFB/Fill").GetComponent<Image>().fillAmount = _percentages[i].percent; 
+                    }
+                    else
+                    {
+                        Dials[i].SetActive(false);
+                    }
+                }
+
+                // Populate list of sources
+                foreach (Transform child in SourcesPanel.transform)
+                {
+                    GameObject.Destroy(child.gameObject);
+                }
+                for (int i = 0; i < _percentages.Count(); i++)
+                {
+                    GameObject newSource = Instantiate(SourceItemPrefab) as GameObject;
+                    ListItemController controller = newSource.GetComponent<ListItemController>();
+                    controller.Title.text = _percentages[i].source;
+                    controller.Count.text = _percentages[i].count.ToString("#,#", CultureInfo.InvariantCulture);
+                    newSource.transform.parent = SourcesPanel.transform;
+                    newSource.transform.localScale = Vector3.one;
                 }
             }
 
