@@ -34,7 +34,7 @@ namespace Devdog.SciFiDesign.UI
 
         protected void UpdateTime()
         {
-            var n = System.DateTime.Now;
+            var n = System.DateTime.Now.ToUniversalTime();
 
             if (_textTimeHour != null)
             {

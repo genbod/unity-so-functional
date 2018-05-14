@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using Bolt;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,10 +14,10 @@ public class RealTimeCounts : MonoBehaviour {
     public float UpdateFrequency;
 
     [SerializeField]
-    private Text _totalCount;
+    private AnimatedCounter _totalCount;
 
     [SerializeField]
-    private GameObject[] Dials;
+    private Dial[] Dials;
 
     [SerializeField]
     private GameObject SourcesPanel;
@@ -27,6 +28,11 @@ public class RealTimeCounts : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        _totalCount.SetCurrentCount(0);
+        foreach (var Dial in Dials)
+        {
+            Dial.Number.SetCurrentCount(0);
+        }
         StartCoroutine("GetRealTimeCounts");
     }
 
@@ -35,7 +41,7 @@ public class RealTimeCounts : MonoBehaviour {
         while (true)
         {
             // Get Timestamp
-            var n = System.DateTime.Now;
+            var n = System.DateTime.Now.ToUniversalTime();
             var year = n.Year.ToString();
             var month = n.Month.ToString().Length < 2 ? "0" + n.Month : n.Month.ToString();
             var day = n.Day.ToString().Length < 2 ? "0" + n.Day : n.Day.ToString();
@@ -59,7 +65,7 @@ public class RealTimeCounts : MonoBehaviour {
 
                 // Get and display totalCount of events
                 float totalCount = response.Sum(x => x.count);
-                _totalCount.text = GetPrettyNumber(totalCount);
+                _totalCount.TargetCount = totalCount;
 
                 // Get and display percentage dials
                 var _percentages = response.GroupBy(x => x.sourceId)
@@ -74,14 +80,14 @@ public class RealTimeCounts : MonoBehaviour {
                 {
                     if (i < _percentages.Count)
                     {
-                        Dials[i].SetActive(true);
-                        Dials[i].transform.Find("Title").GetComponent<Text>().text = _percentages[i].source;
-                        Dials[i].transform.Find("Number").GetComponent<Text>().text = _percentages[i].count.ToString("#,#", CultureInfo.InvariantCulture);
-                        Dials[i].transform.Find("Radial_PFB/Fill").GetComponent<Image>().fillAmount = _percentages[i].percent; 
+                        Dials[i].gameObject.SetActive(true);
+                        Dials[i].Title.text = _percentages[i].source;
+                        Dials[i].Number.TargetCount = _percentages[i].count;
+                        Dials[i].Fill.fillAmount = _percentages[i].percent;
                     }
                     else
                     {
-                        Dials[i].SetActive(false);
+                        Dials[i].gameObject.SetActive(false);
                     }
                 }
 
