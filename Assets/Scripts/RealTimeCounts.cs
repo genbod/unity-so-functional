@@ -24,6 +24,18 @@ public class RealTimeCounts : MonoBehaviour {
 
     [SerializeField]
     private GameObject SourceItemPrefab;
+
+    struct DateAndCount
+    {
+        public DateTime timestamp;
+        public int count;
+        public double velocity;
+    }
+
+
+    Dictionary<string, DateAndCount> _sourcesTimes = new Dictionary<string, DateAndCount>();
+
+    DateTime _latestTime;
     
     // Use this for initialization
     void Start()
@@ -33,6 +45,7 @@ public class RealTimeCounts : MonoBehaviour {
         {
             Dial.Number.SetCurrentCount(0);
         }
+        _latestTime = System.DateTime.Now.ToUniversalTime();
         StartCoroutine("GetRealTimeCounts");
     }
 
@@ -41,11 +54,14 @@ public class RealTimeCounts : MonoBehaviour {
         while (true)
         {
             // Get Timestamp
-            var n = System.DateTime.Now.ToUniversalTime();
-            var year = n.Year.ToString();
-            var month = n.Month.ToString().Length < 2 ? "0" + n.Month : n.Month.ToString();
-            var day = n.Day.ToString().Length < 2 ? "0" + n.Day : n.Day.ToString();
+            var now = System.DateTime.Now.ToUniversalTime();
+            var year = now.Year.ToString();
+            var month = now.Month.ToString().Length < 2 ? "0" + now.Month : now.Month.ToString();
+            var day = now.Day.ToString().Length < 2 ? "0" + now.Day : now.Day.ToString();
             string timeStamp = year + month + day + "00";
+
+            // Get elapsed Time
+            var elapsedTime = now - _latestTime;
 
             // Get Data
             var url = "https://artisapi.redteam.ms/realTime/counts?timeIntervalStart=" + timeStamp;
@@ -67,23 +83,65 @@ public class RealTimeCounts : MonoBehaviour {
                 float totalCount = response.Sum(x => x.count);
                 _totalCount.TargetCount = totalCount;
 
-                // Get and display percentage dials
-                var _percentages = response.GroupBy(x => x.sourceId)
+                // Get and display totals
+                var _totals = response.GroupBy(x => x.sourceId)
                     .Select(g => new
                     {
                         source = g.Key,
                         count = g.Sum(c => c.count),
-                        percent = g.Sum(c => c.count) / totalCount
+                        lastTime = g.OrderByDescending(c => c.processedAt).Select(c => c.processedAt).FirstOrDefault(),
+                        velocity = 0
                     }).OrderByDescending(x => x.count).ToList();
+
+                double totalVelocity = 0;
+
+                foreach (var item in _totals)
+                {
+                    DateTime curTimeStamp = DateTime.Parse(item.lastTime).ToUniversalTime();
+                    if (_sourcesTimes.ContainsKey(item.source))
+                    {
+                        DateAndCount prevTimeCount = _sourcesTimes[item.source];
+                        if (curTimeStamp > prevTimeCount.timestamp)
+                        {
+                            var countsProcessed = item.count - prevTimeCount.count;
+                            var timeElapsed = (curTimeStamp - prevTimeCount.timestamp).TotalSeconds;
+                            var velocity = countsProcessed / timeElapsed;
+                            prevTimeCount.count = item.count;
+                            prevTimeCount.timestamp = curTimeStamp;
+                            prevTimeCount.velocity = velocity;
+                            totalVelocity += velocity;
+                        }
+                        else
+                        {
+
+                            var timeSinceLastCount = (now - curTimeStamp).TotalSeconds;
+                            prevTimeCount.velocity = timeSinceLastCount > 180 ? 0 : Mathf.Floor((float)(prevTimeCount.count / timeSinceLastCount));
+                            totalVelocity += prevTimeCount.velocity;
+                        }
+                        // Update entry;
+                        _sourcesTimes[item.source] = prevTimeCount;
+                    }
+                    else
+                    {
+                        var curVelocity = item.count / elapsedTime.TotalSeconds;
+                        totalVelocity += curVelocity;
+                        _sourcesTimes[item.source] = new DateAndCount() { count = item.count, timestamp = curTimeStamp, velocity = curVelocity };
+                    }
+
+                    _latestTime = curTimeStamp > _latestTime ? curTimeStamp : _latestTime;
+                }
+
+                var sortedVelocities = _sourcesTimes.OrderByDescending(c => c.Value.velocity).Take(Dials.Length).ToList();
+                totalVelocity = totalVelocity > 0 ? totalVelocity : 1;
 
                 for (int i = 0; i < Dials.Length; i++)
                 {
-                    if (i < _percentages.Count)
+                    if (i < _totals.Count)
                     {
                         Dials[i].gameObject.SetActive(true);
-                        Dials[i].Title.text = _percentages[i].source;
-                        Dials[i].Number.TargetCount = _percentages[i].count;
-                        Dials[i].Fill.fillAmount = _percentages[i].percent;
+                        Dials[i].Title.text = sortedVelocities[i].Key;
+                        Dials[i].Number.TargetCount = sortedVelocities[i].Value.count;
+                        Dials[i].Fill.fillAmount = (float)(sortedVelocities[i].Value.velocity / totalVelocity);
                     }
                     else
                     {
@@ -96,12 +154,12 @@ public class RealTimeCounts : MonoBehaviour {
                 {
                     GameObject.Destroy(child.gameObject);
                 }
-                for (int i = 0; i < _percentages.Count(); i++)
+                for (int i = 0; i < _totals.Count(); i++)
                 {
                     GameObject newSource = Instantiate(SourceItemPrefab) as GameObject;
                     ListItemController controller = newSource.GetComponent<ListItemController>();
-                    controller.Title.text = _percentages[i].source;
-                    controller.Count.text = _percentages[i].count.ToString("#,#", CultureInfo.InvariantCulture);
+                    controller.Title.text = _totals[i].source;
+                    controller.Count.text = _totals[i].count.ToString("#,#", CultureInfo.InvariantCulture);
                     newSource.transform.parent = SourcesPanel.transform;
                     newSource.transform.localScale = Vector3.one;
                 }
