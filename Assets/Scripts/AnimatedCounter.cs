@@ -13,7 +13,7 @@ public class AnimatedCounter : MonoBehaviour {
     public float changeRate = 1.0f;
 
     [SerializeField]
-    public float TargetCount = 0;
+    public int TargetCount = 0;
 
     public Text target;
 
@@ -27,28 +27,28 @@ public class AnimatedCounter : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        float currentCount = 0;
+        int currentCount = 0;
         if (!prettyPrint)
         {
-            float.TryParse(target.text, NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out currentCount);
+            int.TryParse(target.text, NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out currentCount);
         }
         else
         {
-            currentCount = float.Parse(target.text.Substring(0, target.text.Length - 1));
+            var floatCount = float.Parse(target.text.Substring(0, target.text.Length - 1));
             var identifier = target.text.Substring(target.text.Length - 1);
             if (identifier == "M")
             {
-                currentCount *= 1000000;
+                currentCount = (int)(1000000 * floatCount);
             }
             else if (identifier == "K")
             {
-                currentCount *= 1000;
+                currentCount = (int)(1000 * floatCount);
             }
         }
         // Scale multiplier based on how much we have to count
         var zeros = Mathf.Max(Mathf.Abs(currentCount - TargetCount).ToString().Length, 2);
         multiplier = Mathf.Pow(10, zeros);
-        var change = Time.unscaledDeltaTime * changeRate * multiplier;
+        var change = Mathf.CeilToInt(Time.unscaledDeltaTime * changeRate * multiplier);
         if (currentCount < TargetCount)
         {
             currentCount += change;
@@ -76,7 +76,7 @@ public class AnimatedCounter : MonoBehaviour {
         }
 	}
 
-    public void SetCurrentCount(float currentCount)
+    public void SetCurrentCount(int currentCount)
     {
         if (prettyPrint)
         {

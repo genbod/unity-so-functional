@@ -80,7 +80,7 @@ public class RealTimeCounts : MonoBehaviour {
                 var response = JsonHelper.FromJson<RealTimeRecord>(FixJson(www.downloadHandler.text));
 
                 // Get and display totalCount of events
-                float totalCount = response.Sum(x => x.count);
+                int totalCount = response.Sum(x => x.count);
                 _totalCount.TargetCount = totalCount;
 
                 // Get and display totals
