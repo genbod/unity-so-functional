@@ -1,4 +1,5 @@
-﻿using Bolt;
+﻿using Assets.Scripts.Json;
+using Bolt;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
@@ -32,8 +33,25 @@ public class RealTimeCounts : MonoBehaviour {
         public double velocity;
     }
 
+    struct Total
+    {
+        public string source;
+        public int count;
+        public string lastTime;
+    }
 
     Dictionary<string, DateAndCount> _sourcesTimes = new Dictionary<string, DateAndCount>();
+
+    [Serializable]
+    public class RealTimeRecord
+    {
+        public string id;
+        public string period;
+        public string sourceId;
+        public string partitionId;
+        public int count;
+        public string processedAt;
+    }
 
     DateTime _latestTime;
     
@@ -55,172 +73,174 @@ public class RealTimeCounts : MonoBehaviour {
         {
             // Get Timestamp
             var now = System.DateTime.Now.ToUniversalTime();
-            var year = now.Year.ToString();
-            var month = now.Month.ToString().Length < 2 ? "0" + now.Month : now.Month.ToString();
-            var day = now.Day.ToString().Length < 2 ? "0" + now.Day : now.Day.ToString();
-            string timeStamp = year + month + day + "00";
-
-            // Get elapsed Time
-            var elapsedTime = now - _latestTime;
+            string timeStamp = GetTimeStamp(now);
 
             // Get Data
-            var url = "https://artisapi.redteam.ms/realTime/counts?timeIntervalStart=" + timeStamp;
-            UnityWebRequest www = UnityWebRequest.Get(url);
-            www.SetRequestHeader("Ocp-Apim-Trace", "true");
-            www.SetRequestHeader("Ocp-Apim-Subscription-Key", "cc46c19debb84717a0f5ba759190865c");
-            yield return www.SendWebRequest();
-
-            if (www.isNetworkError || www.isHttpError)
+            Action<string> callback = (responseFromServer) =>
             {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                // Fix JSON because Unity needs an object root
-                var response = JsonHelper.FromJson<RealTimeRecord>(FixJson(www.downloadHandler.text));
-
-                // Get and display totalCount of events
-                int totalCount = response.Sum(x => x.count);
-                _totalCount.TargetCount = totalCount;
-
-                // Get and display totals
-                var _totals = response.GroupBy(x => x.sourceId)
-                    .Select(g => new
-                    {
-                        source = g.Key,
-                        count = g.Sum(c => c.count),
-                        lastTime = g.OrderByDescending(c => c.processedAt).Select(c => c.processedAt).FirstOrDefault(),
-                        velocity = 0
-                    }).OrderByDescending(x => x.count).ToList();
-
-                double totalVelocity = 0;
-
-                foreach (var item in _totals)
+                if (!string.IsNullOrEmpty(responseFromServer))
                 {
-                    DateTime curTimeStamp = DateTime.Parse(item.lastTime).ToUniversalTime();
-                    if (_sourcesTimes.ContainsKey(item.source))
-                    {
-                        DateAndCount prevTimeCount = _sourcesTimes[item.source];
-                        if (curTimeStamp > prevTimeCount.timestamp)
-                        {
-                            var countsProcessed = item.count - prevTimeCount.count;
-                            var timeElapsed = (curTimeStamp - prevTimeCount.timestamp).TotalSeconds;
-                            var velocity = countsProcessed / timeElapsed;
-                            prevTimeCount.count = item.count;
-                            prevTimeCount.timestamp = curTimeStamp;
-                            prevTimeCount.velocity = velocity;
-                            totalVelocity += velocity;
-                        }
-                        else
-                        {
+                    // Fix JSON because Unity needs an object root
+                    var response = JsonHelper.FromJson<RealTimeRecord>(FixJson(responseFromServer));
 
-                            var timeSinceLastCount = (now - curTimeStamp).TotalSeconds;
-                            prevTimeCount.velocity = timeSinceLastCount > 180 ? 0 : Mathf.Floor((float)(prevTimeCount.count / timeSinceLastCount));
-                            totalVelocity += prevTimeCount.velocity;
-                        }
-                        // Update entry;
-                        _sourcesTimes[item.source] = prevTimeCount;
-                    }
-                    else
-                    {
-                        var curVelocity = item.count / elapsedTime.TotalSeconds;
-                        totalVelocity += curVelocity;
-                        _sourcesTimes[item.source] = new DateAndCount() { count = item.count, timestamp = curTimeStamp, velocity = curVelocity };
-                    }
+                    // Get and display totalCount of events
+                    int totalCount = response.Sum(x => x.count);
+                    _totalCount.TargetCount = totalCount;
 
-                    _latestTime = curTimeStamp > _latestTime ? curTimeStamp : _latestTime;
+                    // Get Totals
+                    var _totals = GetTotals(response);
+
+                    // Update Velocities
+                    double totalVelocity = UpdateVelocities(_totals, now);
+
+                    // Display Top Velocities
+                    DisplayVelocities(totalVelocity);
+
+                    // Display list of sources
+                    DisplaySources(_totals);
                 }
+            };
 
-                var sortedVelocities = _sourcesTimes.OrderByDescending(c => c.Value.velocity).Take(Dials.Length).ToList();
-                totalVelocity = totalVelocity > 0 ? totalVelocity : 1;
-
-                for (int i = 0; i < Dials.Length; i++)
-                {
-                    if (i < _totals.Count)
-                    {
-                        Dials[i].gameObject.SetActive(true);
-                        Dials[i].Title.text = sortedVelocities[i].Key;
-                        Dials[i].Number.TargetCount = sortedVelocities[i].Value.count;
-                        Dials[i].Fill.fillAmount = (float)(sortedVelocities[i].Value.velocity / totalVelocity);
-                    }
-                    else
-                    {
-                        Dials[i].gameObject.SetActive(false);
-                    }
-                }
-
-                // Populate list of sources
-                foreach (Transform child in SourcesPanel.transform)
-                {
-                    GameObject.Destroy(child.gameObject);
-                }
-                for (int i = 0; i < _totals.Count(); i++)
-                {
-                    GameObject newSource = Instantiate(SourceItemPrefab) as GameObject;
-                    ListItemController controller = newSource.GetComponent<ListItemController>();
-                    controller.Title.text = _totals[i].source;
-                    controller.Count.text = _totals[i].count.ToString("#,#", CultureInfo.InvariantCulture);
-                    newSource.transform.parent = SourcesPanel.transform;
-                    newSource.transform.localScale = Vector3.one;
-                }
-            }
+            StartCoroutine(GetData(timeStamp, callback));
 
             yield return new WaitForSeconds(UpdateFrequency);
         }
     }
-    public static class JsonHelper
+
+    private void DisplaySources(List<Total> totals)
     {
-        public static List<T> FromJson<T>(string json)
+        // Populate list of sources
+        foreach (Transform child in SourcesPanel.transform)
         {
-            Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(json);
-            return wrapper.Items;
+            GameObject.Destroy(child.gameObject);
+        }
+        for (int i = 0; i < totals.Count(); i++)
+        {
+            GameObject newSource = Instantiate(SourceItemPrefab) as GameObject;
+            ListItemController controller = newSource.GetComponent<ListItemController>();
+            controller.Title.text = totals[i].source;
+            controller.Count.text = totals[i].count.ToString("#,#", CultureInfo.InvariantCulture);
+            newSource.transform.parent = SourcesPanel.transform;
+            newSource.transform.localScale = Vector3.one;
+        }
+    }
+
+    private void DisplayVelocities(double totalVelocity)
+    {
+        var sortedVelocities = _sourcesTimes.OrderByDescending(c => c.Value.velocity).Take(Dials.Length).ToList();
+        totalVelocity = totalVelocity > 0 ? totalVelocity : 1;
+
+        for (int i = 0; i < Dials.Length; i++)
+        {
+            if (i < sortedVelocities.Count)
+            {
+                Dials[i].gameObject.SetActive(true);
+                Dials[i].Title.text = sortedVelocities[i].Key;
+                Dials[i].Number.TargetCount = sortedVelocities[i].Value.count;
+                Dials[i].Fill.fillAmount = (float)(sortedVelocities[i].Value.velocity / totalVelocity);
+            }
+            else
+            {
+                Dials[i].gameObject.SetActive(false);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Calculates current velocities of every source and updates sourcesTimes dictionary.  Returns total current velocities and updates
+    /// _latestTime based on the newest timestamp it has seen.
+    /// </summary>
+    /// <param name="totals">Results from web request</param>
+    /// <param name="now">Current TimeStamp</param>
+    /// <param name="sourcesTimes">Dictionary of velocities to be updated</param>
+    /// <returns>Total current velocity</returns>
+    private double UpdateVelocities(List<Total> totals, DateTime now)
+    {
+        double totalVelocity = 0;
+
+        foreach (var item in totals)
+        {
+            DateTime curTimeStamp = DateTime.Parse(item.lastTime).ToUniversalTime();
+            if (_sourcesTimes.ContainsKey(item.source))
+            {
+                DateAndCount prevTimeCount = _sourcesTimes[item.source];
+                if (curTimeStamp > prevTimeCount.timestamp)
+                {
+                    var countsProcessed = item.count - prevTimeCount.count;
+                    var timeElapsed = (curTimeStamp - prevTimeCount.timestamp).TotalSeconds;
+                    var velocity = countsProcessed / timeElapsed;
+                    prevTimeCount.count = item.count;
+                    prevTimeCount.timestamp = curTimeStamp;
+                    prevTimeCount.velocity = velocity;
+                    totalVelocity += velocity;
+                }
+                else
+                {
+
+                    var timeSinceLastCount = (now - curTimeStamp).TotalSeconds;
+                    prevTimeCount.velocity = timeSinceLastCount > 180 ? 0 : Mathf.Floor((float)(prevTimeCount.count / timeSinceLastCount));
+                    totalVelocity += prevTimeCount.velocity;
+                }
+                // Update entry
+                _sourcesTimes[item.source] = prevTimeCount;
+            }
+            else
+            {
+                // Get elapsed Time
+                var elapsedTime = now - _latestTime;
+                var curVelocity = item.count / elapsedTime.TotalSeconds;
+                totalVelocity += curVelocity;
+                _sourcesTimes[item.source] = new DateAndCount() { count = item.count, timestamp = curTimeStamp, velocity = curVelocity };
+            }
+
+            _latestTime = curTimeStamp > _latestTime ? curTimeStamp : _latestTime;
         }
 
-        public static string ToJson<T>(List<T> array)
-        {
-            Wrapper<T> wrapper = new Wrapper<T>();
-            wrapper.Items = array;
-            return JsonUtility.ToJson(wrapper);
-        }
+        return totalVelocity;
+    }
 
-        public static string ToJson<T>(List<T> array, bool prettyPrint)
-        {
-            Wrapper<T> wrapper = new Wrapper<T>();
-            wrapper.Items = array;
-            return JsonUtility.ToJson(wrapper, prettyPrint);
-        }
+    private static List<Total> GetTotals(List<RealTimeRecord> response)
+    {
+        return response.GroupBy(x => x.sourceId)
+            .Select(g => new Total
+            {
+                source = g.Key,
+                count = g.Sum(c => c.count),
+                lastTime = g.OrderByDescending(c => c.processedAt).Select(c => c.processedAt).FirstOrDefault()
+            }).OrderByDescending(x => x.count).ToList();
+    }
 
-        [Serializable]
-        private class Wrapper<T>
+    private static IEnumerator GetData(string timeStamp, Action<string> callback)
+    {
+        var url = "https://artisapi.redteam.ms/realTime/counts?timeIntervalStart=" + timeStamp;
+        UnityWebRequest www = UnityWebRequest.Get(url);
+        www.SetRequestHeader("Ocp-Apim-Trace", "true");
+        www.SetRequestHeader("Ocp-Apim-Subscription-Key", "cc46c19debb84717a0f5ba759190865c");
+        yield return www.SendWebRequest();
+
+        if (www.isNetworkError || www.isHttpError)
         {
-            public List<T> Items;
+            Debug.Log(www.error);
+            callback(string.Empty);
         }
+        else
+        {
+            var result = www.downloadHandler.text;
+            callback(result);
+        }
+    }
+
+    private static string GetTimeStamp(DateTime now)
+    {
+        var year = now.Year.ToString();
+        var month = now.Month.ToString().Length < 2 ? "0" + now.Month : now.Month.ToString();
+        var day = now.Day.ToString().Length < 2 ? "0" + now.Day : now.Day.ToString();
+        return year + month + day + "00";
     }
 
     private string FixJson(string value)
     {
         value = "{\"Items\":" + value + "}";
         return value;
-    }
-
-    private string GetPrettyNumber(float totalCount)
-    {
-        if (totalCount > 100000)
-        {
-            var millions = totalCount / 1000000;
-            return millions.ToString("0.00") + "M";
-        }
-        return (totalCount / 1000).ToString("0.00") + "K";
-    }
-
-    [Serializable]
-    public class RealTimeRecord
-    {
-        public string id;
-        public string period;
-        public string sourceId;
-        public string partitionId;
-        public int count;
-        public string processedAt;
     }
 }
