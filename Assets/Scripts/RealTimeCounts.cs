@@ -1,6 +1,4 @@
 ﻿using Assets.Scripts.Json;
-using Bolt;
-using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,7 +6,6 @@ using System.Globalization;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UI;
 
 public class RealTimeCounts : MonoBehaviour {
     [SerializeField]
@@ -26,6 +23,9 @@ public class RealTimeCounts : MonoBehaviour {
     [SerializeField]
     private GameObject SourceItemPrefab;
 
+    [SerializeField]
+    private Partition[] Partitions;
+
     struct DateAndCount
     {
         public DateTime timestamp;
@@ -41,6 +41,7 @@ public class RealTimeCounts : MonoBehaviour {
     }
 
     Dictionary<string, DateAndCount> _sourcesTimes = new Dictionary<string, DateAndCount>();
+    Dictionary<string, DateAndCount> _partitionTimes = new Dictionary<string, DateAndCount>();
 
     [Serializable]
     public class RealTimeRecord
@@ -74,36 +75,90 @@ public class RealTimeCounts : MonoBehaviour {
             // Get Timestamp
             var now = System.DateTime.Now.ToUniversalTime();
             string timeStamp = GetTimeStamp(now);
+            var lastTime = _latestTime;
 
-            // Get Data
-            Action<string> callback = (responseFromServer) =>
+            var url = "https://artisapi.redteam.ms/realTime/counts?timeIntervalStart=" + timeStamp;
+            UnityWebRequest www = UnityWebRequest.Get(url);
+            www.SetRequestHeader("Ocp-Apim-Trace", "true");
+            www.SetRequestHeader("Ocp-Apim-Subscription-Key", "cc46c19debb84717a0f5ba759190865c");
+            yield return www.SendWebRequest();
+
+            if (www.isNetworkError || www.isHttpError)
             {
-                if (!string.IsNullOrEmpty(responseFromServer))
-                {
-                    // Fix JSON because Unity needs an object root
-                    var response = JsonHelper.FromJson<RealTimeRecord>(FixJson(responseFromServer));
+                Debug.Log(www.error);
+            }
+            else
+            {
+                // Fix JSON because Unity needs an object root
+                var response = JsonHelper.FromJson<RealTimeRecord>(FixJson(www.downloadHandler.text));
 
-                    // Get and display totalCount of events
-                    int totalCount = response.Sum(x => x.count);
-                    _totalCount.TargetCount = totalCount;
+                // Get and display totalCount of events
+                int totalCount = response.Sum(x => x.count);
+                _totalCount.TargetCount = totalCount;
 
-                    // Get Totals
-                    var _totals = GetTotals(response);
+                // Get Totals
+                var _totals = GetTotals(response);
 
-                    // Update Velocities
-                    double totalVelocity = UpdateVelocities(_totals, now);
+                // Update Velocities
+                double totalVelocity = UpdateVelocities(_totals, now);
 
-                    // Display Top Velocities
-                    DisplayVelocities(totalVelocity);
+                // Display Top Velocities
+                DisplayVelocities(totalVelocity);
 
-                    // Display list of sources
-                    DisplaySources(_totals);
-                }
-            };
+                // Display list of sources
+                DisplaySources(_totals);
 
-            StartCoroutine(GetData(timeStamp, callback));
+                // Update Partition Activity
+                UpdatePartitions(response);
+
+                // Display Partitions
+                DisplayPartitions(lastTime);
+            }
 
             yield return new WaitForSeconds(UpdateFrequency);
+        }
+    }
+
+    private void DisplayPartitions(DateTime lastTime)
+    {
+        for (int i = 0; i < Partitions.Length; i++)
+        {
+            if (_partitionTimes[i.ToString()].timestamp > lastTime)
+            {
+                Partitions[i].Fill.FillAmount = 1;
+            }
+        }
+    }
+
+    private void UpdatePartitions(List<RealTimeRecord> response)
+    {
+        var partitions = response.GroupBy(x => x.partitionId)
+            .Select(g => new
+            {
+                partition = g.Key,
+                lastTime = g.OrderByDescending(c => c.processedAt).Select(c => c.processedAt).FirstOrDefault(),
+                count = g.Sum(c => c.count)
+            });
+
+        foreach (var p in partitions)
+        {
+            var curTime = DateTime.Parse(p.lastTime).ToUniversalTime();
+            if (_partitionTimes.ContainsKey(p.partition))
+            {
+                var existingPartition = _partitionTimes[p.partition];
+                if (curTime > existingPartition.timestamp)
+                {
+                    existingPartition.timestamp = curTime;
+                    existingPartition.velocity = (p.count - existingPartition.count) / (curTime - existingPartition.timestamp).TotalSeconds;
+                    existingPartition.count = p.count;
+                    _partitionTimes[p.partition] = existingPartition;
+                }
+            }
+            else
+            {
+                DateAndCount newPartition = new DateAndCount() { count = p.count, timestamp = curTime, velocity = p.count / (curTime - _latestTime).TotalSeconds };
+                _partitionTimes[p.partition] = newPartition;
+            }
         }
     }
 
