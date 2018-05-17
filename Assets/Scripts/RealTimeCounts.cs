@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Json;
+using ChartAndGraph;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Globalization;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class RealTimeCounts : MonoBehaviour {
     [SerializeField]
@@ -21,10 +23,31 @@ public class RealTimeCounts : MonoBehaviour {
     private GameObject SourcesPanel;
 
     [SerializeField]
+    private RectTransform contentPanel;
+
+    [SerializeField]
+    private ScrollRect scrollRect;
+
+    [SerializeField]
     private GameObject SourceItemPrefab;
 
     [SerializeField]
     private Partition[] Partitions;
+
+    [SerializeField]
+    private GraphChartBase Graph;
+
+    [SerializeField]
+    private Material CategoryMaterial;
+
+    [SerializeField]
+    private Material PointMaterial;
+
+    [SerializeField]
+    private Material InnerFillMaterial;
+
+    [SerializeField]
+    private Vector2 ScrollSnapPivot;
 
     struct DateAndCount
     {
@@ -55,6 +78,8 @@ public class RealTimeCounts : MonoBehaviour {
     }
 
     DateTime _latestTime;
+
+    int currentRotation = 0;
     
     // Use this for initialization
     void Start()
@@ -113,9 +138,43 @@ public class RealTimeCounts : MonoBehaviour {
 
                 // Display Partitions
                 DisplayPartitions(lastTime);
+
+                // Display Graph
+                DisplayGraph(response);
             }
 
             yield return new WaitForSeconds(UpdateFrequency);
+        }
+    }
+
+    private void DisplayGraph(List<RealTimeRecord> response)
+    {
+        if (Graph != null)
+        {
+            var index = currentRotation++ % _sourcesTimes.Keys.Count;
+            var source = _sourcesTimes.Keys.ElementAt(index);
+            var data = response.Where(x => x.sourceId == source);
+            Debug.Log("Loading Graph...");
+            Graph.DataSource.StartBatch();
+            Graph.DataSource.Clear();
+
+            // Get one result
+            Graph.DataSource.AddCategory(source, CategoryMaterial, 2, new MaterialTiling() { EnableTiling = false }, InnerFillMaterial, false, PointMaterial, 6);
+            foreach (var record in data)
+            {
+                var timeStamp = DateTime.Parse(record.processedAt).ToUniversalTime();
+                Graph.DataSource.AddPointToCategory(record.sourceId, timeStamp, record.count);
+            }
+            //foreach (var sourceId in _sourcesTimes.Keys)
+            //{
+            //    Graph.DataSource.AddCategory(sourceId, CategoryMaterial, 2, new MaterialTiling() { EnableTiling = false }, null, false, PointMaterial, 6);
+            //}
+            //foreach (var record in response)
+            //{
+            //    var timeStamp = DateTime.Parse(record.processedAt).ToUniversalTime();
+            //    Graph.DataSource.AddPointToCategory(record.sourceId, timeStamp, record.count);
+            //}
+            Graph.DataSource.EndBatch();
         }
     }
 
@@ -183,6 +242,8 @@ public class RealTimeCounts : MonoBehaviour {
 
     private void DisplaySources(List<Total> totals)
     {
+        var index = currentRotation % _sourcesTimes.Keys.Count;
+        Transform scrollTarget = contentPanel.transform;
         // Populate list of sources
         foreach (Transform child in SourcesPanel.transform)
         {
@@ -196,7 +257,18 @@ public class RealTimeCounts : MonoBehaviour {
             controller.Count.text = totals[i].count.ToString("#,#", CultureInfo.InvariantCulture);
             newSource.transform.parent = SourcesPanel.transform;
             newSource.transform.localScale = Vector3.one;
+            if (i == index) // highlight button
+            {
+                Button btn = newSource.GetComponent<Button>();
+                btn.Select();
+                btn.OnSelect(null);
+                scrollTarget = newSource.transform;
+                Debug.Log("Current Source: " + totals[i].source);
+            }
         }
+        Canvas.ForceUpdateCanvases();
+        contentPanel.anchoredPosition = (Vector2)scrollRect.transform.InverseTransformPoint(contentPanel.position)
+            - (Vector2)scrollRect.transform.InverseTransformPoint(scrollTarget.position) + ScrollSnapPivot;
     }
 
     private void DisplayVelocities(double totalVelocity)
