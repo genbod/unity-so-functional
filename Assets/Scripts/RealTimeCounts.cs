@@ -123,9 +123,28 @@ public class RealTimeCounts : MonoBehaviour {
     {
         for (int i = 0; i < Partitions.Length; i++)
         {
-            if (_partitionTimes[i.ToString()].timestamp > lastTime)
+            string index = i.ToString();
+            var timeSinceLastUpdate = _latestTime - _partitionTimes[index].timestamp;
+            var curPartition = _partitionTimes[i.ToString()];
+            if (curPartition.timestamp > lastTime)
             {
                 Partitions[i].Fill.FillAmount = 1;
+                Partitions[i].Text.color = Color.white;
+                curPartition.velocity = 3;
+            }
+            else
+            {
+                curPartition.velocity = curPartition.velocity >= 1 ? curPartition.velocity - 1 : 0; 
+            }
+            _partitionTimes[index] = curPartition;
+
+            if (curPartition.velocity < 1)
+            {
+                Partitions[i].Text.color = Color.red;
+            }
+            else if (curPartition.velocity < 2)
+            {
+                Partitions[i].Text.color = Color.yellow;
             }
         }
     }
@@ -149,7 +168,7 @@ public class RealTimeCounts : MonoBehaviour {
                 if (curTime > existingPartition.timestamp)
                 {
                     existingPartition.timestamp = curTime;
-                    existingPartition.velocity = (p.count - existingPartition.count) / (curTime - existingPartition.timestamp).TotalSeconds;
+                    //existingPartition.velocity = (p.count - existingPartition.count) / (curTime - existingPartition.timestamp).TotalSeconds;
                     existingPartition.count = p.count;
                     _partitionTimes[p.partition] = existingPartition;
                 }

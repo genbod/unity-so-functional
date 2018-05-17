@@ -76,6 +76,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Fill: {fileID: 114784980545336016}
+  Text: {fileID: 114949045731571358}
 --- !u!114 &114422171347281936
 MonoBehaviour:
   m_ObjectHideFlags: 1
