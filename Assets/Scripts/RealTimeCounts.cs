@@ -153,7 +153,14 @@ public class RealTimeCounts : MonoBehaviour {
         {
             var index = currentRotation++ % _sourcesTimes.Keys.Count;
             var source = _sourcesTimes.Keys.ElementAt(index);
-            var data = response.Where(x => x.sourceId == source);
+            var data = response.Where(x => x.sourceId == source)
+                .GroupBy(x => x.processedAt)
+                .Select(g => new
+                {
+                    processedAt = g.Key,
+                    g.FirstOrDefault().sourceId,
+                    count = g.Sum(x => x.count)
+                });
             Debug.Log("Loading Graph...");
             Graph.DataSource.StartBatch();
             Graph.DataSource.Clear();
@@ -162,8 +169,9 @@ public class RealTimeCounts : MonoBehaviour {
             Graph.DataSource.AddCategory(source, CategoryMaterial, 2, new MaterialTiling() { EnableTiling = false }, InnerFillMaterial, false, PointMaterial, 6);
             foreach (var record in data)
             {
-                var timeStamp = DateTime.Parse(record.processedAt).ToUniversalTime();
-                Graph.DataSource.AddPointToCategory(record.sourceId, timeStamp, record.count);
+                var timeStamp = record.processedAt;
+                //var timeStamp = record.processedAt.Substring(0, 4) + "/" + record.processedAt.Substring(4, 2) + "/" + record.processedAt.Substring(6, 2) + " " + record.processedAt.Substring(8, 2) + ":00";
+                Graph.DataSource.AddPointToCategory(record.sourceId, DateTime.Parse(timeStamp).ToUniversalTime(), record.count);
             }
             //foreach (var sourceId in _sourcesTimes.Keys)
             //{
