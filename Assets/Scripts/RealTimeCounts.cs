@@ -49,6 +49,9 @@ public class RealTimeCounts : MonoBehaviour {
     [SerializeField]
     private Vector2 ScrollSnapPivot;
 
+    [SerializeField]
+    private Text Latency;
+
     struct DateAndCount
     {
         public DateTime timestamp;
@@ -141,10 +144,20 @@ public class RealTimeCounts : MonoBehaviour {
 
                 // Display Graph
                 DisplayGraph(response);
+
+                var latency = GetLatency(response);
+
+                // Display Latency
+                DisplayLatency(latency);
             }
 
             yield return new WaitForSeconds(UpdateFrequency);
         }
+    }
+
+    private void DisplayLatency(int latency)
+    {
+        Latency.text = latency.ToString();
     }
 
     private void DisplayGraph(List<RealTimeRecord> response)
@@ -312,6 +325,18 @@ public class RealTimeCounts : MonoBehaviour {
     {
         double totalVelocity = 0;
 
+        // clear out old data
+        if (totals.Count < _sourcesTimes.Count)
+        {
+            foreach (var source in _sourcesTimes.Keys.ToList())
+            {
+                if (!totals.Exists(x => x.source == source))
+                {
+                    _sourcesTimes.Remove(source);
+                }
+            }
+        }
+
         foreach (var item in totals)
         {
             DateTime curTimeStamp = DateTime.Parse(item.lastTime).ToUniversalTime();
@@ -362,6 +387,16 @@ public class RealTimeCounts : MonoBehaviour {
                 count = g.Sum(c => c.count),
                 lastTime = g.OrderByDescending(c => c.processedAt).Select(c => c.processedAt).FirstOrDefault()
             }).OrderByDescending(x => x.count).ToList();
+    }
+
+    private static int GetLatency(List<RealTimeRecord> response)
+    {
+        var latestEvent = response
+            .OrderByDescending(x => x.period).FirstOrDefault();
+        var period = DateTime.Parse(latestEvent.period.Substring(0, 4) + "/" + latestEvent.period.Substring(4, 2) + "/" + latestEvent.period.Substring(6, 2) + " " + latestEvent.period.Substring(8, 2) + ":00");
+        var processedAt = DateTime.Parse(latestEvent.processedAt).ToUniversalTime();
+
+        return (period - processedAt).Hours;
     }
 
     private static IEnumerator GetData(string timeStamp, Action<string> callback)
