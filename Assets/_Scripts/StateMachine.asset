@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1083378141, guid: dcd2196c4e9166f499793f2007fcda35, type: 3}
+  m_Name: StateMachine
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"graph":{"pan":{"x":0.0,"y":0.0},"zoom":0.9,"elements":[{"nest":{"source":"Embed","macro":null,"embed":{"variables":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"controlInputDefinitions":[],"controlOutputDefinitions":[],"valueInputDefinitions":[],"valueOutputDefinitions":[],"pan":{"x":0.0,"y":0.0},"zoom":1.0,"elements":[{"defaultValues":{},"position":{"x":-205.0,"y":-215.0},"guid":"c04f4c59-f593-4d85-87fa-498e5402d6b8","$version":"A","$type":"Bolt.OnEnterState"},{"defaultValues":{},"position":{"x":-161.0,"y":-38.0},"guid":"ab01cc77-54f2-4c03-8aa2-f83eac62faae","$version":"A","$type":"Bolt.Update"},{"defaultValues":{},"position":{"x":-205.0,"y":145.0},"guid":"8bae7a11-b8df-41da-8a79-19659eb04d8f","$version":"A","$type":"Bolt.OnExitState"}],"title":"Start","summary":null,"$version":"A"}},"position":{"x":-33.0,"y":-89.0},"width":170.0,"isStart":true,"guid":"3e521acd-85c9-4d76-89bf-91e7dfc33a36","$version":"A","$type":"Bolt.FlowState"},{"nest":{"source":"Embed","macro":null,"embed":{"variables":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"controlInputDefinitions":[],"controlOutputDefinitions":[],"valueInputDefinitions":[],"valueOutputDefinitions":[],"pan":{"x":0.0,"y":0.0},"zoom":1.0,"elements":[{"defaultValues":{},"position":{"x":-205.0,"y":-215.0},"guid":"c7047a5d-577e-48d4-82d1-cfb39674983e","$version":"A","$type":"Bolt.OnEnterState"},{"defaultValues":{},"position":{"x":-161.0,"y":-38.0},"guid":"34869348-7ea4-4947-abc0-a421bd03d791","$version":"A","$type":"Bolt.Update"},{"defaultValues":{},"position":{"x":-205.0,"y":145.0},"guid":"c977b069-5c5a-4de5-82b5-34b7510c948f","$version":"A","$type":"Bolt.OnExitState"}],"title":"Red
+      Alert","summary":null,"$version":"A"}},"position":{"x":184.0,"y":78.0},"width":170.0,"isStart":false,"guid":"bf0bca0b-36cc-4ce1-8a9c-fbf3fdf7546f","$version":"A","$type":"Bolt.FlowState"},{"nest":{"source":"Embed","macro":null,"embed":{"variables":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"controlInputDefinitions":[],"controlOutputDefinitions":[],"valueInputDefinitions":[],"valueOutputDefinitions":[],"pan":{"x":0.0,"y":0.0},"zoom":1.0,"elements":[{"defaultValues":{},"position":{"x":-205.0,"y":-215.0},"guid":"5ee5c152-b5a2-495c-a347-5c52295d8894","$version":"A","$type":"Bolt.OnEnterState"},{"defaultValues":{},"position":{"x":-161.0,"y":-38.0},"guid":"f1e4473d-f5fa-4895-a4ea-4ab2469657ae","$version":"A","$type":"Bolt.Update"},{"defaultValues":{},"position":{"x":-205.0,"y":145.0},"guid":"0c754a7a-3248-4880-a815-cfc73a821852","$version":"A","$type":"Bolt.OnExitState"}],"title":"Yellow
+      Alert","summary":null,"$version":"A"}},"position":{"x":-238.0,"y":74.0},"width":170.0,"isStart":false,"guid":"e8f1515f-a1eb-4822-9391-d4c0a51d015b","$version":"A","$type":"Bolt.FlowState"}],"title":null,"summary":null,"$version":"A"}}'
+    _objectReferences: []
