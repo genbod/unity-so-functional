@@ -146,7 +146,7 @@ public class RealTimeCounts : MonoBehaviour {
     {
         IComparable value = default(T);
         Type settingType = typeof(T);
-        if (_settings.ContainsKey(name) && _settings[name] != "")
+        if (_settings.ContainsKey(name) && _settings[name] != "" && !_settings[name].StartsWith("#{"))
         {
             var valueString = _settings[name];
             if (settingType == typeof(int))
