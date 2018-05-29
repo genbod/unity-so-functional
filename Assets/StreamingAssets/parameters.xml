@@ -1,4 +1,4 @@
 <parameters>
-  <parameter name="Url" value="" />
-  <parameter name="ApiKey" value="" />
+  <parameter name="Url" value="__Url__" />
+  <parameter name="ApiKey" value="__ApiKey__" />
 </parameters>
