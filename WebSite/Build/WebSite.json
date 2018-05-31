@@ -1,11 +1,11 @@
 {
-"companyName": "DefaultCompany",
+"companyName": "Azure Red Team",
 "productName": "ARTIS-Dashboard",
 "dataUrl": "WebSite.data.unityweb",
 "asmCodeUrl": "WebSite.asm.code.unityweb",
 "asmMemoryUrl": "WebSite.asm.memory.unityweb",
 "asmFrameworkUrl": "WebSite.asm.framework.unityweb",
-"TOTAL_MEMORY": 268435456,
+"TOTAL_MEMORY": 536870912,
 "graphicsAPI": ["WebGL 2.0", "WebGL 1.0"],
 "webglContextAttributes": {"preserveDrawingBuffer": false},
 "splashScreenStyle": "Dark",

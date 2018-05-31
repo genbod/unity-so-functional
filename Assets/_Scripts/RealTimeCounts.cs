@@ -54,6 +54,9 @@ public class RealTimeCounts : MonoBehaviour {
     [SerializeField]
     private Text Latency;
 
+    [SerializeField]
+    private Text Version;
+
     struct DateAndCount
     {
         public DateTime timestamp;
@@ -89,8 +92,14 @@ public class RealTimeCounts : MonoBehaviour {
     Dictionary<string, string> _settings = new Dictionary<string, string>();
     
     // Use this for initialization
-    void Start()
+    IEnumerator Start()
     {
+        // Set Version
+        var routine = new Coroutine<string>(GetVersion());
+        yield return routine.StartAsCoroutine(this);
+
+        Version.text = routine.Value;
+
         _totalCount.SetCurrentCount(0);
         foreach (var Dial in Dials)
         {
@@ -99,6 +108,17 @@ public class RealTimeCounts : MonoBehaviour {
 
         _latestTime = System.DateTime.Now.ToUniversalTime();
         StartCoroutine("GetRealTimeCounts");
+    }
+
+    IEnumerator GetVersion()
+    {
+        print(Application.streamingAssetsPath);
+
+        Coroutine<string> coroutineObject = new Coroutine<string>(VersionHelper.GetVersion(Application.streamingAssetsPath));
+        foreach(var x in coroutineObject.enumerable) { yield return x; }
+
+        print("Found Version: " + coroutineObject.Value);
+        yield return coroutineObject.Value;
     }
 
     IEnumerator GetParameters(string filePath)
@@ -112,14 +132,10 @@ public class RealTimeCounts : MonoBehaviour {
             WWW www = new WWW(filePath);
             yield return www;
             result = www.text;
-
-            //print(result);
         }
         else
         {
             result = File.ReadAllText(filePath);
-
-            //print(result);
         }
 
         if (result != "")
@@ -134,8 +150,6 @@ public class RealTimeCounts : MonoBehaviour {
 
             foreach (XmlNode settingValue in settingsList)
             {
-                //print(settingValue.Attributes["name"].Value);
-                //print(settingValue.Attributes["value"].Value);
                 _settings.Add(settingValue.Attributes["name"].Value, settingValue.Attributes["value"].Value);
 
             }
@@ -493,7 +507,7 @@ public class RealTimeCounts : MonoBehaviour {
     private static int GetLatency(List<RealTimeRecord> response)
     {
         var latestEvent = response
-            .OrderByDescending(x => x.period).FirstOrDefault();
+            .OrderByDescending(x => x.processedAt).FirstOrDefault();
         if (latestEvent != null)
         {
             var period = DateTime.Parse(latestEvent.period.Substring(0, 4) + "/" + latestEvent.period.Substring(4, 2) + "/" + latestEvent.period.Substring(6, 2) + " " + latestEvent.period.Substring(8, 2) + ":00");
