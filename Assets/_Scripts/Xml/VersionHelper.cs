@@ -1,10 +1,7 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using System.IO;
 using System.Xml;
-using static MonoBehaviorExt;
-using System.Linq;
+using UnityEngine;
 
 public static class VersionHelper
 {

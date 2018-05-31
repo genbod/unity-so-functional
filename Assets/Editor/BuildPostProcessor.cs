@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Xml;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
@@ -27,7 +23,7 @@ public class BuildPostProcessor : MonoBehaviour {
 
         DateTime now = DateTime.Now;
         var curTimeStamp = now.Year.ToString() + now.Month.ToString("D2") + now.Day.ToString("D2");
-        buildNumber = curTimeStamp == buildDate ? buildNumber++ : 1;
+        buildNumber = curTimeStamp == buildDate ? buildNumber + 1 : 1;
 
         var build = major +"." + minor + "." + curTimeStamp + "." + buildNumber.ToString();
 
