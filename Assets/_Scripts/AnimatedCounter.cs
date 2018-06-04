@@ -13,7 +13,7 @@ public class AnimatedCounter : MonoBehaviour {
     public float changeRate = 1.0f;
 
     [SerializeField]
-    public int TargetCount = 0;
+    public IntVariable TargetCount;
 
     public Text target;
 
@@ -21,7 +21,10 @@ public class AnimatedCounter : MonoBehaviour {
 
     // Use this for initialization
 	void Start () {
-		
+        if (TargetCount == null)
+        {
+            TargetCount = new IntVariable();
+        }
 	}
 	
 	// Update is called once per frame
@@ -46,23 +49,23 @@ public class AnimatedCounter : MonoBehaviour {
             }
         }
         // Scale multiplier based on how much we have to count
-        var zeros = Mathf.Max(Mathf.Abs(currentCount - TargetCount).ToString().Length, 2);
+        var zeros = Mathf.Max(Mathf.Abs(currentCount - TargetCount.Value).ToString().Length, 2);
         multiplier = Mathf.Pow(10, zeros);
         var change = Mathf.CeilToInt(Time.unscaledDeltaTime * changeRate * multiplier);
-        if (currentCount < TargetCount)
+        if (currentCount < TargetCount.Value)
         {
             currentCount += change;
-            if (currentCount > TargetCount)
+            if (currentCount > TargetCount.Value)
             {
-                currentCount = TargetCount;
+                currentCount = TargetCount.Value;
             }
         }
-        else if (currentCount > TargetCount)
+        else if (currentCount > TargetCount.Value)
         {
             currentCount -= change;
-            if (currentCount < TargetCount)
+            if (currentCount < TargetCount.Value)
             {
-                currentCount = TargetCount;
+                currentCount = TargetCount.Value;
             }
         }
 
@@ -81,12 +84,12 @@ public class AnimatedCounter : MonoBehaviour {
         if (prettyPrint)
         {
             target.text = TextUtils.GetPrettyNumber(currentCount);
-            TargetCount = currentCount;
+            TargetCount.Value = currentCount;
         }
         else
         {
             target.text = currentCount.ToString("#,#", CultureInfo.InvariantCulture);
-            TargetCount = currentCount;
+            TargetCount.Value = currentCount;
         }
     }
 }

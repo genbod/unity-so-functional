@@ -16,7 +16,7 @@ public class RealTimeCounts : MonoBehaviour {
     public float UpdateFrequency;
 
     [SerializeField]
-    private AnimatedCounter _totalCount;
+    private IntVariable _totalCount;
 
     [SerializeField]
     private Dial[] Dials;
@@ -56,6 +56,9 @@ public class RealTimeCounts : MonoBehaviour {
 
     [SerializeField]
     private Text Version;
+
+    [SerializeField]
+    private DoubleVariable Velocity;
 
     struct DateAndCount
     {
@@ -100,7 +103,7 @@ public class RealTimeCounts : MonoBehaviour {
 
         Version.text = routine.Value;
 
-        _totalCount.SetCurrentCount(0);
+        _totalCount.Value = 0;
         foreach (var Dial in Dials)
         {
             Dial.Number.SetCurrentCount(0);
@@ -226,16 +229,16 @@ public class RealTimeCounts : MonoBehaviour {
 
                 // Get and display totalCount of events
                 int totalCount = response.Sum(x => x.count);
-                _totalCount.TargetCount = totalCount;
+                _totalCount.Value = totalCount;
 
                 // Get Totals
                 var _totals = GetTotals(response);
 
                 // Update Velocities
-                double totalVelocity = UpdateVelocities(_totals, now);
+                Velocity.Value = UpdateVelocities(_totals, now);
 
                 // Display Top Velocities
-                DisplayVelocities(totalVelocity);
+                DisplayVelocities(Velocity.Value);
 
                 // Display list of sources
                 DisplaySources(_totals);
@@ -418,7 +421,7 @@ public class RealTimeCounts : MonoBehaviour {
             {
                 Dials[i].gameObject.SetActive(true);
                 Dials[i].Title.text = sortedVelocities[i].Key;
-                Dials[i].Number.TargetCount = sortedVelocities[i].Value.count;
+                Dials[i].Number.TargetCount.Value = sortedVelocities[i].Value.count;
                 Dials[i].Fill.fillAmount = (float)(sortedVelocities[i].Value.velocity / totalVelocity);
             }
             else
@@ -513,7 +516,7 @@ public class RealTimeCounts : MonoBehaviour {
             var period = DateTime.Parse(latestEvent.period.Substring(0, 4) + "/" + latestEvent.period.Substring(4, 2) + "/" + latestEvent.period.Substring(6, 2) + " " + latestEvent.period.Substring(8, 2) + ":00");
             var processedAt = DateTime.Parse(latestEvent.processedAt).ToUniversalTime();
 
-            return (period - processedAt).Hours;
+            return (processedAt - period).Hours;
         }
         else return -1;
     }

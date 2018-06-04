@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class TextUtils
 {
-    public static string GetPrettyNumber(float totalCount)
+    public static string GetPrettyNumber(double totalCount)
     {
         if (totalCount > 100000)
         {
