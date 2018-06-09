@@ -10,6 +10,7 @@ using System.Xml;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using static F;
 
 public class RealTimeCounts : MonoBehaviour {
     [SerializeField]
@@ -98,10 +99,13 @@ public class RealTimeCounts : MonoBehaviour {
     IEnumerator Start()
     {
         // Set Version
-        var routine = new Coroutine<string>(GetVersion());
-        yield return routine.StartAsCoroutine(this);
+        var routine = new NestableCoroutine<string>(GetVersion());
+        yield return routine.StartCoroutine(this);
 
-        Version.text = routine.Value;
+        routine.Value.Match(
+            () => Version.text = "Version Could not be read.",
+            (f) => Version.text = f);
+        //Version.text = routine.Value;
 
         _totalCount.Value = 0;
         foreach (var Dial in Dials)
@@ -117,8 +121,8 @@ public class RealTimeCounts : MonoBehaviour {
     {
         print(Application.streamingAssetsPath);
 
-        Coroutine<string> coroutineObject = new Coroutine<string>(VersionHelper.GetVersion(Application.streamingAssetsPath));
-        foreach(var x in coroutineObject.enumerable) { yield return x; }
+        NestableCoroutine<string> coroutineObject = new NestableCoroutine<string>(VersionHelper.GetVersion(Application.streamingAssetsPath));
+        foreach(var x in coroutineObject.Routine) { yield return x; }
 
         print("Found Version: " + coroutineObject.Value);
         yield return coroutineObject.Value;
@@ -211,21 +215,32 @@ public class RealTimeCounts : MonoBehaviour {
             var now = System.DateTime.Now.ToUniversalTime();
             string timeStamp = GetTimeStamp(now);
             var lastTime = _latestTime;
-            
-            var url = GetSetting<string>("Url") + timeStamp;
-            UnityWebRequest www = UnityWebRequest.Get(url);
-            www.SetRequestHeader("Ocp-Apim-Trace", "true");
-            www.SetRequestHeader("Ocp-Apim-Subscription-Key", GetSetting<string>("ApiKey"));
-            yield return www.SendWebRequest();
 
-            if (www.isNetworkError || www.isHttpError)
+            List<Tuple<string, string>> headers = new List<Tuple<string, string>>()
             {
-                Debug.Log(www.error);
+                new Tuple<string,string>("Ocp-Apim-Trace", "true"),
+                new Tuple<string,string>("Ocp-Apim-Subscription-Key", GetSetting<string>("ApiKey"))
+            };
+            var routine = Url.Of(GetSetting<string>("Url") + timeStamp).Map(url => WebRequest.GetJsonString(url, headers));
+            NestableCoroutine<string> coroutine = new NestableCoroutine<string>(routine);
+            foreach(var x in coroutine.Routine) { yield return x; }
+
+            var text = coroutine.Value.Match(
+                () => "",
+                (f) => f);
+
+            if (coroutine.e != null)
+            {
+                Debug.Log(coroutine.e);
+            }
+            else if (String.IsNullOrEmpty(text))
+            {
+                Debug.Log("Web Request did not return test");
             }
             else
             {
                 // Fix JSON because Unity needs an object root
-                var response = JsonHelper.FromJson<RealTimeRecord>(FixJson(www.downloadHandler.text));
+                var response = JsonHelper.FromJson<RealTimeRecord>(FixJson(text));
 
                 // Get and display totalCount of events
                 int totalCount = response.Sum(x => x.count);

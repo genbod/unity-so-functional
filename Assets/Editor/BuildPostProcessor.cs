@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
+using static F;
 
 public class BuildPostProcessor : MonoBehaviour {
 
@@ -10,27 +11,37 @@ public class BuildPostProcessor : MonoBehaviour {
     {
         var buildVersionPath = pathToBuiltProject + "/StreamingAssets";
         var sourceVersionPath = Application.streamingAssetsPath;
-        Coroutine<string> coroutineObject = new Coroutine<string>(VersionHelper.GetVersion(sourceVersionPath));
-        foreach(var x in coroutineObject.enumerable) {}
-        
-        var versionText = coroutineObject.Value;
-        
-        var versionParts = versionText.Split('.');
-        var major = versionParts[0];
-        var minor = versionParts[1];
-        var buildDate = versionParts[2];
-        var buildNumber = int.Parse(versionParts[3]);
+        NestableCoroutine<string> coroutineObject = new NestableCoroutine<string>(VersionHelper.GetVersion(sourceVersionPath));
+        foreach(var x in coroutineObject.Routine) {}
 
-        DateTime now = DateTime.Now;
-        var curTimeStamp = now.Year.ToString() + now.Month.ToString("D2") + now.Day.ToString("D2");
-        buildNumber = curTimeStamp == buildDate ? buildNumber + 1 : 1;
+        var build = coroutineObject.Value.Map(text => text.Split('.'))
+            .Bind(GetBuildVersion)
+            .ForEach( b =>
+            {
+                NestableCoroutine<object> setBuildVersionRoutine = new NestableCoroutine<object>(VersionHelper.SetVersion(buildVersionPath, b));
+                foreach (var x in setBuildVersionRoutine.Routine) { }
 
-        var build = major +"." + minor + "." + curTimeStamp + "." + buildNumber.ToString();
+                NestableCoroutine<object> setSourceVersionRoutine = new NestableCoroutine<object>(VersionHelper.SetVersion(sourceVersionPath, b));
+                foreach (var x in setSourceVersionRoutine.Routine) { }
+            });
+    }
 
-        Coroutine<object> setBuildVersionRoutine = new Coroutine<object>(VersionHelper.SetVersion(buildVersionPath, build));
-        foreach(var x in setBuildVersionRoutine.enumerable) {}
+    private static Option<string> GetBuildVersion(string[] versionParts)
+    {
+        if (versionParts.Length == 4)
+        {
+            var major = versionParts[0];
+            var minor = versionParts[1];
+            var buildDate = versionParts[2];
+            var buildNumber = int.Parse(versionParts[3]);
 
-        Coroutine<object> setSourceVersionRoutine = new Coroutine<object>(VersionHelper.SetVersion(sourceVersionPath, build));
-        foreach (var x in setSourceVersionRoutine.enumerable) {}
+            DateTime now = DateTime.Now;
+            var curTimeStamp = now.Year.ToString() + now.Month.ToString("D2") + now.Day.ToString("D2");
+            buildNumber = curTimeStamp == buildDate ? buildNumber + 1 : 1;
+
+            var build = major + "." + minor + "." + curTimeStamp + "." + buildNumber.ToString();
+            return Some(build);
+        }
+        return None;
     }
 }

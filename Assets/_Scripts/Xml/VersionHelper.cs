@@ -2,6 +2,7 @@
 using System.IO;
 using System.Xml;
 using UnityEngine;
+using static F;
 
 public static class VersionHelper
 {
@@ -44,27 +45,37 @@ public static class VersionHelper
 
     public static IEnumerator GetVersion(string rootPath)
     {
-        Coroutine<XmlNode> coroutineObject = new Coroutine<XmlNode>(GetVersionNode(rootPath));
-        foreach(var x in coroutineObject.enumerable) { yield return x; }
+        var coroutineObject = new NestableCoroutine<XmlNode>(GetVersionNode(rootPath));
+        foreach(var x in coroutineObject.Routine) { yield return x; }
+        
+        yield return coroutineObject.Value.Match(
+            () => None,
+            (f) => Some(f.InnerText));
 
-        var node = coroutineObject.Value;
-        if (node != null)
-        {
-            yield return node.InnerText;
-        }
-        yield return null;
+        //var node = coroutineObject.Value;
+        //if (node != null)
+        //{
+        //    yield return node.InnerText;
+        //}
+        //yield return null;
     }
 
     public static IEnumerator SetVersion(string rootPath, string newVersion)
     {
-        Coroutine<XmlNode> coroutineObject = new Coroutine<XmlNode>(GetVersionNode(rootPath));
-        foreach(var x in coroutineObject.enumerable) { yield return x; }
+        var coroutineObject = new NestableCoroutine<XmlNode>(GetVersionNode(rootPath));
+        foreach(var x in coroutineObject.Routine) { yield return x; }
 
-        var node = coroutineObject.Value;
-        if (node != null)
+        coroutineObject.Value.ForEach(n =>
         {
-            node.InnerText = newVersion;
-            node.OwnerDocument.Save(GetPath(rootPath));
-        }
+            n.InnerText = newVersion;
+            n.OwnerDocument.Save(GetPath(rootPath));
+        });
+
+        //var node = coroutineObject.Value;
+        //if (node != null)
+        //{
+        //    node.InnerText = newVersion;
+        //    node.OwnerDocument.Save(GetPath(rootPath));
+        //}
     }
 }
