@@ -1,0 +1,247 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c12bda183e1d32d489f04d103f7665f1, type: 3}
+  m_Name: Dial1
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  Enabled: {fileID: 114447559020220960}
+  Name: {fileID: 114020444422114374}
+  Count: {fileID: 114524037122845114}
+  FillAmount: {fileID: 114616429495458698}
+  Index: {fileID: 114672279087208622}
+--- !u!114 &114020444422114374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44b2243896fc9c745af15577dcd60b40, type: 3}
+  m_Name: Name
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: DefaultValue
+      Entry: 7
+      Data: Option`1[[System.String, mscorlib]], Assembly-CSharp
+    - Name: value
+      Entry: 6
+      Data: 
+    - Name: isSome
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Value
+      Entry: 7
+      Data: Option`1[[System.String, mscorlib]], Assembly-CSharp
+    - Name: value
+      Entry: 6
+      Data: 
+    - Name: isSome
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+--- !u!114 &114447559020220960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76a02c0f52224f046b5975376be9878a, type: 3}
+  m_Name: Enabled
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: DefaultValue
+      Entry: 7
+      Data: Option`1[[System.Boolean, mscorlib]], Assembly-CSharp
+    - Name: value
+      Entry: 5
+      Data: true
+    - Name: isSome
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Value
+      Entry: 7
+      Data: Option`1[[System.Boolean, mscorlib]], Assembly-CSharp
+    - Name: value
+      Entry: 5
+      Data: true
+    - Name: isSome
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+--- !u!114 &114524037122845114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b1b57bb8037a5b4b80817f943689a76, type: 3}
+  m_Name: Count
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: DefaultValue
+      Entry: 7
+      Data: Option`1[[System.Int32, mscorlib]], Assembly-CSharp
+    - Name: value
+      Entry: 3
+      Data: 0
+    - Name: isSome
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Value
+      Entry: 7
+      Data: Option`1[[System.Int32, mscorlib]], Assembly-CSharp
+    - Name: value
+      Entry: 3
+      Data: 0
+    - Name: isSome
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+--- !u!114 &114616429495458698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 066e88a8b5db6b5468f05900142bcac1, type: 3}
+  m_Name: Fill Amount
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: DefaultValue
+      Entry: 7
+      Data: Option`1[[System.Single, mscorlib]], Assembly-CSharp
+    - Name: value
+      Entry: 4
+      Data: 0
+    - Name: isSome
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Value
+      Entry: 7
+      Data: Option`1[[System.Single, mscorlib]], Assembly-CSharp
+    - Name: value
+      Entry: 4
+      Data: 0
+    - Name: isSome
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+--- !u!114 &114672279087208622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b1b57bb8037a5b4b80817f943689a76, type: 3}
+  m_Name: Index
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: DefaultValue
+      Entry: 7
+      Data: Option`1[[System.Int32, mscorlib]], Assembly-CSharp
+    - Name: value
+      Entry: 3
+      Data: 1
+    - Name: isSome
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Value
+      Entry: 7
+      Data: Option`1[[System.Int32, mscorlib]], Assembly-CSharp
+    - Name: value
+      Entry: 3
+      Data: 1
+    - Name: isSome
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 

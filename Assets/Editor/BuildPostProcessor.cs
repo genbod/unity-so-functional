@@ -9,8 +9,8 @@ public class BuildPostProcessor : MonoBehaviour {
 	[PostProcessBuild(1)]
     public static void OnPostProcessBuild(BuildTarget target, string pathToBuiltProject)
     {
-        var buildVersionPath = pathToBuiltProject + "/StreamingAssets";
-        var sourceVersionPath = Application.streamingAssetsPath;
+        var buildVersionPath = pathToBuiltProject + "/StreamingAssets/version.xml";
+        var sourceVersionPath = Application.streamingAssetsPath + "/version.xml";
         NestableCoroutine<string> coroutineObject = new NestableCoroutine<string>(VersionHelper.GetVersion(sourceVersionPath));
         foreach(var x in coroutineObject.Routine) {}
 
@@ -26,7 +26,7 @@ public class BuildPostProcessor : MonoBehaviour {
             });
     }
 
-    private static Option<string> GetBuildVersion(string[] versionParts)
+    private static Exceptional<string> GetBuildVersion(string[] versionParts)
     {
         if (versionParts.Length == 4)
         {
@@ -40,8 +40,8 @@ public class BuildPostProcessor : MonoBehaviour {
             buildNumber = curTimeStamp == buildDate ? buildNumber + 1 : 1;
 
             var build = major + "." + minor + "." + curTimeStamp + "." + buildNumber.ToString();
-            return Some(build);
+            return build;
         }
-        return None;
+        return new ArgumentOutOfRangeException();
     }
 }

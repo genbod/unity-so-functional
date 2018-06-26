@@ -12,5 +12,11 @@ public static class EnumerableExt
         => list.Select(func);
 
     public static IEnumerable<Unit> ForEach<T>(this IEnumerable<T> ts, Action<T> action)
-        => ts.Map(action.ToFunc()).ToList();
+        => ts.Map(action.ToFunc()).ToList(); // TODO make this immutable
+
+    public static IEnumerable<R> Bind<T, R>(this IEnumerable<T> list, Func<T, IEnumerable<R>> func)
+          => list.SelectMany(func);
+
+    public static IEnumerable<R> Bind<T, R>(this IEnumerable<T> list, Func<T, Option<R>> func)
+        => list.Bind(t => func(t).AsEnumerable());
 }

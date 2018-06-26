@@ -4168,30 +4168,5 @@
             Returns the result of the object's own GetHashCode method.
             </summary>
         </member>
-        <member name="T:TodoAttribute">
-            <summary>
-            Internal...
-            </summary>
-        </member>
-        <member name="F:TodoAttribute.Assignee">
-            <summary>
-            Internal...
-            </summary>
-        </member>
-        <member name="F:TodoAttribute.TodoMessage">
-            <summary>
-            Internal...
-            </summary>
-        </member>
-        <member name="M:TodoAttribute.#ctor(System.String)">
-            <summary>
-            Internal...
-            </summary>
-        </member>
-        <member name="M:TodoAttribute.#ctor(System.String,System.String)">
-            <summary>
-            Internal...
-            </summary>
-        </member>
     </members>
 </doc>

@@ -43,6 +43,9 @@ namespace Ludiq.Generated.Aot
 	// Bolt.StateMacro.op_Equality
 	// Bolt.StateMacro.op_Implicit
 	// Bolt.StateMacro.op_Inequality
+	// BoolVariable.op_Equality
+	// BoolVariable.op_Implicit
+	// BoolVariable.op_Inequality
 	// CategoryLabels.op_Equality
 	// CategoryLabels.op_Implicit
 	// CategoryLabels.op_Inequality
@@ -418,21 +421,30 @@ namespace Ludiq.Generated.Aot
 	// Dial.op_Equality
 	// Dial.op_Implicit
 	// Dial.op_Inequality
+	// DialController.op_Equality
+	// DialController.op_Implicit
+	// DialController.op_Inequality
 	// DialData.op_Equality
 	// DialData.op_Implicit
 	// DialData.op_Inequality
 	// DoubleVariable.op_Equality
 	// DoubleVariable.op_Implicit
 	// DoubleVariable.op_Inequality
+	// EnabledSetter.op_Equality
+	// EnabledSetter.op_Implicit
+	// EnabledSetter.op_Inequality
 	// float.op_Equality
 	// float.op_GreaterThan
 	// float.op_GreaterThanOrEqual
 	// float.op_Inequality
 	// float.op_LessThan
 	// float.op_LessThanOrEqual
-	// Freedom.op_Equality
-	// Freedom.op_Implicit
-	// Freedom.op_Inequality
+	// FloatVariable.op_Equality
+	// FloatVariable.op_Implicit
+	// FloatVariable.op_Inequality
+	// FollowLayout.op_Equality
+	// FollowLayout.op_Implicit
+	// FollowLayout.op_Inequality
 	// GraphAnimation.op_Equality
 	// GraphAnimation.op_Implicit
 	// GraphAnimation.op_Inequality
@@ -445,6 +457,9 @@ namespace Ludiq.Generated.Aot
 	// HoverText.op_Equality
 	// HoverText.op_Implicit
 	// HoverText.op_Inequality
+	// ImageFillSetter.op_Equality
+	// ImageFillSetter.op_Implicit
+	// ImageFillSetter.op_Inequality
 	// IntVariable.op_Equality
 	// IntVariable.op_Implicit
 	// IntVariable.op_Inequality
@@ -460,6 +475,27 @@ namespace Ludiq.Generated.Aot
 	// LongVariable.op_Equality
 	// LongVariable.op_Implicit
 	// LongVariable.op_Inequality
+	// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_AutoFloat.op_Equality
+	// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_AutoFloat.op_Implicit
+	// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_AutoFloat.op_Inequality
+	// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_BarChart_BarEvent.op_Equality
+	// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_BarChart_BarEvent.op_Implicit
+	// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_BarChart_BarEvent.op_Inequality
+	// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_ChartOrientedSize.op_Equality
+	// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_ChartOrientedSize.op_Implicit
+	// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_ChartOrientedSize.op_Inequality
+	// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_GraphChartBase_GraphEvent.op_Equality
+	// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_GraphChartBase_GraphEvent.op_Implicit
+	// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_GraphChartBase_GraphEvent.op_Inequality
+	// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_MaterialTiling.op_Equality
+	// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_MaterialTiling.op_Implicit
+	// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_MaterialTiling.op_Inequality
+	// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_PieChart_PieEvent.op_Equality
+	// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_PieChart_PieEvent.op_Implicit
+	// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_PieChart_PieEvent.op_Inequality
+	// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_RadarChart_RadarEvent.op_Equality
+	// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_RadarChart_RadarEvent.op_Implicit
+	// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_RadarChart_RadarEvent.op_Inequality
 	// Ludiq.Generated.PropertyProviders.PropertyProvider_Devdog_General_Localization_LocalizedAudioClip.op_Equality
 	// Ludiq.Generated.PropertyProviders.PropertyProvider_Devdog_General_Localization_LocalizedAudioClip.op_Implicit
 	// Ludiq.Generated.PropertyProviders.PropertyProvider_Devdog_General_Localization_LocalizedAudioClip.op_Inequality
@@ -559,9 +595,6 @@ namespace Ludiq.Generated.Aot
 	// RealTimeCounts.op_Equality
 	// RealTimeCounts.op_Implicit
 	// RealTimeCounts.op_Inequality
-	// ScriptableValue.op_Equality
-	// ScriptableValue.op_Implicit
-	// ScriptableValue.op_Inequality
 	// SimpleGraphDemo.op_Equality
 	// SimpleGraphDemo.op_Implicit
 	// SimpleGraphDemo.op_Inequality
@@ -570,12 +603,18 @@ namespace Ludiq.Generated.Aot
 	// StreamingGraph.op_Inequality
 	// string.op_Equality
 	// string.op_Inequality
+	// StringHelper.op_Equality
+	// StringHelper.op_Implicit
+	// StringHelper.op_Inequality
 	// StringVariable.op_Equality
 	// StringVariable.op_Implicit
 	// StringVariable.op_Inequality
 	// TextController.op_Equality
 	// TextController.op_Implicit
 	// TextController.op_Inequality
+	// TextReplacer.op_Equality
+	// TextReplacer.op_Implicit
+	// TextReplacer.op_Inequality
 	// UnityEngine.AI.NavMeshAgent.op_Equality
 	// UnityEngine.AI.NavMeshAgent.op_Implicit
 	// UnityEngine.AI.NavMeshAgent.op_Inequality
@@ -621,6 +660,7 @@ namespace Ludiq.Generated.Aot
 	// UnityEngine.Animator.op_Equality
 	// UnityEngine.Animator.op_Implicit
 	// UnityEngine.Animator.op_Inequality
+	// UnityEngine.Animator.SetBool
 	// UnityEngine.Animator.SetTrigger
 	// UnityEngine.AnimatorOverrideController.op_Equality
 	// UnityEngine.AnimatorOverrideController.op_Implicit
@@ -1428,9 +1468,6 @@ namespace Ludiq.Generated.Aot
 	// UnityStandardAssets.ImageEffects.Vortex.op_Equality
 	// UnityStandardAssets.ImageEffects.Vortex.op_Implicit
 	// UnityStandardAssets.ImageEffects.Vortex.op_Inequality
-	// UpdateValue.op_Equality
-	// UpdateValue.op_Implicit
-	// UpdateValue.op_Inequality
 	public class AotStubs
 	{
 		
@@ -1745,6 +1782,38 @@ namespace Ludiq.Generated.Aot
 		
 		// Bolt.StateMacro.op_Inequality
 		public static void Bolt_StateMacro_op_Inequality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 != arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// BoolVariable.op_Equality
+		public static void BoolVariable_op_Equality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 == arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// BoolVariable.op_Implicit
+		public static void BoolVariable_op_Implicit()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			bool conversion = ((bool)(arg0));
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// BoolVariable.op_Inequality
+		public static void BoolVariable_op_Inequality()
 		{
 			UnityEngine.Object arg0 = default(UnityEngine.Object);
 			UnityEngine.Object arg1 = default(UnityEngine.Object);
@@ -5754,6 +5823,38 @@ namespace Ludiq.Generated.Aot
 			optimized.Invoke(default(object[]));
 		}
 		
+		// DialController.op_Equality
+		public static void DialController_op_Equality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 == arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// DialController.op_Implicit
+		public static void DialController_op_Implicit()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			bool conversion = ((bool)(arg0));
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// DialController.op_Inequality
+		public static void DialController_op_Inequality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 != arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
 		// DialData.op_Equality
 		public static void DialData_op_Equality()
 		{
@@ -5809,6 +5910,38 @@ namespace Ludiq.Generated.Aot
 		
 		// DoubleVariable.op_Inequality
 		public static void DoubleVariable_op_Inequality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 != arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// EnabledSetter.op_Equality
+		public static void EnabledSetter_op_Equality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 == arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// EnabledSetter.op_Implicit
+		public static void EnabledSetter_op_Implicit()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			bool conversion = ((bool)(arg0));
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// EnabledSetter.op_Inequality
+		public static void EnabledSetter_op_Inequality()
 		{
 			UnityEngine.Object arg0 = default(UnityEngine.Object);
 			UnityEngine.Object arg1 = default(UnityEngine.Object);
@@ -5884,8 +6017,8 @@ namespace Ludiq.Generated.Aot
 			optimized.Invoke(default(object[]));
 		}
 		
-		// Freedom.op_Equality
-		public static void Freedom_op_Equality()
+		// FloatVariable.op_Equality
+		public static void FloatVariable_op_Equality()
 		{
 			UnityEngine.Object arg0 = default(UnityEngine.Object);
 			UnityEngine.Object arg1 = default(UnityEngine.Object);
@@ -5895,8 +6028,8 @@ namespace Ludiq.Generated.Aot
 			optimized.Invoke(default(object[]));
 		}
 		
-		// Freedom.op_Implicit
-		public static void Freedom_op_Implicit()
+		// FloatVariable.op_Implicit
+		public static void FloatVariable_op_Implicit()
 		{
 			UnityEngine.Object arg0 = default(UnityEngine.Object);
 			bool conversion = ((bool)(arg0));
@@ -5905,8 +6038,40 @@ namespace Ludiq.Generated.Aot
 			optimized.Invoke(default(object[]));
 		}
 		
-		// Freedom.op_Inequality
-		public static void Freedom_op_Inequality()
+		// FloatVariable.op_Inequality
+		public static void FloatVariable_op_Inequality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 != arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// FollowLayout.op_Equality
+		public static void FollowLayout_op_Equality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 == arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// FollowLayout.op_Implicit
+		public static void FollowLayout_op_Implicit()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			bool conversion = ((bool)(arg0));
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// FollowLayout.op_Inequality
+		public static void FollowLayout_op_Inequality()
 		{
 			UnityEngine.Object arg0 = default(UnityEngine.Object);
 			UnityEngine.Object arg1 = default(UnityEngine.Object);
@@ -6035,6 +6200,38 @@ namespace Ludiq.Generated.Aot
 		
 		// HoverText.op_Inequality
 		public static void HoverText_op_Inequality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 != arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// ImageFillSetter.op_Equality
+		public static void ImageFillSetter_op_Equality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 == arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// ImageFillSetter.op_Implicit
+		public static void ImageFillSetter_op_Implicit()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			bool conversion = ((bool)(arg0));
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// ImageFillSetter.op_Inequality
+		public static void ImageFillSetter_op_Inequality()
 		{
 			UnityEngine.Object arg0 = default(UnityEngine.Object);
 			UnityEngine.Object arg1 = default(UnityEngine.Object);
@@ -6195,6 +6392,230 @@ namespace Ludiq.Generated.Aot
 		
 		// LongVariable.op_Inequality
 		public static void LongVariable_op_Inequality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 != arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_AutoFloat.op_Equality
+		public static void Ludiq_Generated_PropertyProviders_PropertyProvider_ChartAndGraph_AutoFloat_op_Equality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 == arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_AutoFloat.op_Implicit
+		public static void Ludiq_Generated_PropertyProviders_PropertyProvider_ChartAndGraph_AutoFloat_op_Implicit()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			bool conversion = ((bool)(arg0));
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_AutoFloat.op_Inequality
+		public static void Ludiq_Generated_PropertyProviders_PropertyProvider_ChartAndGraph_AutoFloat_op_Inequality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 != arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_BarChart_BarEvent.op_Equality
+		public static void Ludiq_Generated_PropertyProviders_PropertyProvider_ChartAndGraph_BarChart_BarEvent_op_Equality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 == arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_BarChart_BarEvent.op_Implicit
+		public static void Ludiq_Generated_PropertyProviders_PropertyProvider_ChartAndGraph_BarChart_BarEvent_op_Implicit()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			bool conversion = ((bool)(arg0));
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_BarChart_BarEvent.op_Inequality
+		public static void Ludiq_Generated_PropertyProviders_PropertyProvider_ChartAndGraph_BarChart_BarEvent_op_Inequality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 != arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_ChartOrientedSize.op_Equality
+		public static void Ludiq_Generated_PropertyProviders_PropertyProvider_ChartAndGraph_ChartOrientedSize_op_Equality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 == arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_ChartOrientedSize.op_Implicit
+		public static void Ludiq_Generated_PropertyProviders_PropertyProvider_ChartAndGraph_ChartOrientedSize_op_Implicit()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			bool conversion = ((bool)(arg0));
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_ChartOrientedSize.op_Inequality
+		public static void Ludiq_Generated_PropertyProviders_PropertyProvider_ChartAndGraph_ChartOrientedSize_op_Inequality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 != arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_GraphChartBase_GraphEvent.op_Equality
+		public static void Ludiq_Generated_PropertyProviders_PropertyProvider_ChartAndGraph_GraphChartBase_GraphEvent_op_Equality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 == arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_GraphChartBase_GraphEvent.op_Implicit
+		public static void Ludiq_Generated_PropertyProviders_PropertyProvider_ChartAndGraph_GraphChartBase_GraphEvent_op_Implicit()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			bool conversion = ((bool)(arg0));
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_GraphChartBase_GraphEvent.op_Inequality
+		public static void Ludiq_Generated_PropertyProviders_PropertyProvider_ChartAndGraph_GraphChartBase_GraphEvent_op_Inequality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 != arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_MaterialTiling.op_Equality
+		public static void Ludiq_Generated_PropertyProviders_PropertyProvider_ChartAndGraph_MaterialTiling_op_Equality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 == arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_MaterialTiling.op_Implicit
+		public static void Ludiq_Generated_PropertyProviders_PropertyProvider_ChartAndGraph_MaterialTiling_op_Implicit()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			bool conversion = ((bool)(arg0));
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_MaterialTiling.op_Inequality
+		public static void Ludiq_Generated_PropertyProviders_PropertyProvider_ChartAndGraph_MaterialTiling_op_Inequality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 != arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_PieChart_PieEvent.op_Equality
+		public static void Ludiq_Generated_PropertyProviders_PropertyProvider_ChartAndGraph_PieChart_PieEvent_op_Equality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 == arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_PieChart_PieEvent.op_Implicit
+		public static void Ludiq_Generated_PropertyProviders_PropertyProvider_ChartAndGraph_PieChart_PieEvent_op_Implicit()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			bool conversion = ((bool)(arg0));
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_PieChart_PieEvent.op_Inequality
+		public static void Ludiq_Generated_PropertyProviders_PropertyProvider_ChartAndGraph_PieChart_PieEvent_op_Inequality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 != arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_RadarChart_RadarEvent.op_Equality
+		public static void Ludiq_Generated_PropertyProviders_PropertyProvider_ChartAndGraph_RadarChart_RadarEvent_op_Equality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 == arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_RadarChart_RadarEvent.op_Implicit
+		public static void Ludiq_Generated_PropertyProviders_PropertyProvider_ChartAndGraph_RadarChart_RadarEvent_op_Implicit()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			bool conversion = ((bool)(arg0));
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// Ludiq.Generated.PropertyProviders.PropertyProvider_ChartAndGraph_RadarChart_RadarEvent.op_Inequality
+		public static void Ludiq_Generated_PropertyProviders_PropertyProvider_ChartAndGraph_RadarChart_RadarEvent_op_Inequality()
 		{
 			UnityEngine.Object arg0 = default(UnityEngine.Object);
 			UnityEngine.Object arg1 = default(UnityEngine.Object);
@@ -7260,38 +7681,6 @@ namespace Ludiq.Generated.Aot
 			optimized.Invoke(default(object[]));
 		}
 		
-		// ScriptableValue.op_Equality
-		public static void ScriptableValue_op_Equality()
-		{
-			UnityEngine.Object arg0 = default(UnityEngine.Object);
-			UnityEngine.Object arg1 = default(UnityEngine.Object);
-			bool @operator = (arg0 == arg1);
-			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
-			optimized.Invoke(null, arg0, arg1);
-			optimized.Invoke(default(object[]));
-		}
-		
-		// ScriptableValue.op_Implicit
-		public static void ScriptableValue_op_Implicit()
-		{
-			UnityEngine.Object arg0 = default(UnityEngine.Object);
-			bool conversion = ((bool)(arg0));
-			Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
-			optimized.Invoke(null, arg0);
-			optimized.Invoke(default(object[]));
-		}
-		
-		// ScriptableValue.op_Inequality
-		public static void ScriptableValue_op_Inequality()
-		{
-			UnityEngine.Object arg0 = default(UnityEngine.Object);
-			UnityEngine.Object arg1 = default(UnityEngine.Object);
-			bool @operator = (arg0 != arg1);
-			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
-			optimized.Invoke(null, arg0, arg1);
-			optimized.Invoke(default(object[]));
-		}
-		
 		// SimpleGraphDemo.op_Equality
 		public static void SimpleGraphDemo_op_Equality()
 		{
@@ -7378,6 +7767,38 @@ namespace Ludiq.Generated.Aot
 			optimized.Invoke(default(object[]));
 		}
 		
+		// StringHelper.op_Equality
+		public static void StringHelper_op_Equality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 == arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// StringHelper.op_Implicit
+		public static void StringHelper_op_Implicit()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			bool conversion = ((bool)(arg0));
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// StringHelper.op_Inequality
+		public static void StringHelper_op_Inequality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 != arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
 		// StringVariable.op_Equality
 		public static void StringVariable_op_Equality()
 		{
@@ -7433,6 +7854,38 @@ namespace Ludiq.Generated.Aot
 		
 		// TextController.op_Inequality
 		public static void TextController_op_Inequality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 != arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// TextReplacer.op_Equality
+		public static void TextReplacer_op_Equality()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			UnityEngine.Object arg1 = default(UnityEngine.Object);
+			bool @operator = (arg0 == arg1);
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// TextReplacer.op_Implicit
+		public static void TextReplacer_op_Implicit()
+		{
+			UnityEngine.Object arg0 = default(UnityEngine.Object);
+			bool conversion = ((bool)(arg0));
+			Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(null, arg0);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// TextReplacer.op_Inequality
+		public static void TextReplacer_op_Inequality()
 		{
 			UnityEngine.Object arg0 = default(UnityEngine.Object);
 			UnityEngine.Object arg1 = default(UnityEngine.Object);
@@ -7919,6 +8372,18 @@ namespace Ludiq.Generated.Aot
 			bool @operator = (arg0 != arg1);
 			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
 			optimized.Invoke(null, arg0, arg1);
+			optimized.Invoke(default(object[]));
+		}
+		
+		// UnityEngine.Animator.SetBool
+		public static void UnityEngine_Animator_SetBool()
+		{
+			UnityEngine.Animator target = default(UnityEngine.Animator);
+			string arg0 = default(string);
+			bool arg1 = default(bool);
+			target.SetBool(arg0, arg1);
+			Ludiq.InstanceActionInvoker<UnityEngine.Animator, string, bool> optimized = new Ludiq.InstanceActionInvoker<UnityEngine.Animator, string, bool>(default(System.Reflection.MethodInfo));
+			optimized.Invoke(default(UnityEngine.Animator), arg0, arg1);
 			optimized.Invoke(default(object[]));
 		}
 		
@@ -16524,38 +16989,6 @@ namespace Ludiq.Generated.Aot
 		
 		// UnityStandardAssets.ImageEffects.Vortex.op_Inequality
 		public static void UnityStandardAssets_ImageEffects_Vortex_op_Inequality()
-		{
-			UnityEngine.Object arg0 = default(UnityEngine.Object);
-			UnityEngine.Object arg1 = default(UnityEngine.Object);
-			bool @operator = (arg0 != arg1);
-			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
-			optimized.Invoke(null, arg0, arg1);
-			optimized.Invoke(default(object[]));
-		}
-		
-		// UpdateValue.op_Equality
-		public static void UpdateValue_op_Equality()
-		{
-			UnityEngine.Object arg0 = default(UnityEngine.Object);
-			UnityEngine.Object arg1 = default(UnityEngine.Object);
-			bool @operator = (arg0 == arg1);
-			Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
-			optimized.Invoke(null, arg0, arg1);
-			optimized.Invoke(default(object[]));
-		}
-		
-		// UpdateValue.op_Implicit
-		public static void UpdateValue_op_Implicit()
-		{
-			UnityEngine.Object arg0 = default(UnityEngine.Object);
-			bool conversion = ((bool)(arg0));
-			Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool> optimized = new Ludiq.StaticFunctionInvoker<UnityEngine.Object, bool>(default(System.Reflection.MethodInfo));
-			optimized.Invoke(null, arg0);
-			optimized.Invoke(default(object[]));
-		}
-		
-		// UpdateValue.op_Inequality
-		public static void UpdateValue_op_Inequality()
 		{
 			UnityEngine.Object arg0 = default(UnityEngine.Object);
 			UnityEngine.Object arg1 = default(UnityEngine.Object);

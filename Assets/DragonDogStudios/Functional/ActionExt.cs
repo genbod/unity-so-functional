@@ -3,11 +3,6 @@ using Unit = System.ValueTuple;
 
 using static F;
 
-public static partial class F
-{
-    public static Unit Unit() => default(Unit);
-}
-
 public static class ActionExt
 {
     public static Func<Unit> ToFunc(this Action action)

@@ -13,7 +13,47 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   excludeAssemblyDefinitionsWithEditorReference: 0
   automateBeforeBuilds: 0
-  deleteDllAfterBuilds: 1
-  automateForPlatforms: 0900000014000000
-  lastScan: 0
-  supportSerializedTypes: []
+  deleteDllAfterBuilds: 0
+  automateForPlatforms: 14000000
+  lastScan: 636652835479909283
+  supportSerializedTypes:
+  - TypeName: System.Boolean, mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Double, mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Single, mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Int32, mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.String, mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Type[], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Func`2[[System.Boolean, mscorlib],[System.String, mscorlib]],
+      mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Func`1[[System.Int32, mscorlib]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: Option`1[[System.Boolean, mscorlib]], Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: Option`1[[System.Double, mscorlib]], Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: Option`1[[System.Single, mscorlib]], Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: Option`1[[System.Int32, mscorlib]], Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: Option`1[[System.String, mscorlib]], Assembly-CSharp
+    IsCustom: 0
+    Emit: 1

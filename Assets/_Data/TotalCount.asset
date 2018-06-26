@@ -11,4 +11,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b1b57bb8037a5b4b80817f943689a76, type: 3}
   m_Name: TotalCount
   m_EditorClassIdentifier: 
-  Value: 0
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: Value
+      Entry: 7
+      Data: Option`1[[System.Int32, mscorlib]], Assembly-CSharp
+    - Name: value
+      Entry: 3
+      Data: 39476234
+    - Name: isSome
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 

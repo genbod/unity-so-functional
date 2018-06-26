@@ -13,14 +13,13 @@ using UnityEngine.UI;
 using static F;
 
 public class RealTimeCounts : MonoBehaviour {
+    public bool UpdateValues;
+
     [SerializeField]
     public float UpdateFrequency;
 
     [SerializeField]
     private IntVariable _totalCount;
-
-    [SerializeField]
-    private Dial[] Dials;
 
     [SerializeField]
     private GameObject SourcesPanel;
@@ -33,6 +32,9 @@ public class RealTimeCounts : MonoBehaviour {
 
     [SerializeField]
     private GameObject SourceItemPrefab;
+
+    [SerializeField]
+    private GameObject DialPrefab;
 
     [SerializeField]
     private Partition[] Partitions;
@@ -53,13 +55,22 @@ public class RealTimeCounts : MonoBehaviour {
     private Vector2 ScrollSnapPivot;
 
     [SerializeField]
-    private Text Latency;
+    private IntVariable Latency;
 
     [SerializeField]
     private Text Version;
 
     [SerializeField]
     private DoubleVariable Velocity;
+
+    [SerializeField]
+    private BoolVariable IsProcessing;
+
+    [SerializeField]
+    private GameObject DialOrigin;
+
+    [SerializeField]
+    private List<Transform> DialLocations;
 
     struct DateAndCount
     {
@@ -77,6 +88,7 @@ public class RealTimeCounts : MonoBehaviour {
 
     Dictionary<string, DateAndCount> _sourcesTimes = new Dictionary<string, DateAndCount>();
     Dictionary<string, DateAndCount> _partitionTimes = new Dictionary<string, DateAndCount>();
+    Dictionary<string, DialData> _dials = new Dictionary<string, DialData>();
 
     [Serializable]
     public class RealTimeRecord
@@ -98,20 +110,13 @@ public class RealTimeCounts : MonoBehaviour {
     // Use this for initialization
     IEnumerator Start()
     {
-        // Set Version
+        // Get Version
         var routine = new NestableCoroutine<string>(GetVersion());
         yield return routine.StartCoroutine(this);
 
         routine.Value.Match(
-            () => Version.text = "Version Could not be read.",
+            (e) => Version.text = "Version Could not be read.",
             (f) => Version.text = f);
-        //Version.text = routine.Value;
-
-        _totalCount.Value = 0;
-        foreach (var Dial in Dials)
-        {
-            Dial.Number.SetCurrentCount(0);
-        }
 
         _latestTime = System.DateTime.Now.ToUniversalTime();
         StartCoroutine("GetRealTimeCounts");
@@ -119,95 +124,32 @@ public class RealTimeCounts : MonoBehaviour {
 
     IEnumerator GetVersion()
     {
-        print(Application.streamingAssetsPath);
-
-        NestableCoroutine<string> coroutineObject = new NestableCoroutine<string>(VersionHelper.GetVersion(Application.streamingAssetsPath));
-        foreach(var x in coroutineObject.Routine) { yield return x; }
-
-        print("Found Version: " + coroutineObject.Value);
-        yield return coroutineObject.Value;
-    }
-
-    IEnumerator GetParameters(string filePath)
-    {
+        string filePath = Application.streamingAssetsPath + "/version.xml";
         print(filePath);
 
-        string result = "";
+        NestableCoroutine<string> coroutineObject = new NestableCoroutine<string>(VersionHelper.GetVersion(filePath));
+        foreach(var x in coroutineObject.Routine) { yield return x; }
 
-        if (filePath.Contains("://") || filePath.Contains(":///"))
-        {
-            WWW www = new WWW(filePath);
-            yield return www;
-            result = www.text;
-        }
-        else
-        {
-            result = File.ReadAllText(filePath);
-        }
-
-        if (result != "")
-        {
-            XmlDocument userXml1 = new XmlDocument();
-
-            userXml1.LoadXml(result);
-
-            XmlNodeList settingsList = userXml1.GetElementsByTagName("parameter");
-
-            print("Found Parameters: " + settingsList.Count);
-
-            foreach (XmlNode settingValue in settingsList)
-            {
-                _settings.Add(settingValue.Attributes["name"].Value, settingValue.Attributes["value"].Value);
-
-            }
-        }
-    }
-
-    T GetSetting<T>(string name) where T : IComparable
-    {
-        IComparable value = default(T);
-        Type settingType = typeof(T);
-        if (_settings.ContainsKey(name) && _settings[name] != "" && !_settings[name].StartsWith("#{"))
-        {
-            var valueString = _settings[name];
-            if (settingType == typeof(int))
-            {
-                value = int.Parse(valueString);
-            }
-            else if (settingType == typeof(float))
-            {
-                value = float.Parse(valueString);
-            }
-            else if (settingType == typeof(string))
-            {
-                value = valueString;
-            }
-        }
-        else if(PlayerPrefs.HasKey(name))// Look for value in PlayerPrefs
-        {
-            if (settingType == typeof(int))
-            {
-                value = PlayerPrefs.GetInt(name);
-            }
-            else if (settingType == typeof(float))
-            {
-                value = PlayerPrefs.GetFloat(name);
-            }
-            else if (settingType == typeof(string))
-            {
-                value = PlayerPrefs.GetString(name);
-            }
-        }
-
-        // return value
-        return (T)value;
+        var message = coroutineObject.Value.Match(
+            (e) => "Could Not Find Version.",
+            (f) => "Found Version: " + f);
+        print(message);
+        yield return coroutineObject.Value;
     }
 
     protected IEnumerator GetRealTimeCounts()
     {
         // Get Settings
         string filePath = Application.streamingAssetsPath + "/parameters.xml";
-        yield return StartCoroutine(GetParameters(filePath));
+        var getSettingsR = new NestableCoroutine<IEnumerable<Tuple<string, string>>>(LocalSettingsHelper.GetSettings(filePath));
+        yield return getSettingsR.StartCoroutine(this);
+        _settings = getSettingsR.Value.Match(
+            (e) => new Dictionary<string, string>(),
+            (f) => f.ToDictionary(x => x.Item1, x => x.Item2));
+
+        print("Found Parameters: " + _settings.Count);
+
+        var getStringSetting = _settings.GetSetting<string>();
 
         while (true)
         {
@@ -215,63 +157,91 @@ public class RealTimeCounts : MonoBehaviour {
             var now = System.DateTime.Now.ToUniversalTime();
             string timeStamp = GetTimeStamp(now);
             var lastTime = _latestTime;
+            var apiKey = getStringSetting("ApiKey").Match(() => "", (f) => f);
 
+            print("Current TimeStamp: " + now);
+
+            // Update Processing flag
+            IsProcessing.SetValue((now - lastTime).TotalSeconds > 3 * UpdateFrequency ? false : true);
+
+            // Set Headers
             List<Tuple<string, string>> headers = new List<Tuple<string, string>>()
             {
                 new Tuple<string,string>("Ocp-Apim-Trace", "true"),
-                new Tuple<string,string>("Ocp-Apim-Subscription-Key", GetSetting<string>("ApiKey"))
+                new Tuple<string,string>("Ocp-Apim-Subscription-Key", apiKey)
             };
-            var routine = Url.Of(GetSetting<string>("Url") + timeStamp).Map(url => WebRequest.GetJsonString(url, headers));
+
+            // Get response
+            var routine = getStringSetting("Url")
+                .Map(s => StringHelper.Append(s, timeStamp))
+                .Bind(Url.Of)
+                .Map(url => WebRequest.GetWebText(url, headers));
             NestableCoroutine<string> coroutine = new NestableCoroutine<string>(routine);
             foreach(var x in coroutine.Routine) { yield return x; }
 
-            var text = coroutine.Value.Match(
-                () => "",
-                (f) => f);
+            var response = coroutine.Value
+                .Map(JsonHelper.FixJson)
+                .Map(JsonHelper.FromJson<RealTimeRecord>);
 
-            if (coroutine.e != null)
+            // If we aren't updating values then wait and short-circuit
+            if (!UpdateValues)
             {
-                Debug.Log(coroutine.e);
+                yield return new WaitForSeconds(UpdateFrequency);
+                continue;
             }
-            else if (String.IsNullOrEmpty(text))
-            {
-                Debug.Log("Web Request did not return test");
-            }
-            else
-            {
-                // Fix JSON because Unity needs an object root
-                var response = JsonHelper.FromJson<RealTimeRecord>(FixJson(text));
 
-                // Get and display totalCount of events
-                int totalCount = response.Sum(x => x.count);
-                _totalCount.Value = totalCount;
+            //------------------- Start of Side Effects :( _---------------------------------------
+            // Get and display totalCount of events
+            response.AsEither()
+                .Map(y => y.Aggregate(Some(0), (acc, record) => acc.Map(num => num + record.count)))
+                .Match(
+                    (e) => print(e),
+                    (f) => _totalCount.SetValue(f));
 
-                // Get Totals
-                var _totals = GetTotals(response);
+            // Get Totals
+            response.Map(GetTotals)
+                .AsEither()
+                .Match(
+                    (e) => { print(e); },
+                    (_totals) =>
+                    {
+                        // Update Velocities
+                        var velocity = UpdateVelocities(_totals, now, lastTime);
 
-                // Update Velocities
-                Velocity.Value = UpdateVelocities(_totals, now);
+                        Velocity.SetValue(Some(velocity));
 
-                // Display Top Velocities
-                DisplayVelocities(Velocity.Value);
+                        // Display Top Velocities
+                        DisplayVelocities(velocity);
 
-                // Display list of sources
-                DisplaySources(_totals);
+                        // Display list of sources
+                        DisplaySources(_totals);
+                    });
 
-                // Update Partition Activity
-                UpdatePartitions(response);
+            // Update Partitions and Graph
+            response.AsEither()
+                .Match(
+                    (e) => { print(e); },
+                    (f) =>
+                    {
+                        // Update Partition Activity
+                        UpdatePartitions(f);
 
-                // Display Partitions
-                DisplayPartitions(lastTime);
+                        // Display Partitions
+                        DisplayPartitions(lastTime);
 
-                // Display Graph
-                DisplayGraph(response);
+                        // Display Graph
+                        DisplayGraph(f);
+                    });
 
-                var latency = GetLatency(response);
-
-                // Display Latency
-                DisplayLatency(latency);
-            }
+            // Get and Display Latency
+            response.Map(GetLatency)
+                .Match(
+                    (e) => { print(e); },
+                    (latency) =>
+                    {
+                        // Display Latency
+                        DisplayLatency(latency);
+                    });
 
             yield return new WaitForSeconds(UpdateFrequency);
         }
@@ -279,7 +249,7 @@ public class RealTimeCounts : MonoBehaviour {
 
     private void DisplayLatency(int latency)
     {
-        Latency.text = latency.ToString();
+        Latency.SetValue(latency);
     }
 
     private void DisplayGraph(List<RealTimeRecord> response)
@@ -289,7 +259,12 @@ public class RealTimeCounts : MonoBehaviour {
             var index = currentRotation++ % _sourcesTimes.Keys.Count;
             var source = _sourcesTimes.Keys.ElementAt(index);
             var data = response.Where(x => x.sourceId == source)
-                .GroupBy(x => x.processedAt)
+                .GroupBy(x =>
+                {
+                    var dateTime = DateTime.Parse(x.processedAt).ToUniversalTime();
+                    return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, 0);
+                })
+                .OrderBy(g => g.Key)
                 .Select(g => new
                 {
                     processedAt = g.Key,
@@ -302,11 +277,13 @@ public class RealTimeCounts : MonoBehaviour {
 
             // Get one result
             Graph.DataSource.AddCategory(source, CategoryMaterial, 2, new MaterialTiling() { EnableTiling = false }, InnerFillMaterial, false, PointMaterial, 6);
+            int runningTotal = 0;
             foreach (var record in data)
             {
                 var timeStamp = record.processedAt;
+                runningTotal += record.count;
                 //var timeStamp = record.processedAt.Substring(0, 4) + "/" + record.processedAt.Substring(4, 2) + "/" + record.processedAt.Substring(6, 2) + " " + record.processedAt.Substring(8, 2) + ":00";
-                Graph.DataSource.AddPointToCategory(record.sourceId, DateTime.Parse(timeStamp).ToUniversalTime(), record.count);
+                Graph.DataSource.AddPointToCategory(record.sourceId, timeStamp, runningTotal);
             }
             //foreach (var sourceId in _sourcesTimes.Keys)
             //{
@@ -345,7 +322,11 @@ public class RealTimeCounts : MonoBehaviour {
             }
             _partitionTimes[index] = curPartition;
 
-            if (curPartition.velocity < 1)
+            if(!IsProcessing.GetValue())
+            {
+                Partitions[i].Text.color = Color.white;
+            }
+            else if (curPartition.velocity < 1)
             {
                 Partitions[i].Text.color = Color.red;
             }
@@ -427,22 +408,41 @@ public class RealTimeCounts : MonoBehaviour {
 
     private void DisplayVelocities(double totalVelocity)
     {
-        var sortedVelocities = _sourcesTimes.OrderByDescending(c => c.Value.velocity).Take(Dials.Length).ToList();
+        var sortedVelocities = _sourcesTimes.OrderByDescending(c => c.Value.velocity).ToList();
         totalVelocity = totalVelocity > 0 ? totalVelocity : 1;
 
-        for (int i = 0; i < Dials.Length; i++)
+        for (int i = 0; i < sortedVelocities.Count(); i++)
         {
-            if (i < sortedVelocities.Count)
+            DialData dial;
+            var item = sortedVelocities[i];
+            // Check to see if the DialData already exists
+            if (_dials.ContainsKey(item.Key))
             {
-                Dials[i].gameObject.SetActive(true);
-                Dials[i].Title.text = sortedVelocities[i].Key;
-                Dials[i].Number.TargetCount.Value = sortedVelocities[i].Value.count;
-                Dials[i].Fill.fillAmount = (float)(sortedVelocities[i].Value.velocity / totalVelocity);
+                dial = _dials[item.Key];
             }
             else
             {
-                Dials[i].gameObject.SetActive(false);
+                dial = ScriptableObject.CreateInstance<DialData>();
+                dial.Name.SetValue(item.Key);
+                GameObject newDial = Instantiate(DialPrefab) as GameObject;
+                DialController controller = newDial.GetComponent<DialController>();
+                controller.dialData = dial;
+                controller.DialLocations = DialLocations;
+                controller.DeepSix = DialOrigin.transform;
+                newDial.transform.parent = DialOrigin.transform;
+                newDial.transform.position = DialOrigin.transform.position;
+                newDial.transform.localScale = Vector3.one;
             }
+            dial.Count.SetValue(item.Value.count);
+            dial.FillAmount.SetValue((float)(item.Value.velocity / totalVelocity));
+            dial.Index.SetValue(i);
+            if (i <= 5)
+            {
+                dial.Enabled.SetValue(true);
+            }
+            else dial.Enabled.SetValue(false);
+
+            _dials[item.Key] = dial;
         }
     }
 
@@ -454,8 +454,10 @@ public class RealTimeCounts : MonoBehaviour {
     /// <param name="now">Current TimeStamp</param>
     /// <param name="sourcesTimes">Dictionary of velocities to be updated</param>
     /// <returns>Total current velocity</returns>
-    private double UpdateVelocities(List<Total> totals, DateTime now)
+    private double UpdateVelocities(List<Total> totals, DateTime now, DateTime lastTime)
     {
+        print("Entered Update Velocities");
+
         double totalVelocity = 0;
 
         // clear out old data
@@ -499,7 +501,7 @@ public class RealTimeCounts : MonoBehaviour {
             else
             {
                 // Get elapsed Time
-                var elapsedTime = now - _latestTime;
+                var elapsedTime = now - lastTime;
                 var curVelocity = item.count / elapsedTime.TotalSeconds;
                 totalVelocity += curVelocity;
                 _sourcesTimes[item.source] = new DateAndCount() { count = item.count, timestamp = curTimeStamp, velocity = curVelocity };
@@ -542,11 +544,5 @@ public class RealTimeCounts : MonoBehaviour {
         var month = now.Month.ToString().Length < 2 ? "0" + now.Month : now.Month.ToString();
         var day = now.Day.ToString().Length < 2 ? "0" + now.Day : now.Day.ToString();
         return year + month + day + "00";
-    }
-
-    private string FixJson(string value)
-    {
-        value = "{\"Items\":" + value + "}";
-        return value;
     }
 }
