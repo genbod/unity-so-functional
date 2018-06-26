@@ -162,7 +162,8 @@ public class RealTimeCounts : MonoBehaviour {
             print("Current TimeStamp: " + now);
 
             // Update Processing flag
-            IsProcessing.SetValue((now - lastTime).TotalSeconds > 3 * UpdateFrequency ? false : true);
+            var processingTime = new TimeSpan(0, 10, 0);
+            IsProcessing.SetValue((now - lastTime).TotalSeconds > processingTime.TotalSeconds ? false : true);
 
             // Set Headers
             List<Tuple<string, string>> headers = new List<Tuple<string, string>>()
