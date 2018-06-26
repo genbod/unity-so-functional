@@ -49,7 +49,7 @@ public class NestableCoroutine<T>
 
     public IEnumerable Routine { get; private set; }
 
-    public Option<T> Value
+    public Exceptional<T> Value
     {
         get
         {
@@ -63,7 +63,7 @@ public class NestableCoroutine<T>
     }
 
     private bool isCancelled = false;
-    private Option<T> returnVal;
+    private Exceptional<T> returnVal;
     public Exception e;
     public Coroutine coroutine;
 
@@ -106,12 +106,19 @@ public class NestableCoroutine<T>
             {
                 if (yielded != null && yielded is T)
                 {
-                    returnVal = Some((T)yielded);
+                    returnVal = Exceptional((T)yielded);
                     yield break;
                 }
                 else if (yielded != null && yielded is Option<T>)
                 {
-                    returnVal = (Option<T>)yielded;
+                    returnVal = ((Option<T>)yielded).Match(
+                        () => Exceptional.Of<T>(new NullReferenceException()),
+                        (f) => Exceptional(f));
+                    yield break;
+                }
+                else if(yielded != null && yielded is Exceptional<T>)
+                {
+                    returnVal = (Exceptional<T>)yielded;
                     yield break;
                 }
                 else

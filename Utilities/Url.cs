@@ -16,7 +16,7 @@ public struct Url
     }
 
     private static bool IsValid(string url)
-        => !String.IsNullOrEmpty(url) && (url.StartsWith("http://") || url.StartsWith("https://"));
+        => !String.IsNullOrEmpty(url) && (url.Contains("://") || url.Contains(":///"));
 
     public static Option<Url> Of(string url)
         => IsValid(url) ? Some(new Url(url)) : None;
