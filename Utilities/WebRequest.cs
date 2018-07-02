@@ -19,7 +19,7 @@ public class WebRequest {
         yield return GetWebText(url, Enumerable.Empty<Tuple<string, string>>());
     }
 
-	public static IEnumerator GetWebText(Url url, IEnumerable<Tuple<string, string>> headers)
+	public static IEnumerator GetWebText(Url url, IEnumerable<Tuple<string, string>> headers, bool treatEmptyStringAsError = false)
     {
         UnityWebRequest www = UnityWebRequest.Get(url.ToString());
         www.chunkedTransfer = false;
@@ -29,11 +29,17 @@ public class WebRequest {
         if (www.isNetworkError || www.isHttpError)
         {
             Debug.Log(www.error);
-            yield return Error(www.error);
+            yield return Exceptional.Of<string>(new WebRequestException(www.error));
         }
-        else
+        else if (treatEmptyStringAsError && String.IsNullOrEmpty(www.downloadHandler.text))
         {
-            yield return www.downloadHandler.text;
+            yield return Exceptional.Of<string>(new WebRequestException("Result was empty"));
         }
+        else yield return www.downloadHandler.text;
     }
+}
+
+public class WebRequestException : Exception
+{
+    public WebRequestException(string message) : base(message) { }
 }

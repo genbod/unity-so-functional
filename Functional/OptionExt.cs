@@ -53,5 +53,25 @@ public static class OptionExt
          => @this.Match(
             () => false,
             (_) => true);
+
+    // LINQ
+
+      public static Option<R> Select<T, R>(this Option<T> @this, Func<T, R> func)
+         => @this.Map(func);
+
+      public static Option<T> Where<T>
+         (this Option<T> optT, Func<T, bool> predicate)
+         => optT.Match(
+            () => None,
+            (t) => predicate(t) ? optT : None);
+
+      public static Option<RR> SelectMany<T, R, RR>
+         (this Option<T> opt, Func<T, Option<R>> bind, Func<T, R, RR> project)
+         => opt.Match(
+            () => None,
+            (t) => bind(t).Match(
+               () => None,
+               (r) => Some(project(t, r))));
+
 }
 
