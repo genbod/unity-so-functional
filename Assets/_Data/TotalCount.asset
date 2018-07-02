@@ -12,23 +12,11 @@ MonoBehaviour:
   m_Name: TotalCount
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
+    SerializedFormat: 0
+    SerializedBytes: 03000c00000044656661756c7456616c75652f0000000000330000004f7074696f6e60315b5b53797374656d2e496e7433322c206d73636f726c69625d5d2c20417373656d626c792d43536861727017000500000076616c7565000000002b00060000006973536f6d65000503000500000056616c7565300000000017000500000076616c7565000000002b00060000006973536f6d650005
     ReferencedUnityObjects: []
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes:
-    - Name: Value
-      Entry: 7
-      Data: Option`1[[System.Int32, mscorlib]], Assembly-CSharp
-    - Name: value
-      Entry: 3
-      Data: 39476234
-    - Name: isSome
-      Entry: 5
-      Data: true
-    - Name: 
-      Entry: 8
-      Data: 
+    SerializationNodes: []

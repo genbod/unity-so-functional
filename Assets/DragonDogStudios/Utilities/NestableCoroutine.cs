@@ -112,7 +112,7 @@ public class NestableCoroutine<T>
                 else if (yielded != null && yielded is Option<T>)
                 {
                     returnVal = ((Option<T>)yielded).Match(
-                        () => Exceptional.Of<T>(new NullReferenceException()),
+                        () => Exceptional.Of<T>(new NoneException()),
                         (f) => Exceptional(f));
                     yield break;
                 }
@@ -136,4 +136,9 @@ public class CoroutineCancelledException : System.Exception
     {
 
     }
+}
+
+public class NoneException : Exception
+{
+    public NoneException() : base("Option was None") { }
 }

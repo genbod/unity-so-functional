@@ -1,5 +1,7 @@
 ﻿using Assets.Scripts.Json;
 using ChartAndGraph;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,10 +11,11 @@ using System.Linq;
 using System.Xml;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static F;
 
-public class RealTimeCounts : MonoBehaviour {
+public class RealTimeCounts : SerializedMonoBehaviour {
     public bool UpdateValues;
 
     [SerializeField]
@@ -101,6 +104,8 @@ public class RealTimeCounts : MonoBehaviour {
         public string processedAt;
     }
 
+    [SerializeField]
+    private IntVariable latestTimeStamp;
     DateTime _latestTime;
 
     int currentRotation = 0;
@@ -155,11 +160,20 @@ public class RealTimeCounts : MonoBehaviour {
         {
             // Get Timestamp
             var now = System.DateTime.Now.ToUniversalTime();
-            string timeStamp = GetTimeStamp(now);
+            var timeStamp = Some(now).Map(GetTimeStamp).Bind(Int.Parse);
             var lastTime = _latestTime;
             var apiKey = getStringSetting("ApiKey").Match(() => "", (f) => f);
 
             print("Current TimeStamp: " + now);
+
+            var isNewDay = IsNewDay(latestTimeStamp.Value, timeStamp);
+            latestTimeStamp.SetValue(timeStamp);
+
+            if (isNewDay)
+            {
+                Reset();
+                break;
+            }
 
             // Update Processing flag
             var processingTime = new TimeSpan(0, 10, 0);
@@ -173,10 +187,12 @@ public class RealTimeCounts : MonoBehaviour {
             };
 
             // Get response
-            var routine = getStringSetting("Url")
-                .Map(s => StringHelper.Append(s, timeStamp))
-                .Bind(Url.Of)
-                .Map(url => WebRequest.GetWebText(url, headers));
+            var routine = (from a in getStringSetting("Url")
+                            from b in timeStamp
+                            select StringHelper.Append(a,b.ToString()))
+                                .Bind(Url.Of)
+                                .Map(url => WebRequest.GetWebText(url, headers, true));
+
             NestableCoroutine<string> coroutine = new NestableCoroutine<string>(routine);
             foreach(var x in coroutine.Routine) { yield return x; }
 
@@ -514,6 +530,14 @@ public class RealTimeCounts : MonoBehaviour {
         return totalVelocity;
     }
 
+    private void Reset()
+    {
+        Latency.SetValue(None);
+        Velocity.SetValue(None);
+        _totalCount.SetValue(None);
+        SceneManager.LoadScene(0);
+    }
+
     private static List<Total> GetTotals(List<RealTimeRecord> response)
     {
         return response.GroupBy(x => x.sourceId)
@@ -545,5 +569,20 @@ public class RealTimeCounts : MonoBehaviour {
         var month = now.Month.ToString().Length < 2 ? "0" + now.Month : now.Month.ToString();
         var day = now.Day.ToString().Length < 2 ? "0" + now.Day : now.Day.ToString();
         return year + month + day + "00";
+    }
+
+    private static bool IsNewDay(Option<int> lastTime, Option<int> now)
+    {
+        return lastTime
+            .Match(
+            () => now.Match(
+                () => false,
+                (f) => true
+            ),
+            (f) => now.Match(
+                () => true,
+                (n) => f/100 != n/100
+            )
+        );
     }
 }
