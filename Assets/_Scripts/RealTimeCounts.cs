@@ -25,16 +25,22 @@ public class RealTimeCounts : SerializedMonoBehaviour {
     private IntVariable _totalCount;
 
     [SerializeField]
-    private GameObject SourcesPanel;
+    private RectTransform ContentTransform;
 
     [SerializeField]
-    private RectTransform contentPanel;
+    private GameObject contentVisuals;
+
+    [SerializeField]
+    private GameObject contentLayout;
 
     [SerializeField]
     private ScrollRect scrollRect;
 
     [SerializeField]
     private GameObject SourceItemPrefab;
+
+    [SerializeField]
+    private GameObject SourceLayoutPrefab;
 
     [SerializeField]
     private GameObject DialPrefab;
@@ -92,6 +98,10 @@ public class RealTimeCounts : SerializedMonoBehaviour {
     Dictionary<string, DateAndCount> _sourcesTimes = new Dictionary<string, DateAndCount>();
     Dictionary<string, DateAndCount> _partitionTimes = new Dictionary<string, DateAndCount>();
     Dictionary<string, DialData> _dials = new Dictionary<string, DialData>();
+    Dictionary<string, SourceData> _sources = new Dictionary<string, SourceData>();
+    [SerializeField]
+    List<Transform> _sourceLocations = new List<Transform>();
+    Dictionary<string, GameObject> _sourceObjects = new Dictionary<string, GameObject>();
 
     [Serializable]
     public class RealTimeRecord
@@ -172,7 +182,6 @@ public class RealTimeCounts : SerializedMonoBehaviour {
             if (isNewDay)
             {
                 Reset();
-                break;
             }
 
             // Update Processing flag
@@ -388,38 +397,73 @@ public class RealTimeCounts : SerializedMonoBehaviour {
 
     private void DisplaySources(List<Total> totals)
     {
-        // Clear list of sources
-        foreach (Transform child in SourcesPanel.transform)
-        {
-            GameObject.Destroy(child.gameObject);
-        }
         if (_sourcesTimes.Count == 0)
         {
             return;
         }
+        
+        // Make sure there are enough place holders
+        if (_sourceLocations.Count() < totals.Count())
+        {
+            var difference = totals.Count() - _sourceLocations.Count();
+            for (int i = 0; i <= difference; i++)
+            {
+                var newPlaceholder = Instantiate(SourceLayoutPrefab);
+                newPlaceholder.transform.parent = contentLayout.transform;
+                _sourceLocations.Add(newPlaceholder.transform);
+            }
+        }
 
         var index = currentRotation % _sourcesTimes.Keys.Count;
-        Transform scrollTarget = contentPanel.transform;
+        Transform scrollTarget = ContentTransform.transform;
 
         for (int i = 0; i < totals.Count(); i++)
         {
-            GameObject newSource = Instantiate(SourceItemPrefab) as GameObject;
-            ListItemController controller = newSource.GetComponent<ListItemController>();
-            controller.Title.text = totals[i].source;
-            controller.Count.text = totals[i].count.ToString("#,#", CultureInfo.InvariantCulture);
-            newSource.transform.parent = SourcesPanel.transform;
-            newSource.transform.localScale = Vector3.one;
+            SourceData sourceData;
+            GameObject source;
+            var item = totals[i];
+            // Check to see if the SourceData already exists
+            if (_sources.ContainsKey(item.source))
+            {
+                sourceData = _sources[item.source];
+                source = _sourceObjects[item.source];
+            }
+            else
+            {
+                sourceData = ScriptableObject.CreateInstance<SourceData>();
+                sourceData.Title.SetValue(item.source);
+                source = Instantiate(SourceItemPrefab) as GameObject;
+                SourceController controller = source.GetComponent<SourceController>();
+                controller.sourceData = sourceData;
+                controller.SourceLocations = _sourceLocations;
+                controller.DeepSix = contentVisuals.transform;
+                source.transform.parent = contentVisuals.transform;
+                source.transform.position = contentVisuals.transform.position;
+                source.transform.localScale = Vector3.one;
+            }
+            sourceData.Count.SetValue(item.count);
+            sourceData.Index.SetValue(i);
+            sourceData.Enabled.SetValue(true);
+            //GameObject newSource = Instantiate(SourceItemPrefab) as GameObject;
+            //ListItemController controller = newSource.GetComponent<ListItemController>();
+            //controller.Title.text = totals[i].source;
+            //controller.Count.text = totals[i].count.ToString("#,#", CultureInfo.InvariantCulture);
+            //newSource.transform.parent = SourcesPanel.transform;
+            //newSource.transform.localScale = Vector3.one;
             if (i == index) // highlight button
             {
-                Button btn = newSource.GetComponent<Button>();
+                Button btn = source.GetComponent<Button>();
                 btn.Select();
                 btn.OnSelect(null);
-                scrollTarget = newSource.transform;
-                Debug.Log("Current Source: " + totals[i].source);
+                scrollTarget = source.transform;
+                Debug.Log("Current Source: " + item.source);
             }
+
+            _sources[item.source] = sourceData;
+            _sourceObjects[item.source] = source;
         }
         Canvas.ForceUpdateCanvases();
-        contentPanel.anchoredPosition = (Vector2)scrollRect.transform.InverseTransformPoint(contentPanel.position)
+        ContentTransform.anchoredPosition = (Vector2)scrollRect.transform.InverseTransformPoint(ContentTransform.position)
             - (Vector2)scrollRect.transform.InverseTransformPoint(scrollTarget.position) + ScrollSnapPivot;
     }
 
@@ -530,7 +574,7 @@ public class RealTimeCounts : SerializedMonoBehaviour {
         return totalVelocity;
     }
 
-    private void Reset()
+    public void Reset()
     {
         Latency.SetValue(None);
         Velocity.SetValue(None);

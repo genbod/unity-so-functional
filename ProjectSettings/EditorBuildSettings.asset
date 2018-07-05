@@ -8,7 +8,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/_Scenes/_DailyTotals.unity
     guid: 13b4a4ad19680f242a57c22532bd62e8
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Scenes/_DailyTotals_animatedLayoutchange.unity
     guid: 04717756bd8d3a24dbc8fe221eaaa65a
+  - enabled: 1
+    path: Assets/_Scenes/_DailyTotals_SourceLayout.unity
+    guid: c3f896c2bbd9b0f49bacf7c69540012a
   m_configObjects: {}
