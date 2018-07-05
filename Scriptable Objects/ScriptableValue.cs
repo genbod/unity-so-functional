@@ -18,4 +18,12 @@ public class ScriptableValue<T> : SerializedScriptableObject
     {
         Value = DefaultValue;
     }
+
+    public Option<System.Object> GetValueAsOption()
+    {
+        return Value.Match(
+            () => None,
+            (f) => (System.Object)f
+        );
+    }
 }

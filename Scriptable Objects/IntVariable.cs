@@ -20,6 +20,14 @@ public class IntVariable : ScriptableValue<int>, IPrintableValue
             (f) => f.ToString());
     }
 
+    public string GetFormattedValueToString()
+    {
+        return Value.Match(
+            () => "None",
+            (f) => StringHelper.GetFormattedInt(f)
+        );
+    }
+
     public int GetValue()
         => Value.Match(
             () => 0,

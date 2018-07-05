@@ -1,9 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using UnityEngine;
+using static F;
 
-public class StringHelper : MonoBehaviour {
+[CreateAssetMenu]
+public class StringHelper : ScriptableObject
+{
     public static string Append(string @this, string appendage)
         => @this + appendage;
 
@@ -21,6 +22,24 @@ public class StringHelper : MonoBehaviour {
             return millions.ToString("0.00") + "M";
         }
         return (totalCount / 1000).ToString("0.00") + "K";
+    }
+
+    public static Option<string> GetFormattedIntAsOptional(System.Object obj)
+    {
+        if (obj is int)
+        {
+            return GetFormattedInt((int)obj);
+        }
+        else return None;
+    }
+
+    public static string GetFormattedInt(System.Object obj)
+    {
+        if (obj is int)
+        {
+            return GetFormattedInt((int)obj);
+        }
+        else return "NOT AN INT";
     }
 
     public static string GetFormattedInt(int totalCount)
