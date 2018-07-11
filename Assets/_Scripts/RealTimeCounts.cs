@@ -99,6 +99,8 @@ public class RealTimeCounts : SerializedMonoBehaviour {
     Dictionary<string, DateAndCount> _partitionTimes = new Dictionary<string, DateAndCount>();
     Dictionary<string, DialData> _dials = new Dictionary<string, DialData>();
     Dictionary<string, SourceData> _sources = new Dictionary<string, SourceData>();
+    Dictionary<string, List<DateAndCount>> _graphData = new Dictionary<string, List<DateAndCount>>();
+
     [SerializeField]
     List<Transform> _sourceLocations = new List<Transform>();
     Dictionary<string, GameObject> _sourceObjects = new Dictionary<string, GameObject>();
@@ -255,8 +257,11 @@ public class RealTimeCounts : SerializedMonoBehaviour {
                         // Display Partitions
                         DisplayPartitions(lastTime);
 
+                        // Update Graph
+                        UpdateGraphData(f);
+
                         // Display Graph
-                        DisplayGraph(f);
+                        DisplayGraph();
                     });
 
             // Get and Display Latency
@@ -278,25 +283,68 @@ public class RealTimeCounts : SerializedMonoBehaviour {
         Latency.SetValue(latency);
     }
 
-    private void DisplayGraph(List<RealTimeRecord> response)
+    private void UpdateGraphData(List<RealTimeRecord> response)
+    {
+       var data = response
+                .GroupBy(w =>
+                {
+                    var dateTime = DateTime.Parse(w.processedAt).ToUniversalTime();
+                    return new
+				    {
+					    sourceId = w.sourceId,
+					    processedAt = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, 0)
+				    };
+                })
+                .Select(g => new
+                {
+                    sourceId = g.Key.sourceId,
+					processedAt = g.Key.processedAt,
+                    count = g.Sum(x => x.count)
+                })
+				.OrderBy(h => h.processedAt)
+				.GroupBy(y => y.sourceId);
+        foreach (var group in data)
+        {
+            var sourceId = group.Key;
+            var list = group.Select(x => new DateAndCount(){ timestamp = x.processedAt, count = x.count}).ToList();
+            _graphData[sourceId] = list;
+        }
+    }
+
+    private void DisplayGraph()
     {
         if (Graph != null && _sourcesTimes.Count > 0)
         {
             var index = currentRotation++ % _sourcesTimes.Keys.Count;
             var source = _sourcesTimes.Keys.ElementAt(index);
-            var data = response.Where(x => x.sourceId == source)
-                .GroupBy(x =>
-                {
-                    var dateTime = DateTime.Parse(x.processedAt).ToUniversalTime();
-                    return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, 0);
-                })
-                .OrderBy(g => g.Key)
-                .Select(g => new
-                {
-                    processedAt = g.Key,
-                    g.FirstOrDefault().sourceId,
-                    count = g.Sum(x => x.count)
-                });
+            DisplayGraphForSource(source);
+
+            Transform scrollTarget = ContentTransform.transform;
+            var childTransform = contentVisuals.transform.GetChild(index);
+            Button btn = childTransform.GetComponent<Button>();
+
+            if (btn != null) // highlight button
+            {
+                btn.Select();
+                btn.OnSelect(null);
+                scrollTarget = childTransform;
+                Debug.Log("Current Source: " + source);
+            }
+
+            ContentTransform.anchoredPosition = (Vector2)scrollRect.transform.InverseTransformPoint(ContentTransform.position)
+                - (Vector2)scrollRect.transform.InverseTransformPoint(scrollTarget.position) + ScrollSnapPivot;
+        }
+    }
+
+    private void DisplayGraphForSource(string source)
+    {
+        if (!_graphData.ContainsKey(source))
+        {
+            Debug.Log(source + " selected but no data exists!");
+            return;
+        }
+
+        var data = _graphData[source];
             Debug.Log("Loading Graph...");
             Graph.DataSource.StartBatch();
             Graph.DataSource.Clear();
@@ -306,22 +354,11 @@ public class RealTimeCounts : SerializedMonoBehaviour {
             int runningTotal = 0;
             foreach (var record in data)
             {
-                var timeStamp = record.processedAt;
+                var timeStamp = record.timestamp;
                 runningTotal += record.count;
-                //var timeStamp = record.processedAt.Substring(0, 4) + "/" + record.processedAt.Substring(4, 2) + "/" + record.processedAt.Substring(6, 2) + " " + record.processedAt.Substring(8, 2) + ":00";
-                Graph.DataSource.AddPointToCategory(record.sourceId, timeStamp, runningTotal);
+                Graph.DataSource.AddPointToCategory(source, timeStamp, runningTotal);
             }
-            //foreach (var sourceId in _sourcesTimes.Keys)
-            //{
-            //    Graph.DataSource.AddCategory(sourceId, CategoryMaterial, 2, new MaterialTiling() { EnableTiling = false }, null, false, PointMaterial, 6);
-            //}
-            //foreach (var record in response)
-            //{
-            //    var timeStamp = DateTime.Parse(record.processedAt).ToUniversalTime();
-            //    Graph.DataSource.AddPointToCategory(record.sourceId, timeStamp, record.count);
-            //}
             Graph.DataSource.EndBatch();
-        }
     }
 
     private void DisplayPartitions(DateTime lastTime)
@@ -382,7 +419,6 @@ public class RealTimeCounts : SerializedMonoBehaviour {
                 if (curTime > existingPartition.timestamp)
                 {
                     existingPartition.timestamp = curTime;
-                    //existingPartition.velocity = (p.count - existingPartition.count) / (curTime - existingPartition.timestamp).TotalSeconds;
                     existingPartition.count = p.count;
                     _partitionTimes[p.partition] = existingPartition;
                 }
@@ -444,27 +480,11 @@ public class RealTimeCounts : SerializedMonoBehaviour {
             sourceData.Count.SetValue(item.count);
             sourceData.Index.SetValue(i);
             sourceData.Enabled.SetValue(true);
-            //GameObject newSource = Instantiate(SourceItemPrefab) as GameObject;
-            //ListItemController controller = newSource.GetComponent<ListItemController>();
-            //controller.Title.text = totals[i].source;
-            //controller.Count.text = totals[i].count.ToString("#,#", CultureInfo.InvariantCulture);
-            //newSource.transform.parent = SourcesPanel.transform;
-            //newSource.transform.localScale = Vector3.one;
-            if (i == index) // highlight button
-            {
-                Button btn = source.GetComponent<Button>();
-                btn.Select();
-                btn.OnSelect(null);
-                scrollTarget = source.transform;
-                Debug.Log("Current Source: " + item.source);
-            }
-
+            
             _sources[item.source] = sourceData;
             _sourceObjects[item.source] = source;
         }
         Canvas.ForceUpdateCanvases();
-        ContentTransform.anchoredPosition = (Vector2)scrollRect.transform.InverseTransformPoint(ContentTransform.position)
-            - (Vector2)scrollRect.transform.InverseTransformPoint(scrollTarget.position) + ScrollSnapPivot;
     }
 
     private void DisplayVelocities(double totalVelocity)
@@ -580,6 +600,12 @@ public class RealTimeCounts : SerializedMonoBehaviour {
         Velocity.SetValue(None);
         _totalCount.SetValue(None);
         SceneManager.LoadScene(0);
+    }
+
+    public void SourceClicked(string buttonName)
+    {
+        Debug.Log(buttonName + " Clicked");
+        DisplayGraphForSource(buttonName);
     }
 
     private static List<Total> GetTotals(List<RealTimeRecord> response)

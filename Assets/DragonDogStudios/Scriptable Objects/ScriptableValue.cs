@@ -14,6 +14,9 @@ public class ScriptableValue<T> : SerializedScriptableObject
     public void SetValue(Option<T> newValue)
         => Value = newValue;
 
+    public void SetValue(T newValue)
+        => Value = Some(newValue);
+
     private void OnEnable()
     {
         Value = DefaultValue;
@@ -21,9 +24,10 @@ public class ScriptableValue<T> : SerializedScriptableObject
 
     public Option<System.Object> GetValueAsOption()
     {
+        // This doesn't work for None becasue returned value for None is converted to Option<Option.None>
         return Value.Match(
             () => None,
-            (f) => (System.Object)f
+            (f) => Some((System.Object)f)
         );
     }
 }

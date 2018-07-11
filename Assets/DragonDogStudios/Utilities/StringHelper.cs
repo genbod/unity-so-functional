@@ -28,7 +28,7 @@ public class StringHelper : ScriptableObject
     {
         if (obj is int)
         {
-            return GetFormattedInt((int)obj);
+            return Some(GetFormattedInt((int)obj));
         }
         else return None;
     }

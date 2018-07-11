@@ -84,7 +84,7 @@ MonoBehaviour:
       Data: Option`1[[System.String, mscorlib]], Assembly-CSharp
     - Name: value
       Entry: 1
-      Data: Source1
+      Data: Source
     - Name: isSome
       Entry: 5
       Data: true
@@ -96,7 +96,7 @@ MonoBehaviour:
       Data: Option`1[[System.String, mscorlib]], Assembly-CSharp
     - Name: value
       Entry: 1
-      Data: Source1
+      Data: Source
     - Name: isSome
       Entry: 5
       Data: true

@@ -479,6 +479,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb2d72b21b3507c40a13cc4f10fb9b45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   sourceData: {fileID: 11400000, guid: 8e54db5dffb85f64c80c386a07d0bc4f, type: 2}
   SourceLocations:
   - {fileID: 0}
@@ -486,6 +495,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   DeepSix: {fileID: 0}
+  SourceClickedEvent: {fileID: 11400000, guid: 4e454cc118c4eff418511d59897d9f30, type: 2}
   Title: {fileID: 114138916996365954}
   Count: {fileID: 114670159719090362}
   FollowLayout: {fileID: 114139382201805052}
@@ -604,12 +614,12 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11500000, guid: 48bdbe56a12ef99439fa74a1be0f1d02, type: 3}
-        m_MethodName: 
+      - m_Target: {fileID: 114513729050317858}
+        m_MethodName: SendClickMessage
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
