@@ -25,8 +25,8 @@ public struct Option<T> : IEquatable<Option.None>, IEquatable<Option<T>>
     public static implicit operator Option<T>(Option.None _) => new Option<T>();
     public static implicit operator Option<T>(Option.Some<T> some) => new Option<T>(some.Value);
 
-    public static implicit operator Option<T>(T value)
-       => value == null ? None : Some(value);
+    // public static implicit operator Option<T>(T value)
+    //    => value == null ? None : Some(value);
 
     public R Match<R>(Func<R> None, Func<T, R> Some)
         => isSome ? Some(value) : None();
