@@ -61,6 +61,9 @@ public class RealTimeCounts : SerializedMonoBehaviour {
     private Material InnerFillMaterial;
 
     [SerializeField]
+    private Material RealTimeInnerFillMaterial;
+
+    [SerializeField]
     private Vector2 ScrollSnapPivot;
 
     [SerializeField]
@@ -99,7 +102,8 @@ public class RealTimeCounts : SerializedMonoBehaviour {
     Dictionary<string, DateAndCount> _partitionTimes = new Dictionary<string, DateAndCount>();
     Dictionary<string, DialData> _dials = new Dictionary<string, DialData>();
     Dictionary<string, SourceData> _sources = new Dictionary<string, SourceData>();
-    Dictionary<string, List<DateAndCount>> _graphData = new Dictionary<string, List<DateAndCount>>();
+    Dictionary<string, List<DateAndCount>> _realTimeGraphData = new Dictionary<string, List<DateAndCount>>();
+    Dictionary<string, List<DateAndCount>> _deepStorageGraphData = new Dictionary<string, List<DateAndCount>>();
 
     [SerializeField]
     List<Transform> _sourceLocations = new List<Transform>();
@@ -174,7 +178,6 @@ public class RealTimeCounts : SerializedMonoBehaviour {
             var now = System.DateTime.Now.ToUniversalTime();
             var timeStamp = Some(now).Map(GetTimeStamp).Bind(Int.Parse);
             var lastTime = _latestTime;
-            var apiKey = getStringSetting("ApiKey").Match(() => "", (f) => f);
 
             print("Current TimeStamp: " + now);
 
@@ -190,24 +193,23 @@ public class RealTimeCounts : SerializedMonoBehaviour {
             var processingTime = new TimeSpan(0, 10, 0);
             IsProcessing.SetValue((now - lastTime).TotalSeconds > processingTime.TotalSeconds ? false : true);
 
-            // Set Headers
-            List<Tuple<string, string>> headers = new List<Tuple<string, string>>()
-            {
-                new Tuple<string,string>("Ocp-Apim-Trace", "true"),
-                new Tuple<string,string>("Ocp-Apim-Subscription-Key", apiKey)
-            };
+            // Get RealTime Stats
+            var realTimeRoutine = GetRealTimeRoutine(getStringSetting, "RealTimeApiKey", "RealTimeUrl", timeStamp);
 
-            // Get response
-            var routine = (from a in getStringSetting("Url")
-                            from b in timeStamp
-                            select StringHelper.Append(a,b.ToString()))
-                                .Bind(Url.Of)
-                                .Map(url => WebRequest.GetWebText(url, headers, true));
+            NestableCoroutine<string> rtCoroutine = new NestableCoroutine<string>(realTimeRoutine);
+            foreach(var x in rtCoroutine.Routine) { yield return x; }
 
-            NestableCoroutine<string> coroutine = new NestableCoroutine<string>(routine);
-            foreach(var x in coroutine.Routine) { yield return x; }
+            var realTimeResponse = rtCoroutine.Value
+                .Map(JsonHelper.FixJson)
+                .Map(JsonHelper.FromJson<RealTimeRecord>);
 
-            var response = coroutine.Value
+            // Get DeepStorage Stats
+            var deepStorageRoutine = GetRealTimeRoutine(getStringSetting, "DeepStorageApiKey", "DeepStorageUrl", timeStamp);
+
+            NestableCoroutine<string> dsCoroutine = new NestableCoroutine<string>(deepStorageRoutine);
+            foreach(var x in dsCoroutine.Routine) { yield return x; }
+
+            var deepStorageResponse = dsCoroutine.Value
                 .Map(JsonHelper.FixJson)
                 .Map(JsonHelper.FromJson<RealTimeRecord>);
 
@@ -220,14 +222,14 @@ public class RealTimeCounts : SerializedMonoBehaviour {
 
             //------------------- Start of Side Effects :( _---------------------------------------
             // Get and display totalCount of events
-            response.AsEither()
+            realTimeResponse.AsEither()
                 .Map(y => y.Aggregate(Some(0), (acc, record) => acc.Map(num => num + record.count)))
                 .Match(
                     (e) => print(e),
                     (f) => _totalCount.SetValue(f));
 
             // Get Totals
-            response.Map(GetTotals)
+            realTimeResponse.Map(GetTotals)
                 .AsEither()
                 .Match(
                     (e) => { print(e); },
@@ -245,8 +247,19 @@ public class RealTimeCounts : SerializedMonoBehaviour {
                         DisplaySources(_totals);
                     });
 
+            // Update RealTime Graph Data
+            deepStorageResponse.AsEither()
+                .Match(
+                    (e) => { print(e); },
+                    (f) =>
+                    {
+                        // Update DeepStorage Data
+                        UpdateGraphData(f, _deepStorageGraphData, true);
+                    }
+                );
+
             // Update Partitions and Graph
-            response.AsEither()
+            realTimeResponse.AsEither()
                 .Match(
                     (e) => { print(e); },
                     (f) =>
@@ -258,14 +271,14 @@ public class RealTimeCounts : SerializedMonoBehaviour {
                         DisplayPartitions(lastTime);
 
                         // Update Graph
-                        UpdateGraphData(f);
+                        UpdateGraphData(f, _realTimeGraphData);
 
                         // Display Graph
                         DisplayGraph();
                     });
 
             // Get and Display Latency
-            response.Map(GetLatency)
+            realTimeResponse.Map(GetLatency)
                 .Match(
                     (e) => { print(e); },
                     (latency) =>
@@ -278,17 +291,40 @@ public class RealTimeCounts : SerializedMonoBehaviour {
         }
     }
 
+    private Option<IEnumerator> GetRealTimeRoutine(Func<string, Option<string>> getStringSetting, string apiKeyName, string urlName, Option<int> timeStamp)
+    {
+        // Get RealTime Stats
+            var apiKey = getStringSetting(apiKeyName).Match(() => "", (f) => f);
+
+            // Set Headers
+            List<Tuple<string, string>> headers = new List<Tuple<string, string>>()
+            {
+                new Tuple<string,string>("Ocp-Apim-Trace", "true"),
+                new Tuple<string,string>("Ocp-Apim-Subscription-Key", apiKey)
+            };
+
+            // Get response
+            var routine = (from a in getStringSetting(urlName)
+                            from b in timeStamp
+                            select StringHelper.Append(a,b.ToString()))
+                                .Bind(Url.Of)
+                                .Map(url => WebRequest.GetWebText(url, headers, true));
+
+            return routine;
+    }
+
     private void DisplayLatency(int latency)
     {
         Latency.SetValue(latency);
     }
 
-    private void UpdateGraphData(List<RealTimeRecord> response)
+    private void UpdateGraphData(List<RealTimeRecord> response, Dictionary<string, List<DateAndCount>> graphData, bool addZulu = false)
     {
        var data = response
                 .GroupBy(w =>
                 {
-                    var dateTime = DateTime.Parse(w.processedAt).ToUniversalTime();
+                    var time = addZulu ? w.processedAt + "Z" : w.processedAt;
+                    var dateTime = DateTime.Parse(time).ToUniversalTime();
                     return new
 				    {
 					    sourceId = w.sourceId,
@@ -307,7 +343,7 @@ public class RealTimeCounts : SerializedMonoBehaviour {
         {
             var sourceId = group.Key;
             var list = group.Select(x => new DateAndCount(){ timestamp = x.processedAt, count = x.count}).ToList();
-            _graphData[sourceId] = list;
+            graphData[sourceId] = list;
         }
     }
 
@@ -338,27 +374,47 @@ public class RealTimeCounts : SerializedMonoBehaviour {
 
     private void DisplayGraphForSource(string source)
     {
-        if (!_graphData.ContainsKey(source))
+        if (!_realTimeGraphData.ContainsKey(source))
         {
             Debug.Log(source + " selected but no data exists!");
             return;
         }
 
-        var data = _graphData[source];
-            Debug.Log("Loading Graph...");
-            Graph.DataSource.StartBatch();
-            Graph.DataSource.Clear();
+        List<DateAndCount> rtData = new List<DateAndCount>();
+        if (_realTimeGraphData.ContainsKey(source))
+        {
+            rtData = _realTimeGraphData[source];
+        } 
+        List<DateAndCount> dsData = new List<DateAndCount>();
+        if (_deepStorageGraphData.ContainsKey(source))
+        {
+            dsData = _deepStorageGraphData[source];
+        }
+        Debug.Log("Loading Graph...");
+        Graph.DataSource.StartBatch();
+        Graph.DataSource.Clear();
 
-            // Get one result
-            Graph.DataSource.AddCategory(source, CategoryMaterial, 2, new MaterialTiling() { EnableTiling = false }, InnerFillMaterial, false, PointMaterial, 6);
-            int runningTotal = 0;
-            foreach (var record in data)
-            {
-                var timeStamp = record.timestamp;
-                runningTotal += record.count;
-                Graph.DataSource.AddPointToCategory(source, timeStamp, runningTotal);
-            }
-            Graph.DataSource.EndBatch();
+        // Add real-time data
+        Graph.DataSource.AddCategory(source, CategoryMaterial, 2, new MaterialTiling() { EnableTiling = false }, InnerFillMaterial, false, PointMaterial, 6);
+        int runningTotal = 0;
+        foreach (var record in rtData)
+        {
+            var timeStamp = record.timestamp;
+            runningTotal += record.count;
+            Graph.DataSource.AddPointToCategory(source, timeStamp, runningTotal);
+        }
+
+        // Add deep storage data
+        var dsCategory = source + "_ds";
+        Graph.DataSource.AddCategory(dsCategory, CategoryMaterial, 2, new MaterialTiling() { EnableTiling = false }, RealTimeInnerFillMaterial, false, PointMaterial, 6);
+        foreach (var record in dsData)
+        {
+            var timeStamp = record.timestamp;
+            // Real-Time data is already a running total
+            Graph.DataSource.AddPointToCategory(dsCategory, timeStamp, record.count);
+        }
+
+        Graph.DataSource.EndBatch();
     }
 
     private void DisplayPartitions(DateTime lastTime)
