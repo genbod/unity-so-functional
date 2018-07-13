@@ -126,6 +126,9 @@ public class RealTimeCounts : SerializedMonoBehaviour {
 
     int currentRotation = 0;
 
+    [SerializeField]
+    public BoolVariable IsPaused;
+
     Dictionary<string, string> _settings = new Dictionary<string, string>();
     
     // Use this for initialization
@@ -349,27 +352,40 @@ public class RealTimeCounts : SerializedMonoBehaviour {
 
     private void DisplayGraph()
     {
-        if (Graph != null && _sourcesTimes.Count > 0)
-        {
-            var index = currentRotation++ % _sourcesTimes.Keys.Count;
-            var source = _sourcesTimes.Keys.ElementAt(index);
-            DisplayGraphForSource(source);
-
-            Transform scrollTarget = ContentTransform.transform;
-            var childTransform = contentVisuals.transform.GetChild(index);
-            Button btn = childTransform.GetComponent<Button>();
-
-            if (btn != null) // highlight button
+        IsPaused.Value.ForEach(
+            (f) =>
             {
-                btn.Select();
-                btn.OnSelect(null);
-                scrollTarget = childTransform;
-                Debug.Log("Current Source: " + source);
-            }
+                if (Graph != null && _sourcesTimes.Count > 0 && !f)
+                {
+                    var index = currentRotation++ % _sourcesTimes.Keys.Count;
+                    var source = _sourcesTimes.Keys.ElementAt(index);
+                    DisplayGraphForSource(source);
 
-            ContentTransform.anchoredPosition = (Vector2)scrollRect.transform.InverseTransformPoint(ContentTransform.position)
-                - (Vector2)scrollRect.transform.InverseTransformPoint(scrollTarget.position) + ScrollSnapPivot;
-        }
+                    Transform scrollTarget = ContentTransform.transform;
+                    var childTransform = contentVisuals.transform.GetChild(index);
+                    Button btn = childTransform.GetComponent<Button>();
+
+                    if (btn != null) // highlight button
+                    {
+                        btn.Select();
+                        btn.OnSelect(null);
+                        scrollTarget = childTransform;
+                        Debug.Log("Current Source: " + source);
+                    }
+
+                    ContentTransform.anchoredPosition = (Vector2)scrollRect.transform.InverseTransformPoint(ContentTransform.position)
+                        - (Vector2)scrollRect.transform.InverseTransformPoint(scrollTarget.position) + ScrollSnapPivot;
+                }
+            }); 
+    }
+
+    public void PauseUnPause()
+    {
+        bool curValue = IsPaused.Value.Match(
+            ()=> false,
+            (f) => f
+        );
+        IsPaused.SetValue(!curValue);
     }
 
     private void DisplayGraphForSource(string source)
