@@ -14,6 +14,7 @@ using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static F;
+using Unit = System.ValueTuple;
 
 public class RealTimeCounts : SerializedMonoBehaviour {
     public bool UpdateValues;
@@ -355,31 +356,62 @@ public class RealTimeCounts : SerializedMonoBehaviour {
         IsPaused.Value.ForEach(
             (f) =>
             {
-                if (Graph != null && _sourcesTimes.Count > 0 && !f)
+                if (Graph != null && _sourceObjects.Count > 0 && !f)
                 {
                     var index = currentRotation++ % _sourcesTimes.Keys.Count;
-                    var source = _sourcesTimes.Keys.ElementAt(index);
-                    DisplayGraphForSource(source);
-
-                    Transform scrollTarget = ContentTransform.transform;
-                    var childTransform = contentVisuals.transform.GetChild(index);
-                    Button btn = childTransform.GetComponent<Button>();
-
-                    if (btn != null) // highlight button
+                    var source = _sourceObjects.Where(p =>
                     {
-                        btn.Select();
-                        btn.OnSelect(null);
-                        scrollTarget = childTransform;
-                        Debug.Log("Current Source: " + source);
-                    }
+                        var sourceController = p.Value.GetComponent<SourceController>();
+                        return (sourceController != null && sourceController.sourceData != null && sourceController.sourceData.Index.GetValue() == index);
+                    }).FirstOrDefault();
 
-                    ContentTransform.anchoredPosition = (Vector2)scrollRect.transform.InverseTransformPoint(ContentTransform.position)
-                        - (Vector2)scrollRect.transform.InverseTransformPoint(scrollTarget.position) + ScrollSnapPivot;
+                    if (source.Value != null)
+                    {
+                        var sourceController = source.Value.GetComponent<SourceController>();
+                        var sourceData = sourceController.sourceData;
+                        DisplayGraphForSource(sourceData.Title.GetValueToString());
+
+                        SetSourceInFocus(source.Value);
+                    }
+                    
+
+                    // Transform scrollTarget = ContentTransform.transform;
+                    // var childTransform = contentVisuals.transform.GetChild(index);
+                    // Button btn = childTransform.GetComponent<Button>();
+
+                    // if (btn != null) // highlight button
+                    // {
+                    //     btn.Select();
+                    //     btn.OnSelect(null);
+                    //     scrollTarget = childTransform;
+                    //     Debug.Log("Current Source: " + source);
+                    // }
+
+                    // ContentTransform.anchoredPosition = (Vector2)scrollRect.transform.InverseTransformPoint(ContentTransform.position)
+                    //     - (Vector2)scrollRect.transform.InverseTransformPoint(scrollTarget.position) + ScrollSnapPivot;
                 }
             }); 
     }
 
-    public void PauseUnPause()
+    private void SetSourceInFocus(GameObject source)
+    {
+        Transform scrollTarget = ContentTransform.transform;
+        var childTransform = source.transform;
+        Button btn = childTransform.GetComponent<Button>();
+
+        if (btn != null) // highlight button
+        {
+            btn.Select();
+            btn.OnSelect(null);
+            scrollTarget = childTransform;
+            Debug.Log("Current Source: " + source);
+        }
+
+        ContentTransform.anchoredPosition = (Vector2)scrollRect.transform.InverseTransformPoint(ContentTransform.position)
+            - (Vector2)scrollRect.transform.InverseTransformPoint(scrollTarget.position) + ScrollSnapPivot;
+    }
+
+    public void PauseUnPause(Unit unit)
     {
         bool curValue = IsPaused.Value.Match(
             ()=> false,
@@ -555,6 +587,11 @@ public class RealTimeCounts : SerializedMonoBehaviour {
             
             _sources[item.source] = sourceData;
             _sourceObjects[item.source] = source;
+
+            // if (index == i)
+            // {
+            //     SetSourceInFocus(source);
+            // }
         }
         Canvas.ForceUpdateCanvases();
     }

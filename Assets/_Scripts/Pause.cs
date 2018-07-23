@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Unit = System.ValueTuple;
 
 public class Pause : MonoBehaviour 
 {
-	public UnityEvent OnPause;
+	public VoidGameEvent PauseGameEvent;
 	// Use this for initialization
 	void Start () {
 		
@@ -15,7 +16,7 @@ public class Pause : MonoBehaviour
 	void Update () {
 		if (Input.GetKeyDown(KeyCode.P))
 		{
-			OnPause.Invoke();
+			PauseGameEvent.Raise(new Unit());
 		}
 	}
 }
