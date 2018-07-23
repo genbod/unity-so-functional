@@ -1,6 +1,0 @@
-<parameters>
-  <parameter name="RealTimeUrl" value="#{RealTimeUrl}#" />
-  <parameter name="RealTimeApiKey" value="#{RealTimeApiKey}#" />
-  <parameter name="DeepStorageUrl" value="#{DeepStorageUrl}#" />
-  <parameter name="DeepStorageApiKey" value="#{DeepStorageApiKey}#" />
-</parameters>
