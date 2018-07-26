@@ -19,7 +19,10 @@ public class ScriptableValue<T> : SerializedScriptableObject
 
     private void OnEnable()
     {
-        Value = DefaultValue;
+        if (DefaultValue.IsSome())
+        {
+            Value = DefaultValue;
+        }
     }
 
     public Option<System.Object> GetValueAsOption()
