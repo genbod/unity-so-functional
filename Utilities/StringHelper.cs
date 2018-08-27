@@ -14,6 +14,9 @@ public class StringHelper : ScriptableObject
     public static string GetPrettyNumber(int totalCount)
         => GetPrettyNumber((double) totalCount);
 
+    public static string GetPrettyNumber(float totalCount)
+        => GetPrettyNumber((double) totalCount);
+
     public static string GetPrettyNumber(double totalCount)
     {
         if (totalCount > 100000)
