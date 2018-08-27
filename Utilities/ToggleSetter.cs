@@ -35,5 +35,6 @@ public class ToggleSetter : MonoBehaviour
 	private void ToggleClicked(bool toggleValue)
 	{
 		ToggleGameEvent.Raise(new Unit());
+		Toggled.SetValue(toggleValue ^ ShouldInvert);
 	}
 }

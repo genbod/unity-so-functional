@@ -18,11 +18,15 @@ public class FormattedTextReplacer : SerializedMonoBehaviour
 
 	private void OnEnable()
 	{
-		Text.text = GetValue().Bind(GetFormattedValueToString)
+		if (Text != null && GetFormattedValueToString != null
+		&& GetValue != null)
+		{
+			Text.text = GetValue().Bind(GetFormattedValueToString)
 			.Match(
 				() => "None",
 				(f) => f
 			);
+		}
 	}
 	
 	// Update is called once per frame
