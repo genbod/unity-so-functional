@@ -65,8 +65,6 @@ public class WebRequest {
         }
         else
         {
-            //Texture retTexture = DownloadHandlerTexture.GetContent(www);
-            //yield return retTexture;
             yield return www.downloadHandler.data;
         }
     }
