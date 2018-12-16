@@ -7,12 +7,11 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[OdinDrawer]
 public class DateTimeDrawer : OdinValueDrawer<DateTime>
 {
-    protected override void DrawPropertyLayout(IPropertyValueEntry<DateTime> entry, GUIContent label)
+    protected override void DrawPropertyLayout(GUIContent label)
     {
-        var value = entry.SmartValue;
+        var value = this.ValueEntry.SmartValue;
 
         var YYYYMMDDhhmmssRect = EditorGUILayout.GetControlRect();
         YYYYMMDDhhmmssRect = EditorGUI.IndentedRect(YYYYMMDDhhmmssRect);
@@ -39,14 +38,14 @@ public class DateTimeDrawer : OdinValueDrawer<DateTime>
         if (currYear != newYear || currMonth != newMonth || currDay != newDay ||
             currHour != newHour || newMin != currMin || newSec != currSec)
         {
-            entry.SmartValue = new DateTime(
+            this.ValueEntry.SmartValue = new DateTime(
                 year: newYear,
                 month: newMonth,
                 day: newDay,
                 hour: newHour,
                 minute: newMin,
                 second: newSec);
-            entry.ApplyChanges();
+            this.ValueEntry.ApplyChanges();
         }
     }
 }

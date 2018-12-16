@@ -2,15 +2,9 @@
 using UnityEditor;
 using UnityEngine;
 
-[OdinDrawer]
 public class MakeLocalMenuAttributeDrawer<T> : OdinAttributeDrawer<MakeLocalMenuAttribute, T>, IDefinesGenericMenuItems
     where T : ScriptableObject
 {
-    protected override void DrawPropertyLayout(IPropertyValueEntry<T> entry, MakeLocalMenuAttribute attribute, GUIContent label)
-    {
-        this.CallNextDrawer(entry.Property, label);
-    }
-
     public void PopulateGenericMenu(InspectorProperty property, GenericMenu genericMenu)
     {
         if (genericMenu.GetItemCount() > 0)
