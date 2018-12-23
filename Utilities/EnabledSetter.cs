@@ -12,21 +12,25 @@ public class EnabledSetter : MonoBehaviour
 
     public GameObject go;
 
-    private void OnEnable()
+    void Awake()
     {
-        go.SetActive(Enabled.GetValue() ^ InvertValue);
+        // During Awake, GameObject needs to be set active for any Awake setup that needs to happen before everything starts
+        if (go != null)
+        {
+            go.SetActive(true);
+        }
     }
 
     // Update is called once per frame
-    void Update ()
+    void Update()
     {
         if (AlwaysUpdate)
         {
             var newEnabled = Enabled.GetValue() ^ InvertValue;
             if (go.activeSelf != newEnabled)
             {
-               go.SetActive(newEnabled); 
+                go.SetActive(newEnabled);
             }
         }
-	}
+    }
 }
