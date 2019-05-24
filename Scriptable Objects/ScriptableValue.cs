@@ -1,4 +1,5 @@
 ﻿using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,8 +10,20 @@ public class ScriptableValue<T> : SerializedScriptableObject
 {
     public Option<T> DefaultValue;
 
-    public Option<T> Value;
-    
+    [OdinSerialize]
+    private Option<T> _value;
+    public Option<T> Value
+    {
+        private set
+        {
+            _value = value;
+        }
+        get
+        {
+            return _value;
+        }
+    }
+
     public void SetValue(Option<T> newValue)
         => Value = newValue;
 
