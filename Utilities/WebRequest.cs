@@ -6,7 +6,8 @@ using UnityEngine;
 using UnityEngine.Networking;
 using static F;
 
-public class WebRequest {
+public class WebRequest
+{
     public static IEnumerator GetWWWText(Url path)
     {
         WWW www = new WWW(path.ToString());
@@ -19,9 +20,10 @@ public class WebRequest {
         return GetWebText(url, Enumerable.Empty<Tuple<string, string>>());
     }
 
-	public static IEnumerator GetWebText(Url url, IEnumerable<Tuple<string, string>> headers, bool treatEmptyStringAsError = false)
+    public static IEnumerator GetWebText(Url url, IEnumerable<Tuple<string, string>> headers, bool treatEmptyStringAsError = false)
     {
         UnityWebRequest www = UnityWebRequest.Get(url.ToString());
+        www.disposeDownloadHandlerOnDispose = true;
         www.chunkedTransfer = false;
         headers.ForEach(t => www.SetRequestHeader(t.Item1, t.Item2));
         yield return www.SendWebRequest();
@@ -40,6 +42,7 @@ public class WebRequest {
             yield return Exceptional.Of<string>(new WebRequestException("Result was empty"));
         }
         else yield return www.downloadHandler.text;
+        www.Dispose();
     }
 
     public static IEnumerator GetWebTexture(Url url)
@@ -57,7 +60,7 @@ public class WebRequest {
         {
             yield return null;
         }
-        
+
         if (www.isNetworkError || www.isHttpError)
         {
             Debug.Log(www.error);
