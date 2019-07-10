@@ -4,12 +4,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 [ExecuteInEditMode]
 public class TextReplacer : SerializedMonoBehaviour { 
     public Func<bool, string> GetValueToString;
 
     public Text Text;
+
+    public TextMeshPro TextMesh;
 
     public bool PrettyPrint;
 
@@ -21,6 +24,10 @@ public class TextReplacer : SerializedMonoBehaviour {
         {
             Text.text = GetValueToString(PrettyPrint);
         }
+        if (TextMesh != null && GetValueToString != null)
+        {
+            TextMesh.text = GetValueToString(PrettyPrint);
+        }
     }
 
     // Update is called once per frame
@@ -29,6 +36,10 @@ public class TextReplacer : SerializedMonoBehaviour {
         if (AlwaysUpdate && Text != null && GetValueToString != null)
         {
             Text.text = GetValueToString(PrettyPrint);
+        }
+        if (AlwaysUpdate && TextMesh != null && GetValueToString != null)
+        {
+            TextMesh.text = GetValueToString(PrettyPrint);
         }
     }
 }
