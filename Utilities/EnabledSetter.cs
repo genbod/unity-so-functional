@@ -1,14 +1,16 @@
-﻿using System.Collections;
+﻿using System;
+using Sirenix.OdinInspector;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnabledSetter : MonoBehaviour
+public class EnabledSetter : SerializedMonoBehaviour
 {
     public bool AlwaysUpdate;
 
     public bool InvertValue;
 
-    public BoolVariable Enabled;
+    public Func<bool> BooleanGetter;
 
     public GameObject go;
 
@@ -26,7 +28,8 @@ public class EnabledSetter : MonoBehaviour
     {
         if (AlwaysUpdate)
         {
-            var newEnabled = Enabled.GetValue() ^ InvertValue;
+            //var newEnabled = Enabled.GetValue() ^ InvertValue;
+            var newEnabled = BooleanGetter() ^ InvertValue;
             if (go.activeSelf != newEnabled)
             {
                 go.SetActive(newEnabled);
