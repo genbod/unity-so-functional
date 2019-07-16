@@ -9,9 +9,6 @@ public class AnimationTriggerSetter : SerializedMonoBehaviour
     [SerializeField]
     private Func<string> ValueGetter;
 
-    [Tooltip("SetTrigger Function from Animator you want to call")]
-    public Action<int> AnimationSetter;
-
     [SerializeField]
     private Animator _animator;
 
