@@ -31,11 +31,28 @@ public class ScriptableValue<T> : SerializedScriptableObject
         }
     }
 
+    private ValueChangedEvent<T> _valueChangedEvent;
+
+    public ValueChangedEvent<T> ValueChangedEvent
+    {
+        get
+        {
+            if (_valueChangedEvent == null)
+            {
+                _valueChangedEvent = new ValueChangedEvent<T>();
+            }
+            return _valueChangedEvent;
+        }
+    }
+
     public void SetValue(Option<T> newValue)
         => Value = newValue;
 
     public void SetValue(T newValue)
-        => Value = Some(newValue);
+    {
+        Value = Some(newValue);
+        ValueChangedEvent.Raise(newValue);
+    }
 
     private void OnEnable()
     {
