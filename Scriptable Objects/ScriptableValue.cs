@@ -76,4 +76,9 @@ public class ScriptableValue<T> : SerializedScriptableObject
         instance._lock = true;
         return instance;
     }
+
+    private void OnValidate()
+    {
+        _value.ForEach(ValueChangedEvent.Raise);
+    }
 }
