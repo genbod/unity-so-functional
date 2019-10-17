@@ -1,12 +1,10 @@
 {
-    "name": "DragonDogStudios.PlayerPrefsEditor",
+    "name": "DragonDogStudios.UnitySoFunctional",
     "references": [
-        "DragonDogStudios"
+        "Unity.TextMeshPro"
     ],
     "optionalUnityReferences": [],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

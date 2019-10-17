@@ -1,10 +1,12 @@
 {
-    "name": "DragonDogStudios",
+    "name": "DragonDogStudios.UnitySoFunctional.Editor",
     "references": [
-        "Unity.TextMeshPro"
+        "DragonDogStudios.UnitySoFunctional"
     ],
     "optionalUnityReferences": [],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

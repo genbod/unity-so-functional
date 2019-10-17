@@ -1,7 +1,7 @@
 {
-    "name": "DragonDogStudios.Editor",
+    "name": "DragonDogStudios.UnitySoFunctional.PlayerPrefsEditor.Editor",
     "references": [
-        "DragonDogStudios"
+        "DragonDogStudios.UnitySoFunctional"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [
