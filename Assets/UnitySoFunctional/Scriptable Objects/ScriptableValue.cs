@@ -1,4 +1,4 @@
-﻿using DragonDogStudios.Exceptions;
+using DragonDogStudios.Exceptions;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using System;
