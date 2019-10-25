@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using static F;
+using System;
 
 namespace Tests
 {
@@ -24,5 +25,41 @@ namespace Tests
             Some: n => n,
             None: () => -1
         );
+
+        Func<int, string> displayValue = value => $"The value is: {value}";
+
+        [Test]
+        public void TestMap_GivenSomeValue_ThenSomeValue()
+        {
+            var originalValue = Some(3);
+            var newValue = originalValue.Map(displayValue);
+            Assert.That(newValue, Is.EqualTo(Some("The value is: 3")));
+        }
+
+        [Test]
+        public void TestMap_GivenNone_ThenNone()
+        {
+            Option<int> originalValue = None;
+            var newValue = originalValue.Map(displayValue);
+            Assert.That(newValue, Is.EqualTo(None));
+        }
+
+        Func<int, Option<string>> displayValueBind = value => Some($"The value is: {value}");
+
+        [Test]
+        public void TestBind_GivenSomeValue_ThenSomeValue()
+        {
+            var originalValue = Some(3);
+            var newValue = originalValue.Bind(displayValueBind);
+            Assert.That(newValue, Is.EqualTo(Some("The value is: 3")));
+        }
+
+        [Test]
+        public void TestBind_GivenNone_ThenNone()
+        {
+            Option<int> originalValue = None;
+            var newvalue = originalValue.Bind(displayValueBind);
+            Assert.That(newvalue, Is.EqualTo(None));
+        }
     }
 }
