@@ -1,22 +1,16 @@
 <#
 .SYNOPSIS
-    Builds .unitypackage artifacts for the Mixed Reality Toolkit
+    Builds .unitypackage artifacts for the Unity ScriptableObject  Functional package
 .DESCRIPTION
     This script builds the following set of .unitypackages:
 
-    - Foundation
+    - Core
     
-    This contains the MixedRealityToolkit, MixedRealityToolkit.SDK,
-    MixedRealityToolkit.Providers, and MixedRealityToolkit.Services
-    content.
+    This contains the core functionality for the package.
 
     - Examples
 
-    This contains all of the content under MixedRealityToolkit.Examples
-
-    Note that these packages are intended to mirror the NuGet packages
-    described in Assets/MixedReality.Toolkit.Foundation.nuspec and
-    Assets/MixedRealityToolkit.Examples/MixedReality.Toolkit.Examples.nuspec.
+    This contains all of the content under UnitySoFunctional.Examples
 
     Defaults to assuming that the current working directory of the script is in the root
     directory of the repo.
@@ -41,17 +35,15 @@
 .PARAMETER Verbose
     If true, verbose messages will be displayed.
 .EXAMPLE
-    .\unitypackage.ps1 -Version 2.0.0
+    .\unitypackage.ps1 -PackageVersion 2.3.2 -UnityDirectory "D:\Unity\2018.4.1f1\Editor"
 
-    This will generate two packages that look like:
-    artifacts\Microsoft.MixedReality.Toolkit.Unity.Foundation.2.0.0.unitypackage
-    artifacts\Microsoft.MixedReality.Toolkit.Unity.Examples.2.0.0.unitypackage
+    This will generate a package that looks like:
+    artifacts\DragonDogStudios.UnitySoFunctional.Core.2.0.0.unitypackage
 .EXAMPLE
-    .\build.ps1 -OutputDirectory .\out -Version 2.0.1 -Clean
+    .\unitypackage.ps1 -OutputDirectory .\out -Version 2.0.1 -Clean
 
-    This will generate two packages that look like:
-    out\Microsoft.MixedReality.Toolkit.Unity.Foundation.2.0.1.unitypackage
-    out\Microsoft.MixedReality.Toolkit.Unity.Examples.2.0.1.unitypackage
+    This will generate a package that looks like:
+    artifacts\DragonDogStudios.UnitySoFunctional.Core.2.0.0.unitypackage
 #>
 param(
     [string]$OutputDirectory = ".\artifacts",
@@ -69,7 +61,6 @@ if ( $Verbose ) { $VerbosePreference = 'Continue' }
 # This hashtable contains mapping of the packages (by name) to the set
 # of top level folders that should be included in that package.
 # The keys of this hashtable will contribute to the final naming of the package
-# (for example, in Microsoft.MixedReality.Toolkit.Unity.Foundation, the Foundation
 # section comes from the key below).
 #
 # Note that capitalization below in the key itself is significant. Capitalization
@@ -77,20 +68,8 @@ if ( $Verbose ) { $VerbosePreference = 'Continue' }
 #
 # These paths are project-root relative.
 $packages = @{
-    "Foundation" = @(
-        "Assets\MixedRealityToolkit",
-        "Assets\MixedRealityToolkit.Providers",
-        "Assets\MixedRealityToolkit.SDK",
-        "Assets\MixedRealityToolkit.Services"
-    );
-    "Extensions" = @(
-        "Assets\MixedRealityToolkit.Extensions"
-    );
-    "Examples"   = @(
-        "Assets\MixedRealityToolkit.Examples"
-    );
-    "Tools"      = @(
-        "Assets\MixedRealityToolkit.Tools"
+    "Core" = @(
+        "Assets\UnitySoFunctional"
     );
 }
 
@@ -100,7 +79,7 @@ function GetPackageVersion() {
         Gets the most recent tag associated with the HEAD of the repo.
     #>
     return git tag --points-at HEAD | 
-        Foreach-Object { if ( $_ -match "^(\d+\.\d+\.\d+)$" ) { [version]$matches[1] } } | 
+        Foreach-Object { if ( $_ -match "^v(\d+\.\d+\.\d+)$" ) { [version]$matches[1] } } | 
         Sort-Object -Descending |
         Select-Object -First 1
 }
@@ -113,7 +92,7 @@ function GetPackageVersion() {
 # 3) Uses the Unity editor's ExportPackages functionality (using the -exportPackages)
 #    to build the .unitypackage files.
 
-Write-Verbose "Mixed Reality Toolkit .unitypackage generation beginning"
+Write-Verbose "UnitySoFunctional .unitypackage generation beginning"
 
 Write-Verbose "Reconciling package version:"
 if (-not $PackageVersion) {
@@ -163,7 +142,7 @@ foreach ($entry in $packages.GetEnumerator()) {
     $folders = $entry.Value
 
     $logFileName = "$LogDirectory\Build-UnityPackage-$packageName.$PackageVersion.log"
-    $unityPackagePath = "$OutputDirectory\Microsoft.MixedReality.Toolkit.Unity.${packageName}.$PackageVersion.unitypackage";
+    $unityPackagePath = "$OutputDirectory\DragonDogStudios.UnitySoFunctional.${packageName}.$PackageVersion.unitypackage";
     
     # The exportPackages flag expects the last value in the array
     # to be the final output destination.
