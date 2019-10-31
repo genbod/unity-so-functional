@@ -1,0 +1,16 @@
+{
+    "name": "DragonDogStudios.UnitySoFunctional.Editor",
+    "references": [
+        "DragonDogStudios.UnitySoFunctional"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": []
+}
