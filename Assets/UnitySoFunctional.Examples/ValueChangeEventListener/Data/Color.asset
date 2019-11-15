@@ -29,11 +29,11 @@ MonoBehaviour:
       Data: DragonDogStudios.UnitySoFunctional.Functional.Option`1[[System.String,
         mscorlib]], DragonDogStudios.UnitySoFunctional
     - Name: value
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: '#00F'
     - Name: isSome
       Entry: 5
-      Data: false
+      Data: true
     - Name: 
       Entry: 8
       Data: 
@@ -42,11 +42,11 @@ MonoBehaviour:
       Data: DragonDogStudios.UnitySoFunctional.Functional.Option`1[[System.String,
         mscorlib]], DragonDogStudios.UnitySoFunctional
     - Name: value
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: '#F00'
     - Name: isSome
       Entry: 5
-      Data: false
+      Data: true
     - Name: 
       Entry: 8
       Data: 
