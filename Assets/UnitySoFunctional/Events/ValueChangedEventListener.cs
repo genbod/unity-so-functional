@@ -1,5 +1,6 @@
 using Sirenix.OdinInspector;
 using System;
+using UnityEngine;
 
 namespace DragonDogStudios.UnitySoFunctional.Events
 {
@@ -8,6 +9,14 @@ namespace DragonDogStudios.UnitySoFunctional.Events
         protected ValueChangedEvent<T> Event;
 
         public Action<T> ResponseAction;
+
+        [SerializeField]
+        private IValueChanged<T> _variable;
+
+        private void Awake()
+        {
+            this.Event = _variable.ValueChangedEvent;
+        }
 
         private void OnEnable()
         {

@@ -1,10 +1,11 @@
 ﻿using DragonDogStudios.UnitySoFunctional.Core;
+using DragonDogStudios.UnitySoFunctional.Events;
 using UnityEngine;
 
 namespace DragonDogStudios.UnitySoFunctional.ScriptableObjects
 {
     [CreateAssetMenu]
-    public class StringVariable : ScriptableValue<string>, IPrintableValue
+    public class StringVariable : ScriptableValue<string>, IPrintableValue, IValueChanged<string>
     {
         public string GetValueToString(bool prettyPrint = false)
         {
