@@ -1,31 +1,36 @@
-﻿using UnityEngine;
+﻿using DragonDogStudios.UnitySoFunctional.Functional;
+using DragonDogStudios.UnitySoFunctional.Utilities;
+using UnityEngine;
 
-[CreateAssetMenu]
-public class FloatVariable : ScriptableValue<float>
+namespace DragonDogStudios.UnitySoFunctional.ScriptableObjects
 {
-    public string GetValueToString(bool prettyPrint)
+    [CreateAssetMenu]
+    public class FloatVariable : ScriptableValue<float>
     {
-        if (prettyPrint)
+        public string GetValueToString(bool prettyPrint)
         {
-            return Value.Map(StringHelper.GetPrettyNumber)
-                .Match(
+            if (prettyPrint)
+            {
+                return Value.Map(StringHelper.GetPrettyNumber)
+                    .Match(
+                    () => "None",
+                    (f) => f);
+            }
+            return Value.Match(
                 () => "None",
-                (f) => f);
+                (f) => f.ToString());
         }
-        return Value.Match(
-            () => "None",
-            (f) => f.ToString());
-    }
 
-    public string GetFormattedValueToString()
-    {
-        return Value.Match(
-            () => "None",
-            (f) => StringHelper.GetFormattedInt(f)
-        );
+        public string GetFormattedValueToString()
+        {
+            return Value.Match(
+                () => "None",
+                (f) => StringHelper.GetFormattedInt(f)
+            );
+        }
+        public float GetValue()
+            => Value.Match(
+                () => 0,
+                (f) => f);
     }
-    public float GetValue()
-        => Value.Match(
-            () => 0,
-            (f) => f);
 }

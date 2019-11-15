@@ -1,6 +1,6 @@
 using System;
 
-namespace DragonDogStudios.Exceptions
+namespace DragonDogStudios.UnitySoFunctional.Exceptions
 {
     public class ReadOnlyObjectInvalidCreationException : Exception
     {

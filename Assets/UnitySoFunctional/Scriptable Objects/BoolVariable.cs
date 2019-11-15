@@ -1,12 +1,15 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu]
-public class BoolVariable : ScriptableValue<bool>
+namespace DragonDogStudios.UnitySoFunctional.ScriptableObjects
 {
-    public bool GetValue()
+    [CreateAssetMenu]
+    public class BoolVariable : ScriptableValue<bool>
     {
-        return Value.Match(
-            () => false,
-            (f) => f);
+        public bool GetValue()
+        {
+            return Value.Match(
+                () => false,
+                (f) => f);
+        }
     }
 }

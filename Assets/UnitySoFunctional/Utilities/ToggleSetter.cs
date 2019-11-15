@@ -1,39 +1,44 @@
-﻿using Unit = System.ValueTuple;
+﻿using DragonDogStudios.UnitySoFunctional.Events;
+using DragonDogStudios.UnitySoFunctional.ScriptableObjects;
+using Unit = System.ValueTuple;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ToggleSetter : MonoBehaviour
+namespace DragonDogStudios.UnitySoFunctional.Utilities
 {
-    public bool AlwaysUpdate;
-
-    public bool ShouldInvert;
-
-    public BoolVariable Toggled;
-
-    public Toggle Toggle;
-
-    public VoidGameEvent ToggleGameEvent;
-
-    // Use this for initialization
-    void Start()
+    public class ToggleSetter : MonoBehaviour
     {
-        Toggle.onValueChanged.AddListener(ToggleClicked);
-    }
+        public bool AlwaysUpdate;
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (AlwaysUpdate)
+        public bool ShouldInvert;
+
+        public BoolVariable Toggled;
+
+        public Toggle Toggle;
+
+        public VoidGameEvent ToggleGameEvent;
+
+        // Use this for initialization
+        void Start()
         {
-            Toggle.onValueChanged.RemoveAllListeners();
-            Toggle.isOn = Toggled.GetValue() ^ ShouldInvert;
             Toggle.onValueChanged.AddListener(ToggleClicked);
         }
-    }
 
-    private void ToggleClicked(bool toggleValue)
-    {
-        ToggleGameEvent.Raise(new Unit());
-        Toggled.SetValue(toggleValue ^ ShouldInvert);
+        // Update is called once per frame
+        void Update()
+        {
+            if (AlwaysUpdate)
+            {
+                Toggle.onValueChanged.RemoveAllListeners();
+                Toggle.isOn = Toggled.GetValue() ^ ShouldInvert;
+                Toggle.onValueChanged.AddListener(ToggleClicked);
+            }
+        }
+
+        private void ToggleClicked(bool toggleValue)
+        {
+            ToggleGameEvent.Raise(new Unit());
+            Toggled.SetValue(toggleValue ^ ShouldInvert);
+        }
     }
 }

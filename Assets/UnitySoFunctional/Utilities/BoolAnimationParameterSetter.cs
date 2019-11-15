@@ -1,3 +1,6 @@
-﻿public class BoolAnimationParameterSetter : AnimationParameterSetter<bool>
+﻿namespace DragonDogStudios.UnitySoFunctional.Utilities
 {
+    public class BoolAnimationParameterSetter : AnimationParameterSetter<bool>
+    {
+    }
 }

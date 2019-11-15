@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
-using static F;
+using static DragonDogStudios.UnitySoFunctional.Functional.F;
 using System;
+using DragonDogStudios.UnitySoFunctional.Functional;
 
 namespace Tests
 {

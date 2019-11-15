@@ -1,28 +1,31 @@
-﻿using System;
+﻿using DragonDogStudios.UnitySoFunctional.Functional;
+using static DragonDogStudios.UnitySoFunctional.Functional.F;
+using System;
 
-using static F;
-
-public struct Url
+namespace DragonDogStudios.UnitySoFunctional.Utilities
 {
-    private string Value { get; }
-    private Url(string value)
+    public struct Url
     {
-        if (!IsValid(value))
+        private string Value { get; }
+        private Url(string value)
         {
-            throw new ArgumentException($"{value} is not a vlid url");
+            if (!IsValid(value))
+            {
+                throw new ArgumentException($"{value} is not a vlid url");
+            }
+
+            Value = value;
         }
 
-        Value = value;
-    }
+        private static bool IsValid(string url)
+            => !String.IsNullOrEmpty(url) && (url.Contains("://") || url.Contains(":///"));
 
-    private static bool IsValid(string url)
-        => !String.IsNullOrEmpty(url) && (url.Contains("://") || url.Contains(":///"));
+        public static Option<Url> Of(string url)
+            => IsValid(url) ? Some(new Url(url)) : None;
 
-    public static Option<Url> Of(string url)
-        => IsValid(url) ? Some(new Url(url)) : None;
-
-    public override string ToString()
-    {
-        return Value.ToString();
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
     }
 }

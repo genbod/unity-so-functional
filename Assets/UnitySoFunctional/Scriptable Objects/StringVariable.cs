@@ -1,13 +1,16 @@
-﻿using UnityEngine;
-using static F;
+﻿using DragonDogStudios.UnitySoFunctional.Core;
+using UnityEngine;
 
-[CreateAssetMenu]
-public class StringVariable : ScriptableValue<string>, IPrintableValue
+namespace DragonDogStudios.UnitySoFunctional.ScriptableObjects
 {
-    public string GetValueToString(bool prettyPrint = false)
+    [CreateAssetMenu]
+    public class StringVariable : ScriptableValue<string>, IPrintableValue
     {
-        return Value.Match(
-            () => "None",
-            (f) => f);
+        public string GetValueToString(bool prettyPrint = false)
+        {
+            return Value.Match(
+                () => "None",
+                (f) => f);
+        }
     }
 }

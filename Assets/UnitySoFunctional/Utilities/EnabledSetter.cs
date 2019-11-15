@@ -1,38 +1,39 @@
-﻿using System;
-using Sirenix.OdinInspector;
-using System.Collections;
-using System.Collections.Generic;
+﻿using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 
-public class EnabledSetter : SerializedMonoBehaviour
+namespace DragonDogStudios.UnitySoFunctional.Utilities
 {
-    public bool AlwaysUpdate;
-
-    public bool InvertValue;
-
-    public Func<bool> BooleanGetter;
-
-    public GameObject go;
-
-    void Awake()
+    public class EnabledSetter : SerializedMonoBehaviour
     {
-        // During Awake, GameObject needs to be set active for any Awake setup that needs to happen before everything starts
-        if (go != null)
-        {
-            go.SetActive(true);
-        }
-    }
+        public bool AlwaysUpdate;
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (AlwaysUpdate)
+        public bool InvertValue;
+
+        public Func<bool> BooleanGetter;
+
+        public GameObject go;
+
+        void Awake()
         {
-            //var newEnabled = Enabled.GetValue() ^ InvertValue;
-            var newEnabled = BooleanGetter() ^ InvertValue;
-            if (go.activeSelf != newEnabled)
+            // During Awake, GameObject needs to be set active for any Awake setup that needs to happen before everything starts
+            if (go != null)
             {
-                go.SetActive(newEnabled);
+                go.SetActive(true);
+            }
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            if (AlwaysUpdate)
+            {
+                //var newEnabled = Enabled.GetValue() ^ InvertValue;
+                var newEnabled = BooleanGetter() ^ InvertValue;
+                if (go.activeSelf != newEnabled)
+                {
+                    go.SetActive(newEnabled);
+                }
             }
         }
     }

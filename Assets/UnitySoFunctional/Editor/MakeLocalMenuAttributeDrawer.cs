@@ -1,36 +1,40 @@
-﻿using Sirenix.OdinInspector.Editor;
+﻿using DragonDogStudios.UnitySoFunctional.ScriptableObjects;
+using Sirenix.OdinInspector.Editor;
 using UnityEditor;
 using UnityEngine;
 
-public class MakeLocalMenuAttributeDrawer<T> : OdinAttributeDrawer<MakeLocalMenuAttribute, T>, IDefinesGenericMenuItems
-    where T : ScriptableObject
+namespace DragonDogStudios.UnitySoFunctional.Editor
 {
-    public void PopulateGenericMenu(InspectorProperty property, GenericMenu genericMenu)
+    public class MakeLocalMenuAttributeDrawer<T> : OdinAttributeDrawer<MakeLocalMenuAttribute, T>, IDefinesGenericMenuItems
+    where T : ScriptableObject
     {
-        if (genericMenu.GetItemCount() > 0)
+        public void PopulateGenericMenu(InspectorProperty property, GenericMenu genericMenu)
         {
-            genericMenu.AddSeparator("");
+            if (genericMenu.GetItemCount() > 0)
+            {
+                genericMenu.AddSeparator("");
+            }
+
+            genericMenu.AddItem(new GUIContent("Create Local"), false, () => this.CreateLocalScriptableValue(property));
         }
 
-        genericMenu.AddItem(new GUIContent("Create Local"), false, () => this.CreateLocalScriptableValue(property));
-    }
-
-    private void CreateLocalScriptableValue(InspectorProperty property)
-    {
-        var parent = property.Tree.UnitySerializedObject.targetObject;
-        // Check for existing asset
-        var assetPath = AssetDatabase.GetAssetPath(parent);
-        var entry = (IPropertyValueEntry<T>)property.ValueEntry;
-        if (entry.SmartValue != null && AssetDatabase.GetAssetPath(entry.SmartValue) == assetPath)
+        private void CreateLocalScriptableValue(InspectorProperty property)
         {
-            Object.DestroyImmediate(entry.SmartValue, true);
+            var parent = property.Tree.UnitySerializedObject.targetObject;
+            // Check for existing asset
+            var assetPath = AssetDatabase.GetAssetPath(parent);
+            var entry = (IPropertyValueEntry<T>)property.ValueEntry;
+            if (entry.SmartValue != null && AssetDatabase.GetAssetPath(entry.SmartValue) == assetPath)
+            {
+                Object.DestroyImmediate(entry.SmartValue, true);
+            }
+            var typeOfValue = entry.TypeOfValue;
+            var newObject = ScriptableObject.CreateInstance<T>();
+            newObject.name = entry.Property.NiceName;
+            AssetDatabase.AddObjectToAsset(newObject, parent);
+            AssetDatabase.SaveAssets();
+            entry.SmartValue = newObject;
+            entry.ApplyChanges();
         }
-        var typeOfValue = entry.TypeOfValue;
-        var newObject = ScriptableObject.CreateInstance<T>();
-        newObject.name = entry.Property.NiceName;
-        AssetDatabase.AddObjectToAsset(newObject, parent);
-        AssetDatabase.SaveAssets();
-        entry.SmartValue = newObject;
-        entry.ApplyChanges();
     }
 }

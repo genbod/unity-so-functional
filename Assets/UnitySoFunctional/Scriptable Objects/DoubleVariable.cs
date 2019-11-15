@@ -1,19 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using DragonDogStudios.UnitySoFunctional.Core;
+using DragonDogStudios.UnitySoFunctional.Functional;
+using DragonDogStudios.UnitySoFunctional.Utilities;
 using UnityEngine;
 
-[CreateAssetMenu]
-public class DoubleVariable : ScriptableValue<double>, IPrintableValue
+namespace DragonDogStudios.UnitySoFunctional.ScriptableObjects
 {
-    public string GetValueToString(bool prettyPrint)
+    [CreateAssetMenu]
+    public class DoubleVariable : ScriptableValue<double>, IPrintableValue
     {
-        if (prettyPrint)
+        public string GetValueToString(bool prettyPrint)
         {
-            return Value.Map(StringHelper.GetPrettyNumber)
-                .Match(
-                () => "",
-                (f) => f);
+            if (prettyPrint)
+            {
+                return Value.Map(StringHelper.GetPrettyNumber)
+                    .Match(
+                    () => "",
+                    (f) => f);
+            }
+            return Value.ToString();
         }
-        return Value.ToString();
     }
 }
