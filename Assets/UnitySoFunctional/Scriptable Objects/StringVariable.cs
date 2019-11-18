@@ -5,7 +5,7 @@ using UnityEngine;
 namespace DragonDogStudios.UnitySoFunctional.ScriptableObjects
 {
     [CreateAssetMenu]
-    public class StringVariable : ScriptableValue<string>, IPrintableValue, IValueChanged<string>
+    public class StringVariable : ScriptableValue<string>, IPrintableValue
     {
         public string GetValueToString(bool prettyPrint = false)
         {
