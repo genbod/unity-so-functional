@@ -29,8 +29,9 @@ namespace DragonDogStudios.UnitySoFunctional.Utilities
             var newState = ValueGetter();
             if (newState != _currentState && !_animator.GetBool(Animator.StringToHash(newState)))
             {
-                _currentState = ValueGetter();
-                _animator.SetTrigger(Animator.StringToHash(_currentState));
+                _animator.ResetTrigger(Animator.StringToHash(_currentState));
+                _animator.SetTrigger(Animator.StringToHash(newState));
+                _currentState = newState;
             }
         }
     }
