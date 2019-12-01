@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 
 namespace DragonDogStudios.UnitySoFunctional.Utilities
@@ -42,6 +43,45 @@ namespace DragonDogStudios.UnitySoFunctional.Utilities
         {
             value = "{\"Items\":" + value + "}";
             return value;
+        }
+
+        public static T ParseValue<T>(string value) where T : struct, IConvertible
+        {
+            try
+            {
+                var converter = TypeDescriptor.GetConverter(typeof(T));
+                if (converter != null)
+                {
+                    if (typeof(T).IsEnum)
+                    {
+                        value = value.Replace('-', '_');
+                    }
+                    return (T)converter.ConvertFromString(value);
+                }
+                return default(T);
+            }
+            catch (System.Exception)
+            {
+                return default(T);
+            }
+        }
+
+        public static T ConvertToType<T>(object obj) where T : struct, IConvertible
+        {
+            try
+            {
+                var converter = TypeDescriptor.GetConverter(typeof(T));
+                if (converter != null)
+                {
+                    return (T)converter.ConvertFrom(obj);
+                }
+                return default(T);
+            }
+            catch (System.Exception)
+            {
+
+                return default(T);
+            }
         }
     }
 }
