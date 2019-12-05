@@ -1,10 +1,14 @@
 ﻿using System.Xml;
 
-public class XmlHelper {
-    public static XmlDocument LoadXml(string text)
+namespace DragonDogStudios.UnitySoFunctional.Utilities
+{
+    public class XmlHelper
     {
-        XmlDocument userXml1 = new XmlDocument();
-        userXml1.LoadXml(text);
-        return userXml1;
+        public static XmlDocument LoadXml(string text)
+        {
+            XmlDocument userXml1 = new XmlDocument();
+            userXml1.LoadXml(text);
+            return userXml1;
+        }
     }
 }

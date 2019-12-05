@@ -1,43 +1,44 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using DragonDogStudios.UnitySoFunctional.Functional;
 using Sirenix.OdinInspector;
-using UnityEngine;
+using System;
 using UnityEngine.UI;
-using static F;
 
-public class FormattedTextReplacer : SerializedMonoBehaviour 
+namespace DragonDogStudios.UnitySoFunctional.Utilities
 {
-	public Func<System.Object, Option<string>> GetFormattedValueToString;
+    public class FormattedTextReplacer : SerializedMonoBehaviour
+    {
+        public Func<System.Object, Option<string>> GetFormattedValueToString;
 
-	public Func<Option<System.Object>> GetValue;
+        public Func<Option<System.Object>> GetValue;
 
-	public Text Text;
+        public Text Text;
 
-	public bool AlwaysUpdate;
+        public bool AlwaysUpdate;
 
-	private void OnEnable()
-	{
-		if (Text != null && GetFormattedValueToString != null
-		&& GetValue != null)
-		{
-			Text.text = GetValue().Bind(GetFormattedValueToString)
-			.Match(
-				() => "None",
-				(f) => f
-			);
-		}
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		if (AlwaysUpdate)
-		{
-			Text.text = GetValue().Bind(GetFormattedValueToString)
-			.Match(
-				() => "None",
-				(f) => f
-			);
-		}
-	}
+        private void OnEnable()
+        {
+            if (Text != null && GetFormattedValueToString != null
+            && GetValue != null)
+            {
+                Text.text = GetValue().Bind(GetFormattedValueToString)
+                .Match(
+                    () => "None",
+                    (f) => f
+                );
+            }
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            if (AlwaysUpdate)
+            {
+                Text.text = GetValue().Bind(GetFormattedValueToString)
+                .Match(
+                    () => "None",
+                    (f) => f
+                );
+            }
+        }
+    }
 }

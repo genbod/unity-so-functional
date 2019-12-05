@@ -1,21 +1,23 @@
-﻿using Sirenix.OdinInspector;
-using Sirenix.Serialization;
+﻿using Sirenix.Serialization;
 using System;
 
-[Serializable]
-public class TestStruct<T>
+namespace DragonDogStudios.UnitySoFunctional.Functional
 {
-    [OdinSerialize]
-    private T value;
-    [OdinSerialize]
-    private bool isSome;
-    bool isNone => !isSome;
-
-    private TestStruct(T value)
+    [Serializable]
+    public class TestStruct<T>
     {
-        if (value == null)
-            throw new ArgumentNullException();
-        this.isSome = true;
-        this.value = value;
+        [OdinSerialize]
+        private T value;
+        [OdinSerialize]
+        private bool isSome;
+        bool isNone => !isSome;
+
+        private TestStruct(T value)
+        {
+            if (value == null)
+                throw new ArgumentNullException();
+            this.isSome = true;
+            this.value = value;
+        }
     }
 }

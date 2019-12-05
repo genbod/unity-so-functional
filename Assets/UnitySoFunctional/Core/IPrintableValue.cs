@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IPrintableValue
+namespace DragonDogStudios.UnitySoFunctional.Core
 {
-    string GetValueToString(bool prettyPrint);
+    public interface IPrintableValue
+    {
+        string GetValueToString(bool prettyPrint);
+    }
 }

@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class BasicButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
+namespace DragonDogStudios.UnitySoFunctional.Behaviours
+{
+    public class BasicButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
     {
         public float fadeTime = 0.2f;
         public float onHoverAlpha;
@@ -66,3 +66,5 @@ public class BasicButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             canvasGroup.alpha = 1.0f;
         }
     }
+
+}

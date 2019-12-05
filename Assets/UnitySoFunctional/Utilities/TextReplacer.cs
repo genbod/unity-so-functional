@@ -1,45 +1,47 @@
 ﻿using Sirenix.OdinInspector;
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
-[ExecuteInEditMode]
-public class TextReplacer : SerializedMonoBehaviour { 
-    public Func<bool, string> GetValueToString;
-
-    public Text Text;
-
-    public TextMeshPro TextMesh;
-
-    public bool PrettyPrint;
-
-    public bool AlwaysUpdate;
-
-    private void OnEnable()
+namespace DragonDogStudios.UnitySoFunctional.Utilities
+{
+    [ExecuteInEditMode]
+    public class TextReplacer : SerializedMonoBehaviour
     {
-        if (Text != null && GetValueToString != null)
-        {
-            Text.text = GetValueToString(PrettyPrint);
-        }
-        if (TextMesh != null && GetValueToString != null)
-        {
-            TextMesh.text = GetValueToString(PrettyPrint);
-        }
-    }
+        public Func<bool, string> GetValueToString;
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (AlwaysUpdate && Text != null && GetValueToString != null)
+        public Text Text;
+
+        public TextMeshPro TextMesh;
+
+        public bool PrettyPrint;
+
+        public bool AlwaysUpdate;
+
+        private void OnEnable()
         {
-            Text.text = GetValueToString(PrettyPrint);
+            if (Text != null && GetValueToString != null)
+            {
+                Text.text = GetValueToString(PrettyPrint);
+            }
+            if (TextMesh != null && GetValueToString != null)
+            {
+                TextMesh.text = GetValueToString(PrettyPrint);
+            }
         }
-        if (AlwaysUpdate && TextMesh != null && GetValueToString != null)
+
+        // Update is called once per frame
+        void Update()
         {
-            TextMesh.text = GetValueToString(PrettyPrint);
+            if (AlwaysUpdate && Text != null && GetValueToString != null)
+            {
+                Text.text = GetValueToString(PrettyPrint);
+            }
+            if (AlwaysUpdate && TextMesh != null && GetValueToString != null)
+            {
+                TextMesh.text = GetValueToString(PrettyPrint);
+            }
         }
     }
 }

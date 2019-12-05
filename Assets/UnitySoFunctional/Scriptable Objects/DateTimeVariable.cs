@@ -1,7 +1,10 @@
 ﻿using System;
 using UnityEngine;
 
-[CreateAssetMenu]
-public class DateTimeVariable : ScriptableValue<DateTime> 
+namespace DragonDogStudios.UnitySoFunctional.ScriptableObjects
 {
+    [CreateAssetMenu]
+    public class DateTimeVariable : ScriptableValue<DateTime>
+    {
+    }
 }

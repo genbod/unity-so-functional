@@ -1,35 +1,38 @@
-﻿using System;
+﻿using DragonDogStudios.UnitySoFunctional.Core;
+using DragonDogStudios.UnitySoFunctional.Functional;
+using DragonDogStudios.UnitySoFunctional.Utilities;
 using UnityEngine;
 
-using static F;
-
-[CreateAssetMenu]
-public class IntVariable : ScriptableValue<int>, IPrintableValue
+namespace DragonDogStudios.UnitySoFunctional.ScriptableObjects
 {
-    public string GetValueToString(bool prettyPrint)
+    [CreateAssetMenu]
+    public class IntVariable : ScriptableValue<int>, IPrintableValue
     {
-        if (prettyPrint)
+        public string GetValueToString(bool prettyPrint)
         {
-            return Value.Map(StringHelper.GetPrettyNumber)
-                .Match(
+            if (prettyPrint)
+            {
+                return Value.Map(StringHelper.GetPrettyNumber)
+                    .Match(
+                    () => "None",
+                    (f) => f);
+            }
+            return Value.Match(
                 () => "None",
-                (f) => f);
+                (f) => f.ToString());
         }
-        return Value.Match(
-            () => "None",
-            (f) => f.ToString());
-    }
 
-    public string GetFormattedValueToString()
-    {
-        return Value.Match(
-            () => "None",
-            (f) => StringHelper.GetFormattedInt(f)
-        );
-    }
+        public string GetFormattedValueToString()
+        {
+            return Value.Match(
+                () => "None",
+                (f) => StringHelper.GetFormattedInt(f)
+            );
+        }
 
-    public int GetValue()
-        => Value.Match(
-            () => 0,
-            (f) => f);
+        public int GetValue()
+            => Value.Match(
+                () => 0,
+                (f) => f);
+    }
 }

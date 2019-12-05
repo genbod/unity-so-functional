@@ -1,34 +1,36 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public static class Utils
+namespace DragonDogStudios.UnitySoFunctional.Behaviours
 {
-    public static IEnumerator FadeIn(CanvasGroup group, float alpha, float duration)
+    public static class Utils
     {
-        var time = 0.0f;
-        var originalAlpha = group.alpha;
-        while (time < duration)
+        public static IEnumerator FadeIn(CanvasGroup group, float alpha, float duration)
         {
-            time += Time.deltaTime;
-            group.alpha = Mathf.Lerp(originalAlpha, alpha, time / duration);
-            yield return new WaitForEndOfFrame();
+            var time = 0.0f;
+            var originalAlpha = group.alpha;
+            while (time < duration)
+            {
+                time += Time.deltaTime;
+                group.alpha = Mathf.Lerp(originalAlpha, alpha, time / duration);
+                yield return new WaitForEndOfFrame();
+            }
+
+            group.alpha = alpha;
         }
 
-        group.alpha = alpha;
-    }
-
-    public static IEnumerator FadeOut(CanvasGroup group, float alpha, float duration)
-    {
-        var time = 0.0f;
-        var originalAlpha = group.alpha;
-        while (time < duration)
+        public static IEnumerator FadeOut(CanvasGroup group, float alpha, float duration)
         {
-            time += Time.deltaTime;
-            group.alpha = Mathf.Lerp(originalAlpha, alpha, time / duration);
-            yield return new WaitForEndOfFrame();
-        }
+            var time = 0.0f;
+            var originalAlpha = group.alpha;
+            while (time < duration)
+            {
+                time += Time.deltaTime;
+                group.alpha = Mathf.Lerp(originalAlpha, alpha, time / duration);
+                yield return new WaitForEndOfFrame();
+            }
 
-        group.alpha = alpha;
+            group.alpha = alpha;
+        }
     }
 }

@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class IntAnimationParameterSetter : AnimationParameterSetter<int>
+﻿namespace DragonDogStudios.UnitySoFunctional.Utilities
 {
+    public class IntAnimationParameterSetter : AnimationParameterSetter<int>
+    {
+    }
 }

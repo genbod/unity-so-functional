@@ -1,42 +1,44 @@
-﻿using System.Collections;
+﻿using DragonDogStudios.UnitySoFunctional.Functional;
+using System.Collections;
 using System.IO;
 using System.Xml;
-using UnityEngine;
-using static F;
 
-public static class VersionHelper
+namespace DragonDogStudios.UnitySoFunctional.Utilities
 {
-    static Exceptional<XmlNode> GetVersionNode(XmlDocument doc)
+    public static class VersionHelper
     {
-        var list = doc.GetElementsByTagName("version");
-        if (list.Count == 1)
+        static Exceptional<XmlNode> GetVersionNode(XmlDocument doc)
         {
-            return list.Item(0);
-        }
-        else return new InvalidDataException();
-    }
-
-    public static IEnumerator GetVersion(string filePath)
-    {
-        NestableCoroutine<string> getTextR = new NestableCoroutine<string>(TextHelper.GetText(filePath));
-        foreach(var x in getTextR.Routine) { yield return x; }
-
-        yield return getTextR.Value.Map(XmlHelper.LoadXml)
-            .Bind(GetVersionNode)
-            .Map(n => n.InnerText);
-    }
-
-    public static IEnumerator SetVersion(string filePath, string newVersion)
-    {
-        var getTextR = new NestableCoroutine<string>(TextHelper.GetText(filePath));
-        foreach(var x in getTextR.Routine) { yield return x; }
-
-        yield return getTextR.Value.Map(XmlHelper.LoadXml)
-            .Bind(GetVersionNode)
-            .ForEach(n =>
+            var list = doc.GetElementsByTagName("version");
+            if (list.Count == 1)
             {
-                n.InnerText = newVersion;
-                n.OwnerDocument.Save(filePath);
-            });
+                return list.Item(0);
+            }
+            else return new InvalidDataException();
+        }
+
+        public static IEnumerator GetVersion(string filePath)
+        {
+            NestableCoroutine<string> getTextR = new NestableCoroutine<string>(TextHelper.GetText(filePath));
+            foreach (var x in getTextR.Routine) { yield return x; }
+
+            yield return getTextR.Value.Map(XmlHelper.LoadXml)
+                .Bind(GetVersionNode)
+                .Map(n => n.InnerText);
+        }
+
+        public static IEnumerator SetVersion(string filePath, string newVersion)
+        {
+            var getTextR = new NestableCoroutine<string>(TextHelper.GetText(filePath));
+            foreach (var x in getTextR.Routine) { yield return x; }
+
+            yield return getTextR.Value.Map(XmlHelper.LoadXml)
+                .Bind(GetVersionNode)
+                .ForEach(n =>
+                {
+                    n.InnerText = newVersion;
+                    n.OwnerDocument.Save(filePath);
+                });
+        }
     }
 }
