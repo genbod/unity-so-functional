@@ -17,32 +17,40 @@ namespace DragonDogStudios.UnitySoFunctional.ScriptableObjects
         private Option<T> _value;
         public Option<T> Value
         {
-            set
+            private set
             {
                 if (_lock)
                 {
                     throw new ReadOnlyObjectEditException();
                 }
                 _value = value;
+                _value.ForEach(ValueChangedEvent.Raise);
             }
-            get
-            {
-                return _value;
-            }
+            get => _value;
         }
 
         private ValueChangedEvent<T> _valueChangedEvent;
 
-        public ValueChangedEvent<T> ValueChangedEvent
+        public ValueChangedEvent<T> ValueChangedEvent => _valueChangedEvent ?? (_valueChangedEvent = new ValueChangedEvent<T>());
+
+        private void OnEnable()
         {
-            get
+            if (DefaultValue.IsSome())
             {
-                if (_valueChangedEvent == null)
-                {
-                    _valueChangedEvent = new ValueChangedEvent<T>();
-                }
-                return _valueChangedEvent;
+                Value = DefaultValue;
             }
+        }
+
+        [Button]
+        public void Reset()
+        {
+            Value = DefaultValue;
+        }
+
+        [Button]
+        public void FireEvent()
+        {
+            Value.ForEach(ValueChangedEvent.Raise);
         }
 
         public void SetValue(Option<T> newValue)
@@ -51,15 +59,6 @@ namespace DragonDogStudios.UnitySoFunctional.ScriptableObjects
         public void SetValue(T newValue)
         {
             Value = Some(newValue);
-            ValueChangedEvent.Raise(newValue);
-        }
-
-        private void OnEnable()
-        {
-            if (DefaultValue.IsSome())
-            {
-                Value = DefaultValue;
-            }
         }
 
         public Option<System.Object> GetValueAsOption()
@@ -75,11 +74,6 @@ namespace DragonDogStudios.UnitySoFunctional.ScriptableObjects
         {
             instance._lock = true;
             return instance;
-        }
-
-        private void OnValidate()
-        {
-            _value.ForEach(ValueChangedEvent.Raise);
         }
     }
 }
