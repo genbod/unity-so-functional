@@ -44,12 +44,13 @@
             <e p="MakeLocalMenuAttributeDrawer.cs" t="Include" />
           </e>
           <e p="Events" t="Include">
+            <e p="FloatEvent.cs" t="Include" />
             <e p="FloatVariableChangedEventListener.cs" t="Include" />
             <e p="GameEvent.cs" t="Include" />
             <e p="GameEventListener.cs" t="Include" />
             <e p="IValueChanged.cs" t="Include" />
             <e p="StringArrayVariableChangedEventListener.cs" t="Include" />
-            <e p="StringEventListener.cs" t="Include" />
+            <e p="StringEvent.cs" t="Include" />
             <e p="StringGameEvent.cs" t="Include" />
             <e p="StringGameEventListener.cs" t="Include" />
             <e p="StringVariableChangedEventListener.cs" t="Include" />
