@@ -6,16 +6,7 @@ namespace DragonDogStudios.UnitySoFunctional.Events
     public class ValueChangedEvent<T>
     {
         private readonly List<ValueChangedEventListener<T>> eventListeners = new List<ValueChangedEventListener<T>>();
-
-        [ShowInInspector]
-        private T TestArg;
-
-        [Button]
-        private void TestRaise()
-        {
-            Raise(TestArg);
-        }
-
+        
         public void Raise(T arg)
         {
             for (int i = eventListeners.Count - 1; i >= 0; i--)

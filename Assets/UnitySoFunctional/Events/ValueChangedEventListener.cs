@@ -1,29 +1,34 @@
-using Sirenix.OdinInspector;
 using System;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace DragonDogStudios.UnitySoFunctional.Events
 {
-    public class ValueChangedEventListener<T> : SerializedMonoBehaviour
+    [Serializable]
+    public class ValueChangedEventListener<T> : IValueChangedEventListener
     {
         protected ValueChangedEvent<T> Event;
 
-        [SerializeField]
-        [InlineEditor(InlineEditorObjectFieldModes.Foldout)]
+        [SerializeField, InlineEditor(InlineEditorObjectFieldModes.Foldout)]
         private IValueChanged<T> _variable;
 
-        [SerializeField] private bool _fireOnEnable = false;
+        [SerializeField]
+        private bool _fireOnEnable = false;
 
-        public List<UnityEventBase> Responses = new List<UnityEventBase>();
+        [SerializeField]
+        private List<UnityEventBase> _responses = new List<UnityEventBase>();
 
-        private void Awake()
+        public ReadOnlyCollection<UnityEventBase> Responses => _responses.AsReadOnly();
+
+        public void Awake()
         {
             this.Event = _variable.ValueChangedEvent;
         }
 
-        private void OnEnable()
+        public void OnEnable()
         {
             Event.RegisterListener(this);
             if (_fireOnEnable)
@@ -32,14 +37,14 @@ namespace DragonDogStudios.UnitySoFunctional.Events
             }
         }
 
-        private void OnDisable()
+        public void OnDisable()
         {
             Event.UnregisterListener(this);
         }
 
         public void OnEventRaised(T arg)
         {
-            foreach (var response in Responses)
+            foreach (var response in _responses)
             {
                 (response as UnityEvent)?.Invoke();
                 (response as UnityEvent<T>)?.Invoke(arg);

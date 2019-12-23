@@ -7,7 +7,7 @@ using static DragonDogStudios.UnitySoFunctional.Functional.F;
 
 namespace DragonDogStudios.UnitySoFunctional.ScriptableObjects
 {
-    public class ScriptableValue<T> : SerializedScriptableObject, IValueChanged<T>
+    public class ScriptableValue<T> : SerializedScriptableObject, IValueChanged<T>, IScriptableValue
     {
         [OdinSerialize]
         protected bool _lock = false;

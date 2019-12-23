@@ -23,7 +23,7 @@ MonoBehaviour:
     SerializationNodes:
     - Name: _lock
       Entry: 5
-      Data: false
+      Data: true
     - Name: DefaultValue
       Entry: 7
       Data: DragonDogStudios.UnitySoFunctional.Functional.Option`1[[System.Single,
@@ -43,10 +43,10 @@ MonoBehaviour:
         mscorlib]], DragonDogStudios.UnitySoFunctional
     - Name: value
       Entry: 4
-      Data: 0
+      Data: 3
     - Name: isSome
       Entry: 5
-      Data: false
+      Data: true
     - Name: 
       Entry: 8
       Data: 
