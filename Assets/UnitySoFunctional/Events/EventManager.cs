@@ -9,7 +9,7 @@ namespace DragonDogStudios.UnitySoFunctional.Events
     public class EventManager : SerializedMonoBehaviour
     {
         [SerializeField]
-        private List<IValueChangedEventListener> _eventListeners = new List<IValueChangedEventListener>();
+        private List<IEventListener> _eventListeners = new List<IEventListener>();
 
         private void Awake()
         {

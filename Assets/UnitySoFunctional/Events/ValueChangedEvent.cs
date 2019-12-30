@@ -5,7 +5,7 @@ namespace DragonDogStudios.UnitySoFunctional.Events
 {
     public class ValueChangedEvent<T>
     {
-        private readonly List<ValueChangedEventListener<T>> eventListeners = new List<ValueChangedEventListener<T>>();
+        private readonly List<EventListener<T>> eventListeners = new List<EventListener<T>>();
         
         public void Raise(T arg)
         {
@@ -15,7 +15,7 @@ namespace DragonDogStudios.UnitySoFunctional.Events
             }
         }
 
-        public void RegisterListener(ValueChangedEventListener<T> listener)
+        public void RegisterListener(EventListener<T> listener)
         {
             if (!eventListeners.Contains(listener))
             {
@@ -23,7 +23,7 @@ namespace DragonDogStudios.UnitySoFunctional.Events
             }
         }
 
-        public void UnregisterListener(ValueChangedEventListener<T> listener)
+        public void UnregisterListener(EventListener<T> listener)
         {
             if (eventListeners.Contains(listener))
             {

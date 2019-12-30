@@ -8,7 +8,40 @@ using UnityEngine.Events;
 namespace DragonDogStudios.UnitySoFunctional.Events
 {
     [Serializable]
-    public class ValueChangedEventListener<T> : IValueChangedEventListener
+    public class EventListener : IEventListener
+    {
+        [SerializeField, InlineEditor(InlineEditorObjectFieldModes.Foldout)]
+        private GameEvent _event;
+        
+        [SerializeField]
+        private List<UnityEventBase> _responses = new List<UnityEventBase>();
+
+        public ReadOnlyCollection<UnityEventBase> Responses => _responses.AsReadOnly();
+        public void Awake()
+        {
+        }
+
+        public void OnEnable()
+        {
+            _event.RegisterListener(this);
+        }
+
+        public void OnDisable()
+        {
+            _event.UnregisterListener(this);
+        }
+
+        public void OnEventRaised()
+        {
+            foreach (var response in _responses)
+            {
+                (response as UnityEvent)?.Invoke();
+            }
+        }
+    }
+    
+    [Serializable]
+    public class EventListener<T> : IEventListener
     {
         protected ValueChangedEvent<T> Event;
 

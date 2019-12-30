@@ -1,6 +1,6 @@
 ﻿namespace DragonDogStudios.UnitySoFunctional.Events
 {
-    public class StringVariableChangedEventListener : ValueChangedEventListener<string>
+    public class StringVariableChangedEventListener : EventListener<string>
     {
     }
 }
