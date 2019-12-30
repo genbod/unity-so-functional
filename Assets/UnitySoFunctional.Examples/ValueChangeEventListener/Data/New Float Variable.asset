@@ -43,7 +43,7 @@ MonoBehaviour:
         mscorlib]], DragonDogStudios.UnitySoFunctional
     - Name: value
       Entry: 4
-      Data: 3
+      Data: 4
     - Name: isSome
       Entry: 5
       Data: true

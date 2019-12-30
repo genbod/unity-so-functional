@@ -1,6 +1,5 @@
 ﻿using Sirenix.OdinInspector;
 using System.Collections.Generic;
-using sfw.net;
 using UnityEngine;
 
 namespace DragonDogStudios.UnitySoFunctional.Events

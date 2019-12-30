@@ -207,7 +207,6 @@ GameObject:
   - component: {fileID: 752850760}
   - component: {fileID: 752850759}
   - component: {fileID: 752850757}
-  - component: {fileID: 752850758}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -228,114 +227,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   material: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
---- !u!114 &752850758
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 752850756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd3547e7e74971c4b9ddc6c51ff337c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects:
-    - {fileID: 11400000, guid: ca3ca99683836fd46bc22ea1c4ba26f8, type: 2}
-    - {fileID: 752850757}
-    - {fileID: 0}
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: _variable
-      Entry: 10
-      Data: 0
-    - Name: Responses
-      Entry: 7
-      Data: 0|System.Collections.Generic.List`1[[UnityEngine.Events.UnityEventBase,
-        UnityEngine.CoreModule]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 1
-    - Name: 
-      Entry: 7
-      Data: 1|DragonDogStudios.UnitySoFunctional.Events.StringEvent, DragonDogStudios.UnitySoFunctional
-    - Name: m_PersistentCalls
-      Entry: 7
-      Data: 2|UnityEngine.Events.PersistentCallGroup, UnityEngine.CoreModule
-    - Name: m_Calls
-      Entry: 7
-      Data: 3|System.Collections.Generic.List`1[[UnityEngine.Events.PersistentCall,
-        UnityEngine.CoreModule]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 1
-    - Name: 
-      Entry: 7
-      Data: 4|UnityEngine.Events.PersistentCall, UnityEngine.CoreModule
-    - Name: m_Target
-      Entry: 10
-      Data: 1
-    - Name: m_MethodName
-      Entry: 1
-      Data: ChangeColor
-    - Name: m_Mode
-      Entry: 3
-      Data: 0
-    - Name: m_Arguments
-      Entry: 7
-      Data: 5|UnityEngine.Events.ArgumentCache, UnityEngine.CoreModule
-    - Name: m_ObjectArgument
-      Entry: 10
-      Data: 2
-    - Name: m_ObjectArgumentAssemblyTypeName
-      Entry: 1
-      Data: UnityEngine.Object, UnityEngine
-    - Name: m_IntArgument
-      Entry: 3
-      Data: 0
-    - Name: m_FloatArgument
-      Entry: 4
-      Data: 0
-    - Name: m_StringArgument
-      Entry: 1
-      Data: 
-    - Name: m_BoolArgument
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_CallState
-      Entry: 3
-      Data: 2
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-  _fireOnEnable: 0
 --- !u!65 &752850759
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -418,7 +309,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1280266121}
   - component: {fileID: 1280266120}
-  - component: {fileID: 1280266122}
   m_Layer: 0
   m_Name: EventManager
   m_TagString: Untagged
@@ -435,7 +325,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1280266119}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd3547e7e74971c4b9ddc6c51ff337c3, type: 3}
+  m_Script: {fileID: 11500000, guid: 85ed6779a5994c46b9ed96be5c713199, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
@@ -445,37 +335,53 @@ MonoBehaviour:
     - {fileID: 11400000, guid: ca3ca99683836fd46bc22ea1c4ba26f8, type: 2}
     - {fileID: 752850757}
     - {fileID: 0}
+    - {fileID: 11400000, guid: c927c2691f3e30d4cb39f3e2815ff080, type: 2}
+    - {fileID: 0}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
+    - Name: _eventListeners
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[DragonDogStudios.UnitySoFunctional.Events.IEventListener,
+        DragonDogStudios.UnitySoFunctional]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 1|DragonDogStudios.UnitySoFunctional.Events.StringVariableChangedEventListener,
+        DragonDogStudios.UnitySoFunctional
     - Name: _variable
       Entry: 10
       Data: 0
-    - Name: Responses
+    - Name: _fireOnEnable
+      Entry: 5
+      Data: true
+    - Name: _responses
       Entry: 7
-      Data: 0|System.Collections.Generic.List`1[[UnityEngine.Events.UnityEventBase,
+      Data: 2|System.Collections.Generic.List`1[[UnityEngine.Events.UnityEventBase,
         UnityEngine.CoreModule]], mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 1|DragonDogStudios.UnitySoFunctional.Events.StringEvent, DragonDogStudios.UnitySoFunctional
+      Data: 3|DragonDogStudios.UnitySoFunctional.Events.StringEvent, DragonDogStudios.UnitySoFunctional
     - Name: m_PersistentCalls
       Entry: 7
-      Data: 2|UnityEngine.Events.PersistentCallGroup, UnityEngine.CoreModule
+      Data: 4|UnityEngine.Events.PersistentCallGroup, UnityEngine.CoreModule
     - Name: m_Calls
       Entry: 7
-      Data: 3|System.Collections.Generic.List`1[[UnityEngine.Events.PersistentCall,
+      Data: 5|System.Collections.Generic.List`1[[UnityEngine.Events.PersistentCall,
         UnityEngine.CoreModule]], mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 4|UnityEngine.Events.PersistentCall, UnityEngine.CoreModule
+      Data: 6|UnityEngine.Events.PersistentCall, UnityEngine.CoreModule
     - Name: m_Target
       Entry: 10
       Data: 1
@@ -487,7 +393,7 @@ MonoBehaviour:
       Data: 0
     - Name: m_Arguments
       Entry: 7
-      Data: 5|UnityEngine.Events.ArgumentCache, UnityEngine.CoreModule
+      Data: 7|UnityEngine.Events.ArgumentCache, UnityEngine.CoreModule
     - Name: m_ObjectArgument
       Entry: 10
       Data: 2
@@ -533,71 +439,42 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  _fireOnEnable: 0
---- !u!4 &1280266121
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1280266119}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1280266122
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1280266119}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f7f33e9ec44e344fa5e4afe46c9ab28, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects:
-    - {fileID: 11400000, guid: c927c2691f3e30d4cb39f3e2815ff080, type: 2}
-    - {fileID: 752850757}
-    - {fileID: 0}
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 8|DragonDogStudios.UnitySoFunctional.Events.FloatVariableChangedEventListener,
+        DragonDogStudios.UnitySoFunctional
     - Name: _variable
       Entry: 10
-      Data: 0
-    - Name: Responses
+      Data: 3
+    - Name: _fireOnEnable
+      Entry: 5
+      Data: false
+    - Name: _responses
       Entry: 7
-      Data: 0|System.Collections.Generic.List`1[[UnityEngine.Events.UnityEventBase,
+      Data: 9|System.Collections.Generic.List`1[[UnityEngine.Events.UnityEventBase,
         UnityEngine.CoreModule]], mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 1|UnityEngine.Events.UnityEvent, UnityEngine.CoreModule
+      Data: 10|UnityEngine.Events.UnityEvent, UnityEngine.CoreModule
     - Name: m_PersistentCalls
       Entry: 7
-      Data: 2|UnityEngine.Events.PersistentCallGroup, UnityEngine.CoreModule
+      Data: 11|UnityEngine.Events.PersistentCallGroup, UnityEngine.CoreModule
     - Name: m_Calls
       Entry: 7
-      Data: 3|System.Collections.Generic.List`1[[UnityEngine.Events.PersistentCall,
+      Data: 12|System.Collections.Generic.List`1[[UnityEngine.Events.PersistentCall,
         UnityEngine.CoreModule]], mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 4|UnityEngine.Events.PersistentCall, UnityEngine.CoreModule
+      Data: 13|UnityEngine.Events.PersistentCall, UnityEngine.CoreModule
     - Name: m_Target
       Entry: 10
       Data: 1
@@ -609,10 +486,10 @@ MonoBehaviour:
       Data: 5
     - Name: m_Arguments
       Entry: 7
-      Data: 5|UnityEngine.Events.ArgumentCache, UnityEngine.CoreModule
+      Data: 14|UnityEngine.Events.ArgumentCache, UnityEngine.CoreModule
     - Name: m_ObjectArgument
       Entry: 10
-      Data: 2
+      Data: 4
     - Name: m_ObjectArgumentAssemblyTypeName
       Entry: 1
       Data: UnityEngine.Object, UnityEngine
@@ -655,7 +532,29 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  _fireOnEnable: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+--- !u!4 &1280266121
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1280266119}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2009847298
 GameObject:
   m_ObjectHideFlags: 0

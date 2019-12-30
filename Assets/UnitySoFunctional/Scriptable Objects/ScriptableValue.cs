@@ -69,6 +69,12 @@ namespace DragonDogStudios.UnitySoFunctional.ScriptableObjects
                 (f) => Some((System.Object)f)
             );
         }
+        
+        // This is needed to trigger updates as soon as value is changed in editor.
+        private void OnValidate()
+        {
+            Value.ForEach(ValueChangedEvent.Raise);
+        }
 
         public static V CreateAsReadOnly<V>(V instance) where V : ScriptableValue<T>
         {

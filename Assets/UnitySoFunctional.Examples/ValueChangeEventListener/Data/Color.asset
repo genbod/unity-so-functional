@@ -30,7 +30,7 @@ MonoBehaviour:
         mscorlib]], DragonDogStudios.UnitySoFunctional
     - Name: value
       Entry: 1
-      Data: '#F0F'
+      Data: '#F00'
     - Name: isSome
       Entry: 5
       Data: true
@@ -43,7 +43,7 @@ MonoBehaviour:
         mscorlib]], DragonDogStudios.UnitySoFunctional
     - Name: value
       Entry: 1
-      Data: '#F0F'
+      Data: '#F00'
     - Name: isSome
       Entry: 5
       Data: true

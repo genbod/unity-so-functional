@@ -44,20 +44,18 @@
             <e p="MakeLocalMenuAttributeDrawer.cs" t="Include" />
           </e>
           <e p="Events" t="Include">
+            <e p="EventListener.cs" t="Include" />
+            <e p="EventManager.cs" t="Include" />
             <e p="FloatEvent.cs" t="Include" />
             <e p="FloatVariableChangedEventListener.cs" t="Include" />
             <e p="GameEvent.cs" t="Include" />
-            <e p="GameEventListener.cs" t="Include" />
+            <e p="IEventListener.cs" t="Include" />
             <e p="IValueChanged.cs" t="Include" />
+            <e p="StringArrayEvent.cs" t="Include" />
             <e p="StringArrayVariableChangedEventListener.cs" t="Include" />
             <e p="StringEvent.cs" t="Include" />
-            <e p="StringGameEvent.cs" t="Include" />
-            <e p="StringGameEventListener.cs" t="Include" />
             <e p="StringVariableChangedEventListener.cs" t="Include" />
             <e p="ValueChangedEvent.cs" t="Include" />
-            <e p="ValueChangedEventListener.cs" t="Include" />
-            <e p="VoidGameEvent.cs" t="Include" />
-            <e p="VoidGameEventListener.cs" t="Include" />
           </e>
           <e p="Exceptions" t="Include">
             <e p="Exceptions.cs" t="Include" />
@@ -95,6 +93,8 @@
             <e p="DoubleVariable.cs" t="Include" />
             <e p="FloatVariable.cs" t="Include" />
             <e p="IntVariable.cs" t="Include" />
+            <e p="IReturnValue.cs" t="Include" />
+            <e p="IScriptableValue.cs" t="Include" />
             <e p="LongVariable.cs" t="Include" />
             <e p="MakeLocalMenu.cs" t="Include" />
             <e p="ScriptableValue.cs" t="Include" />
