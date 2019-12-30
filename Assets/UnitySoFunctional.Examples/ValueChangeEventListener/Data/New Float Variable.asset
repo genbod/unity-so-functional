@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a99f727783f78db4681c30d1f4f5b466, type: 3}
-  m_Name: Color
+  m_Script: {fileID: 11500000, guid: cef46d19eb1508449ae780f2bd0dd689, type: 3}
+  m_Name: New Float Variable
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -23,27 +23,27 @@ MonoBehaviour:
     SerializationNodes:
     - Name: _lock
       Entry: 5
-      Data: false
+      Data: true
     - Name: DefaultValue
       Entry: 7
-      Data: DragonDogStudios.UnitySoFunctional.Functional.Option`1[[System.String,
+      Data: DragonDogStudios.UnitySoFunctional.Functional.Option`1[[System.Single,
         mscorlib]], DragonDogStudios.UnitySoFunctional
     - Name: value
-      Entry: 1
-      Data: '#F00'
+      Entry: 4
+      Data: 0
     - Name: isSome
       Entry: 5
-      Data: true
+      Data: false
     - Name: 
       Entry: 8
       Data: 
     - Name: _value
       Entry: 7
-      Data: DragonDogStudios.UnitySoFunctional.Functional.Option`1[[System.String,
+      Data: DragonDogStudios.UnitySoFunctional.Functional.Option`1[[System.Single,
         mscorlib]], DragonDogStudios.UnitySoFunctional
     - Name: value
-      Entry: 1
-      Data: '#F00'
+      Entry: 4
+      Data: 4
     - Name: isSome
       Entry: 5
       Data: true

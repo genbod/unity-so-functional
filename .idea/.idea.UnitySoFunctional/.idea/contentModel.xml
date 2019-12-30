@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\BGoda\.Rider2019.3\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\BGoda\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_UnitySoFunctional.-945843358.00" t="ExcludeRecursive" />
+    <e p="D:\repos\ARTVIS\UnitySoFunctional" t="IncludeRecursive">
+      <e p="Assets" t="Include">
+        <e p="Plugins" t="Include">
+          <e p="Sirenix" t="Include">
+            <e p="Odin Inspector" t="Include">
+              <e p="scripts" t="Include">
+                <e p="Editor" t="Include">
+                  <e p="AssemblyImportSettingsAutomation.cs" t="Include" />
+                  <e p="BuildAOTAutomation.cs" t="Include" />
+                  <e p="EnsureOdinInspectorDefine.cs" t="Include" />
+                  <e p="FixBrokenUnityObjectWrapperDrawer.cs" t="Include" />
+                  <e p="Sirenix.OdinInspector.CompatibilityLayer.Editor.asmdef" t="Include" />
+                  <e p="SyncListDrawer.cs" t="Include" />
+                  <e p="SyncVarAttributeDrawer.cs" t="Include" />
+                  <e p="Vector2IntMinMaxAttributeDrawer.cs" t="Include" />
+                  <e p="VectorIntDrawers.cs" t="Include" />
+                  <e p="VectorIntPropertyResolvers.cs" t="Include" />
+                </e>
+                <e p="SerializedNetworkBehaviour.cs" t="Include" />
+                <e p="Sirenix.OdinInspector.CompatibilityLayer.asmdef" t="Include" />
+                <e p="VectorIntFormatters.cs" t="Include" />
+              </e>
+            </e>
+          </e>
+        </e>
+        <e p="UnitySoFunctional" t="Include">
+          <e p="Behaviours" t="Include">
+            <e p="BasicButton.cs" t="Include" />
+            <e p="Utils.cs" t="Include" />
+          </e>
+          <e p="Core" t="Include">
+            <e p="IPrintableValue.cs" t="Include" />
+          </e>
+          <e p="DragonDogStudios.UnitySoFunctional.asmdef" t="Include" />
+          <e p="Editor" t="Include">
+            <e p="BuildPostProcessor.cs" t="Include" />
+            <e p="DateTimeDrawer.cs" t="Include" />
+            <e p="DragonDogStudios.UnitySoFunctional.Editor.asmdef" t="Include" />
+            <e p="MakeLocalMenuAttributeDrawer.cs" t="Include" />
+          </e>
+          <e p="Events" t="Include">
+            <e p="EventListener.cs" t="Include" />
+            <e p="EventManager.cs" t="Include" />
+            <e p="FloatEvent.cs" t="Include" />
+            <e p="FloatVariableChangedEventListener.cs" t="Include" />
+            <e p="GameEvent.cs" t="Include" />
+            <e p="IEventListener.cs" t="Include" />
+            <e p="IValueChanged.cs" t="Include" />
+            <e p="StringArrayEvent.cs" t="Include" />
+            <e p="StringArrayVariableChangedEventListener.cs" t="Include" />
+            <e p="StringEvent.cs" t="Include" />
+            <e p="StringVariableChangedEventListener.cs" t="Include" />
+            <e p="ValueChangedEvent.cs" t="Include" />
+          </e>
+          <e p="Exceptions" t="Include">
+            <e p="Exceptions.cs" t="Include" />
+          </e>
+          <e p="Functional" t="Include">
+            <e p="ActionExt.cs" t="Include" />
+            <e p="Either.cs" t="Include" />
+            <e p="EnumerableExt.cs" t="Include" />
+            <e p="Error.cs" t="Include" />
+            <e p="Exceptional.cs" t="Include" />
+            <e p="F.cs" t="Include" />
+            <e p="FuncExt.cs" t="Include" />
+            <e p="Int.cs" t="Include" />
+            <e p="Option.cs" t="Include" />
+            <e p="OptionExt.cs" t="Include" />
+            <e p="TestStruct.cs" t="Include" />
+            <e p="Validation.cs" t="Include" />
+          </e>
+          <e p="PlayerPrefsEditor" t="Include">
+            <e p="Editor" t="Include">
+              <e p="DragonDogStudios.UnitySoFunctional.PlayerPrefsEditor.Editor.asmdef" t="Include" />
+              <e p="ImportPlayerPrefsWizard.cs" t="Include" />
+              <e p="Mac" t="Include">
+                <e p="Plist.cs" t="Include" />
+              </e>
+              <e p="PlayerPrefsEditor.cs" t="Include" />
+            </e>
+            <e p="PlayerPrefsUtility.cs" t="Include" />
+            <e p="SimpleEncryption.cs" t="Include" />
+          </e>
+          <e p="Scriptable Objects" t="Include">
+            <e p="BoolVariable.cs" t="Include" />
+            <e p="DateTimeVariable.cs" t="Include" />
+            <e p="DialData.cs" t="Include" />
+            <e p="DoubleVariable.cs" t="Include" />
+            <e p="FloatVariable.cs" t="Include" />
+            <e p="IntVariable.cs" t="Include" />
+            <e p="IReturnValue.cs" t="Include" />
+            <e p="IScriptableValue.cs" t="Include" />
+            <e p="LongVariable.cs" t="Include" />
+            <e p="MakeLocalMenu.cs" t="Include" />
+            <e p="ScriptableValue.cs" t="Include" />
+            <e p="StringVariable.cs" t="Include" />
+            <e p="TestObject.cs" t="Include" />
+          </e>
+          <e p="Utilities" t="Include">
+            <e p="AnimatedCounter.cs" t="Include" />
+            <e p="AnimationParameterSetter.cs" t="Include" />
+            <e p="AnimationTriggerSetter.cs" t="Include" />
+            <e p="BoolAnimationParameterSetter.cs" t="Include" />
+            <e p="EnabledSetter.cs" t="Include" />
+            <e p="FollowLayout.cs" t="Include" />
+            <e p="FormattedTextReplacer.cs" t="Include" />
+            <e p="ImageFillSetter.cs" t="Include" />
+            <e p="IntAnimationParameterSetter.cs" t="Include" />
+            <e p="JsonHelper.cs" t="Include" />
+            <e p="LocalSettingsHelper.cs" t="Include" />
+            <e p="NestableCoroutine.cs" t="Include" />
+            <e p="Singleton.cs" t="Include" />
+            <e p="SliderHelper.cs" t="Include" />
+            <e p="StringHelper.cs" t="Include" />
+            <e p="TextHelper.cs" t="Include" />
+            <e p="TextReplacer.cs" t="Include" />
+            <e p="ToggleSetter.cs" t="Include" />
+            <e p="Url.cs" t="Include" />
+            <e p="VersionHelper.cs" t="Include" />
+            <e p="WebRequest.cs" t="Include" />
+            <e p="XmlHelper.cs" t="Include" />
+          </e>
+        </e>
+        <e p="UnitySoFunctional.Examples" t="Include">
+          <e p="UnitySoFunctional.Examples.asmdef" t="Include" />
+          <e p="ValueChangeEventListener" t="Include">
+            <e p="scripts" t="Include">
+              <e p="ColorChanger.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="UnitySoFunctional.Tests" t="Include">
+          <e p="EditModeTests" t="Include">
+            <e p="DragonDogStudios.UnitySoFunctional.Tests.EditModeTests.asmdef" t="Include" />
+            <e p="Functional" t="Include">
+              <e p="OptionTest.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="DragonDogStudios.UnitySoFunctional.csproj" t="IncludeRecursive" />
+      <e p="DragonDogStudios.UnitySoFunctional.Editor.csproj" t="IncludeRecursive" />
+      <e p="DragonDogStudios.UnitySoFunctional.PlayerPrefsEditor.Editor.csproj" t="IncludeRecursive" />
+      <e p="DragonDogStudios.UnitySoFunctional.Tests.EditModeTests.csproj" t="IncludeRecursive" />
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="Packages" t="ExcludeRecursive" />
+      <e p="Sirenix.OdinInspector.CompatibilityLayer.csproj" t="IncludeRecursive" />
+      <e p="Sirenix.OdinInspector.CompatibilityLayer.Editor.csproj" t="IncludeRecursive" />
+      <e p="Temp\bin" t="ExcludeRecursive" />
+      <e p="UnitySoFunctional.Examples.csproj" t="IncludeRecursive" />
+      <e p="UnitySoFunctional.sln" t="IncludeFlat" />
+    </e>
+  </component>
+</project>

@@ -3,7 +3,7 @@
 namespace DragonDogStudios.UnitySoFunctional.ScriptableObjects
 {
     [CreateAssetMenu]
-    public class BoolVariable : ScriptableValue<bool>
+    public class BoolVariable : ScriptableValue<bool>, IReturnValue<bool>
     {
         public bool GetValue()
         {
