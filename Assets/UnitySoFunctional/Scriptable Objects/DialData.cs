@@ -1,4 +1,6 @@
-﻿using Sirenix.OdinInspector;
+﻿using System;
+using DragonDogStudios.UnitySoFunctional.Events;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DragonDogStudios.UnitySoFunctional.ScriptableObjects
@@ -25,6 +27,9 @@ namespace DragonDogStudios.UnitySoFunctional.ScriptableObjects
         [InlineEditor]
         [MakeLocalMenu]
         public IntVariable Index;
+
+        [InlineEditor]
+        public StringVariableChangedEventListener StringListener;
 
         private void Awake()
         {

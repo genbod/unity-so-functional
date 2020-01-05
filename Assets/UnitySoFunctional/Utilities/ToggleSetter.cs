@@ -16,7 +16,6 @@ namespace DragonDogStudios.UnitySoFunctional.Utilities
 
         public Toggle Toggle;
 
-        public VoidGameEvent ToggleGameEvent;
 
         // Use this for initialization
         void Start()
@@ -37,7 +36,6 @@ namespace DragonDogStudios.UnitySoFunctional.Utilities
 
         private void ToggleClicked(bool toggleValue)
         {
-            ToggleGameEvent.Raise(new Unit());
             Toggled.SetValue(toggleValue ^ ShouldInvert);
         }
     }

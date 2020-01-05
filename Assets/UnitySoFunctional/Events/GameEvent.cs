@@ -1,42 +1,36 @@
 ﻿using Sirenix.OdinInspector;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace DragonDogStudios.UnitySoFunctional.Events
 {
-    public class GameEvent<T> : SerializedScriptableObject
+    [CreateAssetMenu]
+    public class GameEvent : SerializedScriptableObject
     {
-        private readonly List<GameEventListener<T>> eventListeners = new List<GameEventListener<T>>();
-
-        [ShowInInspector]
-        private T TestArg;
+        private readonly List<EventListener> _eventListeners = new List<EventListener>();
 
         [Button]
-        private void TestRaise()
+        public void Raise()
         {
-            Raise(TestArg);
-        }
-
-        public void Raise(T arg)
-        {
-            for (int i = eventListeners.Count - 1; i >= 0; i--)
+            for (int i = _eventListeners.Count - 1; i >= 0; i--)
             {
-                eventListeners[i].OnEventRaised(arg);
+                _eventListeners[i].OnEventRaised();
             }
         }
 
-        public void RegisterListener(GameEventListener<T> listener)
+        public void RegisterListener(EventListener listener)
         {
-            if (!eventListeners.Contains(listener))
+            if (!_eventListeners.Contains(listener))
             {
-                eventListeners.Add(listener);
+                _eventListeners.Add(listener);
             }
         }
 
-        public void UnregisterListener(GameEventListener<T> listener)
+        public void UnregisterListener(EventListener listener)
         {
-            if (eventListeners.Contains(listener))
+            if (_eventListeners.Contains(listener))
             {
-                eventListeners.Remove(listener);
+                _eventListeners.Remove(listener);
             }
         }
     }

@@ -2,13 +2,13 @@
 <project version="4">
   <component name="ContentModelStore">
     <e p="C:\Users\BGoda\.Rider2019.3\system\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\BGoda\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_UnitySoFunctional.505482697.00" t="ExcludeRecursive" />
-    <e p="D:\repos\InfiniteRunner\UnitySoFunctional" t="IncludeRecursive">
+    <e p="C:\Users\BGoda\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_UnitySoFunctional.-945843358.00" t="ExcludeRecursive" />
+    <e p="D:\repos\ARTVIS\UnitySoFunctional" t="IncludeRecursive">
       <e p="Assets" t="Include">
         <e p="Plugins" t="Include">
           <e p="Sirenix" t="Include">
             <e p="Odin Inspector" t="Include">
-              <e p="Scripts" t="Include">
+              <e p="scripts" t="Include">
                 <e p="Editor" t="Include">
                   <e p="AssemblyImportSettingsAutomation.cs" t="Include" />
                   <e p="BuildAOTAutomation.cs" t="Include" />
@@ -44,15 +44,18 @@
             <e p="MakeLocalMenuAttributeDrawer.cs" t="Include" />
           </e>
           <e p="Events" t="Include">
+            <e p="EventListener.cs" t="Include" />
+            <e p="EventManager.cs" t="Include" />
+            <e p="FloatEvent.cs" t="Include" />
+            <e p="FloatVariableChangedEventListener.cs" t="Include" />
             <e p="GameEvent.cs" t="Include" />
+            <e p="IEventListener.cs" t="Include" />
             <e p="IValueChanged.cs" t="Include" />
-            <e p="StringGameEvent.cs" t="Include" />
-            <e p="StringGameEventListener.cs" t="Include" />
+            <e p="StringArrayEvent.cs" t="Include" />
+            <e p="StringArrayVariableChangedEventListener.cs" t="Include" />
+            <e p="StringEvent.cs" t="Include" />
             <e p="StringVariableChangedEventListener.cs" t="Include" />
             <e p="ValueChangedEvent.cs" t="Include" />
-            <e p="ValueChangedEventListener.cs" t="Include" />
-            <e p="VoidGameEvent.cs" t="Include" />
-            <e p="VoidGameEventListener.cs" t="Include" />
           </e>
           <e p="Exceptions" t="Include">
             <e p="Exceptions.cs" t="Include" />
@@ -90,6 +93,8 @@
             <e p="DoubleVariable.cs" t="Include" />
             <e p="FloatVariable.cs" t="Include" />
             <e p="IntVariable.cs" t="Include" />
+            <e p="IReturnValue.cs" t="Include" />
+            <e p="IScriptableValue.cs" t="Include" />
             <e p="LongVariable.cs" t="Include" />
             <e p="MakeLocalMenu.cs" t="Include" />
             <e p="ScriptableValue.cs" t="Include" />
@@ -104,7 +109,6 @@
             <e p="EnabledSetter.cs" t="Include" />
             <e p="FollowLayout.cs" t="Include" />
             <e p="FormattedTextReplacer.cs" t="Include" />
-            <e p="GameEventListener.cs" t="Include" />
             <e p="ImageFillSetter.cs" t="Include" />
             <e p="IntAnimationParameterSetter.cs" t="Include" />
             <e p="JsonHelper.cs" t="Include" />
@@ -125,7 +129,7 @@
         <e p="UnitySoFunctional.Examples" t="Include">
           <e p="UnitySoFunctional.Examples.asmdef" t="Include" />
           <e p="ValueChangeEventListener" t="Include">
-            <e p="Scripts" t="Include">
+            <e p="scripts" t="Include">
               <e p="ColorChanger.cs" t="Include" />
             </e>
           </e>
