@@ -33,6 +33,28 @@ namespace DragonDogStudios.UnitySoFunctional.Utilities
             wrapper.Items = array;
             return JsonUtility.ToJson(wrapper, prettyPrint);
         }
+        
+        public static T ConvertToType<T>(this object obj) where T : IConvertible
+        {
+            try
+            {
+                if (obj is T)
+                {
+                    return (T) obj;
+                }
+                var converter = TypeDescriptor.GetConverter(typeof(T));
+                if (converter != null)
+                {
+                    return (T)converter.ConvertFrom(obj);
+                }
+                return default(T);
+            }
+            catch (System.Exception e)
+            {
+
+                return default(T);
+            }
+        }
 
         [Serializable]
         private class Wrapper<T>
