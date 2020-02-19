@@ -19,7 +19,14 @@ namespace DragonDogStudios.UnitySoFunctional.Editor
             NestableCoroutine<string> coroutineObject = new NestableCoroutine<string>(VersionHelper.GetVersion(sourceVersionPath));
             foreach (var x in coroutineObject.Routine) { }
 
-            var build = coroutineObject.Value.Map(text => text.Split('.'))
+            var build = coroutineObject.Value.Map(text =>
+                {
+                    if (text == null)
+                    {
+                        return "".Split('.');
+                    }
+                    return text.Split('.');
+                })
                 .Bind(GetBuildVersion)
                 .ForEach(b =>
                {
