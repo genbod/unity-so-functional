@@ -36,7 +36,10 @@ namespace DragonDogStudios.UnitySoFunctional.Utilities
                 m_Instance = this as T;
 
                 // Making sure Singleton Instance persists across every scene
-                DontDestroyOnLoad(this.gameObject);
+                if (Application.IsPlaying(m_Instance))
+                {
+                    DontDestroyOnLoad(this.gameObject);
+                }
             }
             else
             {
