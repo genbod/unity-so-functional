@@ -2,7 +2,10 @@ using DragonDogStudios.UnitySoFunctional.Events;
 using DragonDogStudios.UnitySoFunctional.Exceptions;
 using DragonDogStudios.UnitySoFunctional.Functional;
 using Sirenix.OdinInspector;
+using Sirenix.OdinInspector.Editor;
 using Sirenix.Serialization;
+using UnityEditor;
+using UnityEngine;
 using static DragonDogStudios.UnitySoFunctional.Functional.F;
 
 namespace DragonDogStudios.UnitySoFunctional.ScriptableObjects
@@ -80,6 +83,16 @@ namespace DragonDogStudios.UnitySoFunctional.ScriptableObjects
         {
             instance._lock = true;
             return instance;
+        }
+
+        public static V CreateNested<V>(ScriptableObject parent, string name) where V : ScriptableValue<T>
+        {
+            // Check for existing asset
+            var newObject = ScriptableObject.CreateInstance<V>();
+            newObject.name = name;
+            AssetDatabase.AddObjectToAsset(newObject, parent);
+            AssetDatabase.SaveAssets();
+            return newObject;
         }
     }
 }
