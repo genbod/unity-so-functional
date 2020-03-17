@@ -35,19 +35,56 @@ namespace DragonDogStudios.UnitySoFunctional.Functional
 
     public static class OptionExt
     {
-        public static Option<R> Map<T, R>(this Option<T> optT, Func<T, R> f)
-            => optT.Match(
+        /// <summary>
+        /// Takes in Function that returns R.
+        /// If Option is None then return None.
+        /// If Option is Some then execute func with value of Option and Return R wrapped in Some.
+        /// </summary>
+        /// <param name="this">This Option</param>
+        /// <param name="func">Function to perform if Some</param>
+        /// <typeparam name="T">Original Option Value Type</typeparam>
+        /// <typeparam name="R">Returned Type</typeparam>
+        /// <returns>None or Some/<R/></returns>
+        public static Option<R> Map<T, R>(this Option<T> @this, Func<T, R> func)
+            => @this.Match(
                 () => None,
-                (t) => Some(f(t)));
+                (t) => Some(func(t)));
 
+        /// <summary>
+        /// Takes in Action.
+        /// If Option is None then do nothing.
+        /// If Option is Some then execute Action with value of Option.
+        /// </summary>
+        /// <param name="this">This Option</param>
+        /// <param name="action">Action to perform if Some</param>
+        /// <typeparam name="T">Option Value Type</typeparam>
+        /// <returns>(VOID) Option/<Unit/></returns>
         public static Option<Unit> ForEach<T>(this Option<T> @this, Action<T> action)
             => Map(@this, action.ToFunc());
 
-        public static Option<R> Bind<T, R>(this Option<T> optT, Func<T, Option<R>> f)
-            => optT.Match(
+        /// <summary>
+        /// Like Map but Takes in Function the returns Option<R>.
+        /// If Option is None then return None.
+        /// If Option is Some then execute func with value of Option and Return Option/<R/>.
+        /// </summary>
+        /// <param name="this">This Option</param>
+        /// <param name="func">Function to perform if Some</param>
+        /// <typeparam name="T">Original Option Value Type</typeparam>
+        /// <typeparam name="R">Returned Type</typeparam>
+        /// <returns></returns>
+        public static Option<R> Bind<T, R>(this Option<T> @this, Func<T, Option<R>> func)
+            => @this.Match(
                 () => None,
-                (t) => f(t));
+                (t) => func(t));
 
+        /// <summary>
+        /// Same as Bind but creates IEnumerable from this Option and func returns IEnumerable of Rs.
+        /// </summary>
+        /// <param name="this">This Option</param>
+        /// <param name="func">Function to perform if Some</param>
+        /// <typeparam name="T">Oritinal Option Value Type</typeparam>
+        /// <typeparam name="R">Returned Type</typeparam>
+        /// <returns>Returns IEnumerable of Rs</returns>
         public static IEnumerable<R> Bind<T, R>(this Option<T> @this, Func<T, IEnumerable<R>> func)
             => @this.AsEnumerable().Bind(func);
 

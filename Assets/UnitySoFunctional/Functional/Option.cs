@@ -27,6 +27,15 @@ namespace DragonDogStudios.UnitySoFunctional.Functional
         // public static implicit operator Option<T>(T value)
         //    => value == null ? None : Some(value);
 
+        /// <summary>
+        /// Takes in Two functions that return type R.
+        /// If the Option is None then execute "None" function.
+        /// If the Option is Some then perform "Some" function, passing in Value.  
+        /// </summary>
+        /// <param name="None">Function to run if Value is None</param>
+        /// <param name="Some">Function to run if Value is Some</param>
+        /// <typeparam name="R">The return Type of both functions</typeparam>
+        /// <returns>Either None, or R</returns>
         public R Match<R>(Func<R> None, Func<T, R> Some)
             => isSome ? Some(value) : None();
 
