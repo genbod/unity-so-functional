@@ -12,6 +12,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         private IState _currentState;
 
         public IState CurrentState => _currentState;
+        public string Name { get; set; }
 
         public event Action<IState> OnStateChanged;
 
@@ -34,7 +35,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             _currentState?.OnExit();
 
             _currentState = state;
-            Debug.Log($"Changed to state {state}");
+            Debug.Log($"Changed to state {Name}.{state.Name}");
             _currentState.OnEnter();
             
             OnStateChanged?.Invoke(_currentState);
