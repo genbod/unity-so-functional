@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace DragonDogStudios.UnitySoFunctional.Controls
 {
@@ -9,6 +10,7 @@ namespace DragonDogStudios.UnitySoFunctional.Controls
         [SerializeField] private PoolManager _poolManager;
         [SerializeField] private RectTransform _viewportTransform;
         [SerializeField] private RectTransform _contentTransform;
+        [SerializeField] private ScrollRect _scrollRect;
         
         private float _viewportHeight;
         private float _logItemHeight;
@@ -26,11 +28,11 @@ namespace DragonDogStudios.UnitySoFunctional.Controls
             ClearContentTransformContents();
         }
 
-        private void ClearContentTransformContents()
+        public void LateUpdate()
         {
-            for (int i = 0; i < _contentTransform.childCount; i++)
+            if (_poolManager.SnapToBottom)
             {
-                GameObject.Destroy(_contentTransform.GetChild(i).gameObject);
+                _scrollRect.verticalNormalizedPosition = 0f;
             }
         }
 
@@ -39,6 +41,14 @@ namespace DragonDogStudios.UnitySoFunctional.Controls
             CalculateContentHeight();
             _viewportHeight = _viewportTransform.rect.height;
             UpdateItemsInTheList();
+        }
+
+        private void ClearContentTransformContents()
+        {
+            for (int i = 0; i < _contentTransform.childCount; i++)
+            {
+                GameObject.Destroy(_contentTransform.GetChild(i).gameObject);
+            }
         }
 
         private void CalculateContentHeight()

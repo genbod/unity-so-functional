@@ -8,6 +8,7 @@ namespace DragonDogStudios.UnitySoFunctional.Controls
         public event Action PooledItemsUpdated;
         public abstract float LogItemHeight { get; }
         public abstract float Count { get; }
+        public abstract bool SnapToBottom { get; set; }
 
         protected void InvokePooledItemsUpdated()
         {
