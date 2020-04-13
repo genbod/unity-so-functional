@@ -28,6 +28,11 @@ namespace DragonDogStudios.UnitySoFunctional.Controls
             ClearContentTransformContents();
         }
 
+        public void Start()
+        {
+            Invoke("OnPooledItemsUpdated", 0.01f); // Hack because layout code needs a frame to set the viewport size
+        }
+
         public void LateUpdate()
         {
             if (_poolManager.SnapToBottom)
