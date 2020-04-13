@@ -48,6 +48,7 @@ namespace DragonDogStudios.UnitySoFunctional.Controls
             _poolManager.SnapToBottom = false;
             var newPos = Mathf.Min(_scrollRect.verticalNormalizedPosition + GetDeltaScroll(), 1);
             _scrollRect.verticalNormalizedPosition = newPos;
+            SetSnapToBottom();
         }
         
         public void ScrollDown()
@@ -55,6 +56,7 @@ namespace DragonDogStudios.UnitySoFunctional.Controls
             _poolManager.SnapToBottom = false;
             var newPos = Mathf.Max(_scrollRect.verticalNormalizedPosition - GetDeltaScroll(), 0);
             _scrollRect.verticalNormalizedPosition = newPos;
+            SetSnapToBottom();
         }
 
         private float GetDeltaScroll()
@@ -62,6 +64,12 @@ namespace DragonDogStudios.UnitySoFunctional.Controls
             var diff = Mathf.Max((_currentBottomIndex - _currentTopIndex) / 2, 1);
             var delta = _poolManager.Count != 0 ? (float)diff / _poolManager.Count : 0;
             return delta;
+        }
+        
+        private void SetSnapToBottom()
+        {
+            float scrollbarYPos = _scrollRect.verticalNormalizedPosition;
+            _poolManager.SnapToBottom = scrollbarYPos <= 1E-6f;
         }
 
         private void ClearContentTransformContents()
