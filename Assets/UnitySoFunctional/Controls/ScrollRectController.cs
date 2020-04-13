@@ -4,11 +4,11 @@ using UnityEngine.UI;
 
 namespace DragonDogStudios.UnitySoFunctional.Controls
 {
-    public class ScrollRectListener : MonoBehaviour, IScrollHandler, IBeginDragHandler, IEndDragHandler
+    public class ScrollRectController : MonoBehaviour, IScrollHandler, IBeginDragHandler, IEndDragHandler
     {
         [SerializeField] private ScrollRect _scrollRect;
         [SerializeField] private PoolManager _poolManager;
-        
+
         public void OnScroll(PointerEventData eventData)
         {
             SetSnapToBottom();

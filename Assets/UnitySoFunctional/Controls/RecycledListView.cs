@@ -43,6 +43,27 @@ namespace DragonDogStudios.UnitySoFunctional.Controls
             UpdateItemsInTheList();
         }
 
+        public void ScrollUp()
+        {
+            _poolManager.SnapToBottom = false;
+            var newPos = Mathf.Min(_scrollRect.verticalNormalizedPosition + GetDeltaScroll(), 1);
+            _scrollRect.verticalNormalizedPosition = newPos;
+        }
+        
+        public void ScrollDown()
+        {
+            _poolManager.SnapToBottom = false;
+            var newPos = Mathf.Max(_scrollRect.verticalNormalizedPosition - GetDeltaScroll(), 0);
+            _scrollRect.verticalNormalizedPosition = newPos;
+        }
+
+        private float GetDeltaScroll()
+        {
+            var diff = Mathf.Max((_currentBottomIndex - _currentTopIndex) / 2, 1);
+            var delta = _poolManager.Count != 0 ? (float)diff / _poolManager.Count : 0;
+            return delta;
+        }
+
         private void ClearContentTransformContents()
         {
             for (int i = 0; i < _contentTransform.childCount; i++)
@@ -67,11 +88,13 @@ namespace DragonDogStudios.UnitySoFunctional.Controls
                 int newTopIndex = Mathf.Max((int) (contentPosTop * _1OverLogItemHeight), 0);
                 int newBottomIndex = Mathf.Min((int) (contentPosBottom * _1OverLogItemHeight),
                     (int) _poolManager.Count - 1);
+                //print(
+                //    $"curTop:{_currentTopIndex}, curBottom:{_currentBottomIndex}, newTop:{newTopIndex}, newBottom:{newBottomIndex}");
+                //if (newTopIndex > _currentBottomIndex || newBottomIndex < _currentTopIndex) HardResetItems();
 
-                CreatePoolItemsBetweenIndices(_currentBottomIndex + 1, newBottomIndex);
                 DeletePoolItemsBetweenIndices(newBottomIndex + 1, _currentBottomIndex);
-                CreatePoolItemsBetweenIndices(newTopIndex, _currentTopIndex - 1);
                 DeletePoolItemsBetweenIndices(_currentTopIndex, newTopIndex - 1);
+                CreatePoolItemsBetweenIndices(newTopIndex, newBottomIndex);
                 
                 _currentTopIndex = newTopIndex;
                 _currentBottomIndex = newBottomIndex;
@@ -85,9 +108,26 @@ namespace DragonDogStudios.UnitySoFunctional.Controls
                 DeletePoolItemAtIndex(i);
         }
 
-        private void DeletePoolItemAtIndex(int i)
+        private void DeletePoolItemAtIndex(int index)
         {
-            _poolManager.RemoveItem(_pooledItemsAtIndex[i]);
+            // Only delete if there is an actual item at that index
+            var item = GetItem(index);
+            if (item != null)
+            {
+                _pooledItemsAtIndex[index] = null;
+                _poolManager.RemoveItem(item);
+            }
+        }
+
+        private PooledItem GetItem(int i)
+        {
+            PooledItem item = null;
+            if (_pooledItemsAtIndex.TryGetValue(i, out item))
+            {
+                return item;
+            }
+
+            return null;
         }
 
         private void CreatePoolItemsBetweenIndices(int topIndex, int bottomIndex)
@@ -98,6 +138,11 @@ namespace DragonDogStudios.UnitySoFunctional.Controls
 
         private void CreatePoolItemAtIndex(int index)
         {
+            var item = GetItem(index);
+            if (item != null) // If there is already an item there, make sure to remove it first
+            {
+                _poolManager.RemoveItem(item);
+            }
             Vector2 anchoredPosition = new Vector2( 0f, -index * _logItemHeight);
             var pooledItem = _poolManager.GetItem(index, _contentTransform, anchoredPosition);
             _pooledItemsAtIndex[index] = pooledItem;
