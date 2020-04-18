@@ -12,6 +12,7 @@ namespace DragonDogStudios.UnitySoFunctional.Controls
         [SerializeField] private RectTransform _contentTransform;
         [SerializeField] private ScrollRect _scrollRect;
         
+        
         private float _viewportHeight;
         private float _logItemHeight;
         private float _1OverLogItemHeight;
@@ -30,7 +31,7 @@ namespace DragonDogStudios.UnitySoFunctional.Controls
 
         public void Start()
         {
-            Invoke("OnPooledItemsUpdated", 0.01f); // Hack because layout code needs a frame to set the viewport size
+            Invoke("OnPooledItemsUpdated", .2f); // Hack because layout code needs a frame to set the viewport size
         }
 
         public void LateUpdate()
