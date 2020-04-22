@@ -7,7 +7,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
 {
     public class StateMachine
     {
-        public IState CurrentState => _currentState;
+        public string CurrentState => _currentState.Name;
         public event Action<IState> OnStateChanged;
 
         private Dictionary<string, StateWrapper> _states = new Dictionary<string, StateWrapper>();
