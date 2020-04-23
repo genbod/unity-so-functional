@@ -11,7 +11,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         private Action _tickAction;
         private Action _exitAction;
 
-        public State(string stateName)
+        internal State(string stateName)
         {
             _name = stateName;
         }

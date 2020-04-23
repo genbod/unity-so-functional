@@ -35,7 +35,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             return Configure(stateWrapper);
         }
 
-        internal StateConfiguration Configure(StateWrapper stateWrapper)
+        private StateConfiguration Configure(StateWrapper stateWrapper)
         {
             var stateConfiguration = new StateConfiguration(this, stateWrapper);
             return stateConfiguration;
@@ -43,19 +43,13 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
 
         public void AddAnyTransition(IState to, Func<bool> condition)
         {
-            var stateTransition = new StateTransition(null, to, condition);
+            var stateTransition = new StateTransition(null, to.Name, condition);
             _anyStateTransitions.Add(stateTransition);
         }
 
         internal void AddTransition(IState from, string to, Func<bool> condition)
         {
-            var toState = _states[to];
-            AddTransition(from, toState, condition);
-        }
-        
-        public void AddTransition(IState from, IState to, Func<bool> condition)
-        {
-            var stateTransition = new StateTransition(from, to, condition);
+            var stateTransition = new StateTransition(from.Name, to, condition);
             _stateTransitions.Add(stateTransition);
         }
 
@@ -65,7 +59,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             SetState(state);
         }
 
-        public void SetState(IState state)
+        private void SetState(IState state)
         {
             if (_currentState == state) return;
 
@@ -101,96 +95,16 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
 
             foreach (var transition in _stateTransitions)
             {
-                if (transition.From == _currentState && transition.Condition())
+                if (_states.TryGetValue(transition.From,
+                        out var fromState) &&
+                    fromState == _currentState &&
+                    transition.Condition())
                 {
                     return transition;
                 }
             }
 
             return null;
-        }
-    }
-
-    internal class StateWrapper : IState
-    {
-        private IState _state;
-        private List<Action> _enterActions = new List<Action>();
-        private List<Action> _exitActions = new List<Action>();
-
-        internal StateWrapper(IState state)
-        {
-            _state = state;
-        }
-
-        internal void AddEnterAction(Action enterAction)
-        {
-            _enterActions.Add(enterAction);
-        }
-
-        internal void AddExitAction(Action exitAction)
-        {
-            _exitActions.Add(exitAction);
-        }
-
-        public string Name => _state.Name;
-        
-        public void Tick()
-        {
-            _state?.Tick();
-        }
-
-        public void OnEnter()
-        {
-            _state?.OnEnter();
-            foreach (var enterAction in _enterActions)
-            {
-                enterAction.Invoke();
-            }
-        }
-
-        public void OnExit()
-        {
-            _state?.OnExit();
-            foreach (var exitAction in _exitActions)
-            {
-                exitAction.Invoke();
-            }
-        }
-    }
-
-    public class StateConfiguration
-    {
-        private StateMachine _stateMachine;
-        private StateWrapper _stateWrapper;
-
-        internal StateConfiguration(StateMachine stateMachine, StateWrapper state)
-        {
-            _stateMachine = stateMachine;
-            _stateWrapper = state;
-        }
-
-        public StateConfiguration OnEnter(Action enterAction)
-        {
-            _stateWrapper.AddEnterAction(enterAction);
-            return this;
-        }
-
-        public StateConfiguration OnExit(Action exitAction)
-        {
-            _stateWrapper.AddExitAction(exitAction);
-            return this;
-        }
-
-        public StateConfiguration Transition(string state, Func<bool> condition)
-        {
-            _stateMachine.AddTransition(_stateWrapper, state, condition);
-            return this;
-        }
-
-        public StateConfiguration AnyTransition(Func<bool> condition)
-        {
-            _stateMachine.AddAnyTransition(_stateWrapper, condition);
-            return this;
         }
     }
 }
