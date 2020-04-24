@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="40dad085-08a6-4d13-9993-d5daddbb61da" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.UnitySoFunctional/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UnitySoFunctional/.idea/contentModel.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.UnitySoFunctional/.idea/projectSettingsUpdater.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UnitySoFunctional/.idea/projectSettingsUpdater.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.UnitySoFunctional/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UnitySoFunctional/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/UnitySoFunctional.Tests/EditModeTests/StateMachines/base_state_machine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/UnitySoFunctional.Tests/EditModeTests/StateMachines/base_state_machine.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/UnitySoFunctional/StateMachines/StateConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/UnitySoFunctional/StateMachines/StateConfiguration.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/UnitySoFunctional/StateMachines/StateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/UnitySoFunctional/StateMachines/StateMachine.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -30,6 +28,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/UnitySoFunctional/Scriptable Objects/BoolVariable.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/UnitySoFunctional/Scriptable Objects/DialData.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/UnitySoFunctional/Events/ValueChangedEvent.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/UnitySoFunctional/StateMachines/StateMachine.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/UnitySoFunctional/Events/StringVariableChangedEventListener.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/UnitySoFunctional/Scriptable Objects/DoubleVariable.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets.meta" root0="FORCE_HIGHLIGHTING" />
@@ -40,6 +39,7 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+        <option value="$PROJECT_DIR$/Assets/UnitySoFunctional/StateMachines/StateMachine.cs" />
         <option value="$PROJECT_DIR$/Assets/UnitySoFunctional.Tests/EditModeTests/StateMachines/base_state_machine.cs" />
       </list>
     </option>
@@ -55,6 +55,8 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="DebuggerViewTab_PTCS_FirstProportionKey" value="0.3496678" />
+    <property name="DebuggerViewTab_PTCS_LastProportionKey" value="0.2998339" />
     <property name="Discover.Launch.Via.Unity" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
@@ -68,10 +70,10 @@
       <option name="pid" />
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="19052">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="19052" />
       <method v="2" />
     </configuration>
   </component>
@@ -86,7 +88,7 @@
       <option name="presentableId" value="Default" />
       <updated>1576800924473</updated>
       <workItem from="1576800926026" duration="1103000" />
-      <workItem from="1587738713670" duration="917000" />
+      <workItem from="1587738713670" duration="2440000" />
     </task>
     <servers />
   </component>
@@ -111,13 +113,92 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="2049" y="555" key="RollbackChangesDialog" timestamp="1576849278649">
-      <screen x="0" y="0" width="3072" height="1688" />
+    <state width="440" height="464" key="DebuggerActiveHint" timestamp="1587740751772">
+      <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="2049" y="555" key="RollbackChangesDialog/0.0.3072.1688@0.0.3072.1688" timestamp="1576849278649" />
-    <state x="438" y="391" width="672" height="678" key="search.everywhere.popup" timestamp="1576801017061">
-      <screen x="0" y="0" width="3072" height="1688" />
+    <state width="440" height="464" key="DebuggerActiveHint/0.0.2560.1400@0.0.2560.1400" timestamp="1587740751772" />
+    <state width="1235" height="519" key="GridCell.Tab.0.bottom" timestamp="1587740960466">
+      <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="438" y="391" width="672" height="678" key="search.everywhere.popup/0.0.3072.1688@0.0.3072.1688" timestamp="1576801017061" />
+    <state width="1235" height="519" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1587740960466" />
+    <state width="1235" height="519" key="GridCell.Tab.0.center" timestamp="1587740960465">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1235" height="519" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1587740960465" />
+    <state width="1235" height="519" key="GridCell.Tab.0.left" timestamp="1587740960465">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1235" height="519" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1587740960465" />
+    <state width="1235" height="519" key="GridCell.Tab.0.right" timestamp="1587740960466">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1235" height="519" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1587740960466" />
+    <state width="1235" height="519" key="GridCell.Tab.1.bottom" timestamp="1587740960466">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1235" height="519" key="GridCell.Tab.1.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1587740960466" />
+    <state width="1235" height="519" key="GridCell.Tab.1.center" timestamp="1587740960466">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1235" height="519" key="GridCell.Tab.1.center/0.0.2560.1400@0.0.2560.1400" timestamp="1587740960466" />
+    <state width="1235" height="519" key="GridCell.Tab.1.left" timestamp="1587740960466">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1235" height="519" key="GridCell.Tab.1.left/0.0.2560.1400@0.0.2560.1400" timestamp="1587740960466" />
+    <state width="1235" height="519" key="GridCell.Tab.1.right" timestamp="1587740960466">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1235" height="519" key="GridCell.Tab.1.right/0.0.2560.1400@0.0.2560.1400" timestamp="1587740960466" />
+    <state width="1235" height="519" key="GridCell.Tab.2.bottom" timestamp="1587740960466">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1235" height="519" key="GridCell.Tab.2.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1587740960466" />
+    <state width="1235" height="519" key="GridCell.Tab.2.center" timestamp="1587740960466">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1235" height="519" key="GridCell.Tab.2.center/0.0.2560.1400@0.0.2560.1400" timestamp="1587740960466" />
+    <state width="1235" height="519" key="GridCell.Tab.2.left" timestamp="1587740960466">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1235" height="519" key="GridCell.Tab.2.left/0.0.2560.1400@0.0.2560.1400" timestamp="1587740960466" />
+    <state width="1235" height="519" key="GridCell.Tab.2.right" timestamp="1587740960466">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1235" height="519" key="GridCell.Tab.2.right/0.0.2560.1400@0.0.2560.1400" timestamp="1587740960466" />
+    <state width="1235" height="519" key="GridCell.Tab.3.bottom" timestamp="1587740960468">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1235" height="519" key="GridCell.Tab.3.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1587740960468" />
+    <state width="1235" height="519" key="GridCell.Tab.3.center" timestamp="1587740960467">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1235" height="519" key="GridCell.Tab.3.center/0.0.2560.1400@0.0.2560.1400" timestamp="1587740960467" />
+    <state width="1235" height="519" key="GridCell.Tab.3.left" timestamp="1587740960466">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1235" height="519" key="GridCell.Tab.3.left/0.0.2560.1400@0.0.2560.1400" timestamp="1587740960466" />
+    <state width="1235" height="519" key="GridCell.Tab.3.right" timestamp="1587740960467">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1235" height="519" key="GridCell.Tab.3.right/0.0.2560.1400@0.0.2560.1400" timestamp="1587740960467" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/UnitySoFunctional/StateMachines/StateMachine.cs</url>
+          <line>60</line>
+          <properties documentPath="$PROJECT_DIR$/Assets/UnitySoFunctional/StateMachines/StateMachine.cs" initialLine="60">
+            <startOffsets>
+              <option value="2071" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2114" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

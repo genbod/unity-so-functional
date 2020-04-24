@@ -1,4 +1,5 @@
-﻿using DragonDogStudios.UnitySoFunctional.StateMachines;
+﻿using System;
+using DragonDogStudios.UnitySoFunctional.StateMachines;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -99,6 +100,73 @@ namespace Tests
             stateMachine.Tick();
             
             Assert.AreSame("secondState", stateMachine.CurrentState);
+        }
+
+        [Test]
+        public void pushTransition_from_any_state_switches_state_when_condition_is_met()
+        {
+            var stateMachine = new StateMachine();
+            stateMachine.Configure("firstState");
+            stateMachine.Configure("secondState")
+                .PushTransition(ShouldTransition);
+            bool ShouldTransition() => true;
+            
+            stateMachine.SetState("firstState");
+            Assert.AreEqual("firstState", stateMachine.CurrentState);
+
+            stateMachine.Tick();
+            
+            Assert.AreEqual("secondState", stateMachine.CurrentState);
+        }
+        
+        [Test]
+        public void popTransition_goes_back_to_original_state_when_conditions_met()
+        {
+            var ShouldPushTransition = Substitute.For<Func<bool>>();
+            ShouldPushTransition().Returns(x => true, x=> false);
+            bool ShouldTransition() => true;
+            
+            var stateMachine = new StateMachine();
+            stateMachine.Configure("firstState");
+            stateMachine.Configure("secondState")
+                .PushTransition(ShouldPushTransition)
+                .PopTransition(ShouldTransition);
+
+            stateMachine.SetState("firstState");
+            Assert.AreEqual("firstState", stateMachine.CurrentState);
+
+            stateMachine.Tick();
+            
+            Assert.AreEqual("secondState", stateMachine.CurrentState);
+
+            stateMachine.Tick();
+            
+            Assert.AreEqual("firstState", stateMachine.CurrentState);
+        }
+        
+        [Test]
+        public void popTransition_does_not_go_back_to_original_state_if_not_in_correct_push_state()
+        {
+            var ShouldPushTransition = Substitute.For<Func<bool>>();
+            ShouldPushTransition().Returns(x => true, x=> false);
+            bool ShouldTransition() => true;
+            
+            var stateMachine = new StateMachine();
+            stateMachine.Configure("firstState")
+                .PopTransition(ShouldTransition);
+            stateMachine.Configure("secondState")
+                .PushTransition(ShouldPushTransition);
+
+            stateMachine.SetState("firstState");
+            Assert.AreEqual("firstState", stateMachine.CurrentState);
+
+            stateMachine.Tick();
+            
+            Assert.AreEqual("secondState", stateMachine.CurrentState);
+
+            stateMachine.Tick();
+            
+            Assert.AreEqual("secondState", stateMachine.CurrentState);
         }
     }
 }

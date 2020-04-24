@@ -124,9 +124,10 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         {
             foreach (var transition in _popTransitions)
             {
-                if (_states.TryGetValue(transition.From,
+                if (_stateStack.Count > 0 &&
+                    _states.TryGetValue(transition.From,
                         out var fromState) &&
-                    fromState == _currentState &&
+                    fromState == _stateStack.Peek() &&
                     transition.Condition())
                 {
                     result = transition;
