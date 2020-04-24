@@ -1,18 +1,24 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace DragonDogStudios.UnitySoFunctional.StateMachines
 {
     public class StateMachine
     {
-        public string CurrentState => _currentState.Name;
+        public string CurrentState => _stateStack.Count > 0 ? _stateStack.Peek().Name : _currentState.Name;
+
         public event Action<IState> OnStateChanged;
 
         private Dictionary<string, StateWrapper> _states = new Dictionary<string, StateWrapper>();
         private List<StateTransition> _stateTransitions = new List<StateTransition>();
         private List<StateTransition> _anyStateTransitions = new List<StateTransition>();
+        private List<StateTransition> _pushTransitions = new List<StateTransition>();
+        private List<StateTransition> _popTransitions = new List<StateTransition>();
         private IState _currentState;
+        private Stack<IState> _stateStack = new Stack<IState>();
 
         public StateConfiguration Configure(string stateName)
         {
@@ -35,32 +41,9 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             return Configure(stateWrapper);
         }
 
-        private StateConfiguration Configure(StateWrapper stateWrapper)
-        {
-            var stateConfiguration = new StateConfiguration(this, stateWrapper);
-            return stateConfiguration;
-        }
-
-        public void AddAnyTransition(IState to, Func<bool> condition)
-        {
-            var stateTransition = new StateTransition(null, to.Name, condition);
-            _anyStateTransitions.Add(stateTransition);
-        }
-
-        internal void AddTransition(IState from, string to, Func<bool> condition)
-        {
-            var stateTransition = new StateTransition(from.Name, to, condition);
-            _stateTransitions.Add(stateTransition);
-        }
-
         public void SetState(string stateName)
         {
             var state = _states[stateName];
-            SetState(state);
-        }
-
-        private void SetState(IState state)
-        {
             if (_currentState == state) return;
 
             _currentState?.OnExit();
@@ -74,22 +57,110 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
 
         public void Tick()
         {
-            StateTransition transition = CheckForTransition();
-            if (transition != null)
+            StateTransition transition;
+            if (CheckForPushTransition(out transition))
+            {
+                var state = _states[transition.To];
+                if (state != null)
+                {
+                    _stateStack.Push(state);
+                    Debug.Log($"Pushed state {state.Name}");
+                    _stateStack.Peek().OnEnter();
+                    OnStateChanged?.Invoke(_stateStack.Peek());
+                }
+            }
+            else if (CheckForPopTransition(out transition))
+            {
+                if (_stateStack.Count > 0)
+                {
+                    _stateStack.Peek().OnExit();
+                    Debug.Log($"Popped State {_stateStack.Peek().Name}");
+                    _stateStack.Pop();
+                }
+            }
+            else if(CheckForTransition(out transition))
             {
                 SetState(transition.To);
             }
 
-            _currentState.Tick();
+            if (_stateStack.Count > 0)
+            {
+                _stateStack.Peek().Tick();
+            }
+            else _currentState.Tick();
         }
 
-        private StateTransition CheckForTransition()
+        internal void AddAnyTransition(IState to, Func<bool> condition)
+        {
+            var stateTransition = new StateTransition(null, to.Name, condition);
+            _anyStateTransitions.Add(stateTransition);
+        }
+
+        internal void AddTransition(IState from, string to, Func<bool> condition)
+        {
+            var stateTransition = new StateTransition(from.Name, to, condition);
+            _stateTransitions.Add(stateTransition);
+        }
+
+        internal void AddPushTransition(IState to, Func<bool> condition)
+        {
+            var stateTransition = new StateTransition(null, to.Name, condition);
+            _pushTransitions.Add(stateTransition);
+        }
+
+        internal void AddPopTransition(IState from, Func<bool> condition)
+        {
+            var stateTransition = new StateTransition(from.Name, null, condition);
+            _popTransitions.Add(stateTransition);
+        }
+
+        private StateConfiguration Configure(StateWrapper stateWrapper)
+        {
+            var stateConfiguration = new StateConfiguration(this, stateWrapper);
+            return stateConfiguration;
+        }
+
+        private bool CheckForPopTransition(out StateTransition result)
+        {
+            foreach (var transition in _popTransitions)
+            {
+                if (_states.TryGetValue(transition.From,
+                        out var fromState) &&
+                    fromState == _currentState &&
+                    transition.Condition())
+                {
+                    result = transition;
+                    return true;
+                }
+            }
+
+            result = null;
+            return false;
+        }
+
+        private bool CheckForPushTransition(out StateTransition result)
+        {
+            foreach (var transition in _pushTransitions)
+            {
+                if (transition.Condition())
+                {
+                    result = transition;
+                    return true;
+                }
+            }
+
+            result = null;
+            return false;
+        }
+
+        private bool CheckForTransition(out StateTransition result)
         {
             foreach (var transition in _anyStateTransitions)
             {
                 if (transition.Condition())
                 {
-                    return transition;
+                    result = transition;
+                    return true;
                 }
             }
 
@@ -100,11 +171,13 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
                     fromState == _currentState &&
                     transition.Condition())
                 {
-                    return transition;
+                    result = transition;
+                    return true;
                 }
             }
 
-            return null;
+            result = null;
+            return false;
         }
     }
 }

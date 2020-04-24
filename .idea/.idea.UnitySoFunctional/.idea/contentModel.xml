@@ -1,12 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\Users\BGoda\.Rider2019.3\system\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\BGoda\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_UnitySoFunctional.-945843358.00" t="ExcludeRecursive" />
-    <e p="D:\repos\ARTVIS\UnitySoFunctional" t="IncludeRecursive">
+    <e p="C:\Users\BGoda\AppData\local\JetBrains\Rider2020.1\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\BGoda\AppData\local\JetBrains\Rider2020.1\resharper-host\local\Transient\ReSharperHost\v201\SolutionCaches\_UnitySoFunctional.505482697.00" t="ExcludeRecursive" />
+    <e p="D:\repos\InfiniteRunner\UnitySoFunctional" t="IncludeRecursive">
+      <e p="Assembly-CSharp-Editor-firstpass.csproj" t="IncludeRecursive" />
+      <e p="Assembly-CSharp-firstpass.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="Plugins" t="Include">
           <e p="Sirenix" t="Include">
+            <e p="Assemblies" t="Include">
+              <e p="link.xml" t="Include" />
+              <e p="Sirenix.OdinInspector.Attributes.xml" t="Include" />
+              <e p="Sirenix.OdinInspector.Editor.xml" t="Include" />
+              <e p="Sirenix.Serialization.Config.xml" t="Include" />
+              <e p="Sirenix.Utilities.Editor.xml" t="Include" />
+              <e p="Sirenix.Utilities.xml" t="Include" />
+            </e>
+            <e p="Demos" t="Include">
+              <e p="Custom Attribute Processors" t="Include">
+                <e p="scripts" t="Include">
+                  <e p="AttributeProcessorForListItemsExample.cs" t="Include" />
+                  <e p="AttributeProcessorPriorityExample.cs" t="Include" />
+                  <e p="Bar.cs" t="Include" />
+                  <e p="BasicAttributeProcessorExample.cs" t="Include" />
+                  <e p="CustomAttributeProcessorLocatorExample.cs" t="Include" />
+                  <e p="CustomizeDictionaryKeyValueExample.cs" t="Include" />
+                  <e p="Foo.cs" t="Include" />
+                  <e p="PutAttributesOnAnyType.cs" t="Include" />
+                  <e p="SelfAndChildrenExample.cs" t="Include" />
+                  <e p="TabGroupByDeclaringType.cs" t="Include" />
+                </e>
+              </e>
+              <e p="Custom Drawers" t="Include">
+                <e p="scripts" t="Include">
+                  <e p="CustomDrawerExample.cs" t="Include" />
+                  <e p="CustomGroupExample.cs" t="Include" />
+                  <e p="GenericDrawerExample.cs" t="Include" />
+                  <e p="GenericMenuExample.cs" t="Include" />
+                  <e p="HealthBarExample.cs" t="Include" />
+                  <e p="InstancedDrawerExample.cs" t="Include" />
+                  <e p="MinesweeperExample.cs" t="Include" />
+                  <e p="PriorityExamples.cs" t="Include" />
+                  <e p="ReflectionExample.cs" t="Include" />
+                  <e p="StringMemberHelperExample.cs" t="Include" />
+                  <e p="ValidationExample.cs" t="Include" />
+                </e>
+              </e>
+              <e p="Editor Windows" t="Include">
+                <e p="scripts" t="Include">
+                  <e p="Editor" t="Include">
+                    <e p="BasicOdinEditorExampleWindow.cs" t="Include" />
+                    <e p="OdinMenuEditorWindowExample.cs" t="Include" />
+                    <e p="OdinMenuStyleExample.cs" t="Include" />
+                    <e p="OverrideGetTargetsExampleWindow.cs" t="Include" />
+                    <e p="QuicklyInspectObjects.cs" t="Include" />
+                    <e p="SomeData.cs" t="Include" />
+                    <e p="SomeTextureToolWindow.cs" t="Include" />
+                  </e>
+                </e>
+              </e>
+            </e>
             <e p="Odin Inspector" t="Include">
               <e p="scripts" t="Include">
                 <e p="Editor" t="Include">
@@ -26,12 +80,19 @@
                 <e p="VectorIntFormatters.cs" t="Include" />
               </e>
             </e>
+            <e p="Readme.txt" t="Include" />
           </e>
         </e>
         <e p="UnitySoFunctional" t="Include">
           <e p="Behaviours" t="Include">
             <e p="BasicButton.cs" t="Include" />
             <e p="Utils.cs" t="Include" />
+          </e>
+          <e p="Controls" t="Include">
+            <e p="PooledItem.cs" t="Include" />
+            <e p="PoolManager.cs" t="Include" />
+            <e p="RecycledListView.cs" t="Include" />
+            <e p="ScrollRectController.cs" t="Include" />
           </e>
           <e p="Core" t="Include">
             <e p="IPrintableValue.cs" t="Include" />
@@ -42,6 +103,7 @@
             <e p="DateTimeDrawer.cs" t="Include" />
             <e p="DragonDogStudios.UnitySoFunctional.Editor.asmdef" t="Include" />
             <e p="MakeLocalMenuAttributeDrawer.cs" t="Include" />
+            <e p="MultiSceneSetup.cs" t="Include" />
           </e>
           <e p="Events" t="Include">
             <e p="EventListener.cs" t="Include" />
@@ -101,6 +163,14 @@
             <e p="StringVariable.cs" t="Include" />
             <e p="TestObject.cs" t="Include" />
           </e>
+          <e p="StateMachines" t="Include">
+            <e p="IState.cs" t="Include" />
+            <e p="State.cs" t="Include" />
+            <e p="StateConfiguration.cs" t="Include" />
+            <e p="StateMachine.cs" t="Include" />
+            <e p="StateTransition.cs" t="Include" />
+            <e p="StateWrapper.cs" t="Include" />
+          </e>
           <e p="Utilities" t="Include">
             <e p="AnimatedCounter.cs" t="Include" />
             <e p="AnimationParameterSetter.cs" t="Include" />
@@ -139,6 +209,9 @@
             <e p="DragonDogStudios.UnitySoFunctional.Tests.EditModeTests.asmdef" t="Include" />
             <e p="Functional" t="Include">
               <e p="OptionTest.cs" t="Include" />
+            </e>
+            <e p="StateMachines" t="Include">
+              <e p="base_state_machine.cs" t="Include" />
             </e>
           </e>
         </e>
