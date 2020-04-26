@@ -2,7 +2,7 @@
 
 namespace DragonDogStudios.UnitySoFunctional.StateMachines
 {
-    public class State : IState
+    internal class State : IState
     {
         public string Name => _name;
         

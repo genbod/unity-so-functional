@@ -8,8 +8,11 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
     {
         public string CurrentState => _stateStack.Count > 0 ? _stateStack.Peek().Name : _currentState.Name;
 
-        public event Action<IState> OnStateChanged;
+        public event Action<string> OnStateChanged;
 
+        public const string ENTERED = ".entered";
+        public const string EXITED = ".exited";
+        
         private Dictionary<string, StateWrapper> _states = new Dictionary<string, StateWrapper>();
         private List<StateTransition> _stateTransitions = new List<StateTransition>();
         private List<StateTransition> _anyStateTransitions = new List<StateTransition>();
@@ -44,13 +47,13 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             var state = _states[stateName];
             if (_currentState == state) return;
 
-            _currentState?.OnExit();
+            Exit(_currentState);
 
             _currentState = state;
             Debug.Log($"Changed to state {state.Name}");
-            _currentState.OnEnter();
+            Enter(_currentState);
             
-            OnStateChanged?.Invoke(_currentState);
+            OnStateChanged?.Invoke(_currentState.Name);
         }
 
         public void Tick()
@@ -63,15 +66,15 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
                 {
                     _stateStack.Push(state);
                     Debug.Log($"Pushed state {state.Name}");
-                    _stateStack.Peek().OnEnter();
-                    OnStateChanged?.Invoke(_stateStack.Peek());
+                    Enter(_stateStack.Peek());
+                    OnStateChanged?.Invoke(_stateStack.Peek().Name);
                 }
             }
             else if (CheckForPopTransition(out transition))
             {
                 if (_stateStack.Count > 0)
                 {
-                    _stateStack.Peek().OnExit();
+                    Exit(_stateStack.Peek());
                     Debug.Log($"Popped State {_stateStack.Peek().Name}");
                     _stateStack.Pop();
                 }
@@ -86,6 +89,18 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
                 _stateStack.Peek().Tick();
             }
             else _currentState.Tick();
+        }
+
+        private void Enter(IState state)
+        {
+            state.OnEnter();
+            OnStateChanged?.Invoke(state.Name+ENTERED);
+        }
+
+        private void Exit(IState state)
+        {
+            state?.OnExit();
+            OnStateChanged?.Invoke(state?.Name+EXITED);
         }
 
         internal void AddAnyTransition(IState to, Func<bool> condition)
