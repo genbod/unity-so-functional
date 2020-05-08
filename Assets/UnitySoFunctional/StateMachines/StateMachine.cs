@@ -44,7 +44,12 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
 
         public void SetState(string stateName)
         {
-            var state = _states[stateName];
+            StateWrapper state;
+            if (!_states.TryGetValue(stateName, out state))
+            {
+                Debug.LogError($"State name: {stateName} does not exist");
+                return;
+            }
             if (_currentState == state) return;
 
             Exit(_currentState);
