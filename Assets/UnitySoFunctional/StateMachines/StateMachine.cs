@@ -20,6 +20,8 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         private List<StateTransition> _popTransitions = new List<StateTransition>();
         private IState _currentState;
         private Stack<IState> _stateStack = new Stack<IState>();
+        private string _startState;
+        private bool _firstTick = true;
 
         public StateConfiguration Configure(string stateName)
         {
@@ -42,29 +44,19 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             return Configure(stateWrapper);
         }
 
-        public void SetState(string stateName)
+        public void SetStartState(string startState)
         {
-            StateWrapper state;
-            if (!_states.TryGetValue(stateName, out state))
-            {
-                Debug.LogError($"State name: {stateName} does not exist");
-                return;
-            }
-            if (_currentState == state) return;
-
-            Exit(_currentState);
-
-            _currentState = state;
-            Debug.Log($"Changed to state {state.Name}");
-            Enter(_currentState);
-            
-            OnStateChanged?.Invoke(_currentState.Name);
+            _startState = startState;
         }
 
         public void Tick()
         {
             StateTransition transition;
-            if (CheckForPushTransition(out transition))
+            if (_firstTick && _startState != null)
+            {
+                SetState(_startState);
+            }
+            else if (CheckForPushTransition(out transition))
             {
                 var state = _states[transition.To];
                 if (state != null)
@@ -88,6 +80,8 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             {
                 SetState(transition.To);
             }
+            
+            if (_firstTick) _firstTick = false;
 
             if (_stateStack.Count > 0)
             {
@@ -100,18 +94,6 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         {
             if (_stateStack.Count > 0) Exit(_stateStack.Peek());
             Exit(_currentState);
-        }
-
-        private void Enter(IState state)
-        {
-            state.OnEnter();
-            OnStateChanged?.Invoke(state.Name+ENTERED);
-        }
-
-        private void Exit(IState state)
-        {
-            state?.OnExit();
-            OnStateChanged?.Invoke(state?.Name+EXITED);
         }
 
         internal void AddAnyTransition(IState to, Func<bool> condition)
@@ -138,10 +120,41 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             _popTransitions.Add(stateTransition);
         }
 
+        private void SetState(string stateName)
+        {
+            StateWrapper state;
+            if (!_states.TryGetValue(stateName, out state))
+            {
+                Debug.LogError($"State name: {stateName} does not exist");
+                return;
+            }
+            if (_currentState == state) return;
+
+            if (_currentState != null) Exit(_currentState);
+
+            _currentState = state;
+
+            Enter(_currentState);
+            Debug.Log($"Changed to state {state.Name}");
+            OnStateChanged?.Invoke(_currentState.Name);
+        }
+
         private StateConfiguration Configure(StateWrapper stateWrapper)
         {
             var stateConfiguration = new StateConfiguration(this, stateWrapper);
             return stateConfiguration;
+        }
+
+        private void Enter(IState state)
+        {
+            OnStateChanged?.Invoke(state.Name+ENTERED);
+            state.OnEnter();
+        }
+
+        private void Exit(IState state)
+        {
+            state?.OnExit();
+            OnStateChanged?.Invoke(state?.Name+EXITED);
         }
 
         private bool CheckForPopTransition(out StateTransition result)
