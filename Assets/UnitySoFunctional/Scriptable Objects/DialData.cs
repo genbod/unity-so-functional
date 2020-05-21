@@ -1,5 +1,4 @@
-﻿using System;
-using DragonDogStudios.UnitySoFunctional.Events;
+﻿using DragonDogStudios.UnitySoFunctional.Events;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

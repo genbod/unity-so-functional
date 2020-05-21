@@ -1,5 +1,3 @@
-using System.ComponentModel;
-
 namespace DragonDogStudios.UnitySoFunctional.Events
 {
     interface IValueChanged<T>

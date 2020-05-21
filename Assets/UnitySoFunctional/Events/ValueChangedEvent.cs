@@ -1,5 +1,4 @@
-﻿using Sirenix.OdinInspector;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine.Events;
 
 namespace DragonDogStudios.UnitySoFunctional.Events

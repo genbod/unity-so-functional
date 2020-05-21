@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace DragonDogStudios.UnitySoFunctional.Core
+﻿namespace DragonDogStudios.UnitySoFunctional.Core
 {
     public interface IPrintableValue
     {

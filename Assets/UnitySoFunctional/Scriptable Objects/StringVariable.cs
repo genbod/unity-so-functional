@@ -1,5 +1,4 @@
 ﻿using DragonDogStudios.UnitySoFunctional.Core;
-using DragonDogStudios.UnitySoFunctional.Events;
 using UnityEngine;
 
 namespace DragonDogStudios.UnitySoFunctional.ScriptableObjects

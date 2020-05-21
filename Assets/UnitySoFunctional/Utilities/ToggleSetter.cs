@@ -1,5 +1,4 @@
-﻿using DragonDogStudios.UnitySoFunctional.Events;
-using DragonDogStudios.UnitySoFunctional.ScriptableObjects;
+﻿using DragonDogStudios.UnitySoFunctional.ScriptableObjects;
 using Unit = System.ValueTuple;
 using UnityEngine;
 using UnityEngine.UI;
