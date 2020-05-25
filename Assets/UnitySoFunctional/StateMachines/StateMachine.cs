@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Text;
 using UnityEngine;
 
 namespace DragonDogStudios.UnitySoFunctional.StateMachines
@@ -96,25 +98,25 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             Exit(_currentState);
         }
 
-        internal void AddAnyTransition(IState to, Func<bool> condition)
+        internal void AddAnyTransition(IState to, Expression<Func<bool>> condition)
         {
             var stateTransition = new StateTransition(null, to.Name, condition);
             _anyStateTransitions.Add(stateTransition);
         }
 
-        internal void AddTransition(IState from, string to, Func<bool> condition)
+        internal void AddTransition(IState from, string to, Expression<Func<bool>> condition)
         {
             var stateTransition = new StateTransition(from.Name, to, condition);
             _stateTransitions.Add(stateTransition);
         }
 
-        internal void AddPushTransition(IState to, Func<bool> condition)
+        internal void AddPushTransition(IState to, Expression<Func<bool>> condition)
         {
             var stateTransition = new StateTransition(null, to.Name, condition);
             _pushTransitions.Add(stateTransition);
         }
 
-        internal void AddPopTransition(IState from, Func<bool> condition)
+        internal void AddPopTransition(IState from, Expression<Func<bool>> condition)
         {
             var stateTransition = new StateTransition(from.Name, null, condition);
             _popTransitions.Add(stateTransition);
@@ -216,6 +218,22 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
 
             result = null;
             return false;
+        }
+
+        public string ToDOT()
+        {
+            StringBuilder dot = new StringBuilder();
+            dot.AppendLine("digraph {");
+            foreach (var transition in _anyStateTransitions)
+            {
+                dot.AppendLine($"Any -> {transition.To} [label=\"{transition.Expression}\"];");
+            }
+            foreach (var transition in _stateTransitions)
+            {
+                dot.AppendLine($"{transition.From} -> {transition.To} [label=\"{transition.Expression}\"];");
+            }
+            dot.AppendLine("}");
+            return dot.ToString();
         }
     }
 }
