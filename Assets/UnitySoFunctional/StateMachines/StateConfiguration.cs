@@ -26,25 +26,25 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             return this;
         }
 
-        public StateConfiguration Transition(string state, Func<bool> condition)
+        public StateConfiguration Transition(string state, Expression<Func<bool>> condition)
         {
             _stateMachine.AddTransition(_stateWrapper, state, condition);
             return this;
         }
 
-        public StateConfiguration AnyTransition(Func<bool> condition)
+        public StateConfiguration AnyTransition(Expression<Func<bool>> condition)
         {
             _stateMachine.AddAnyTransition(_stateWrapper, condition);
             return this;
         }
 
-        public StateConfiguration PushTransition(Func<bool> condition)
+        public StateConfiguration PushTransition(Expression<Func<bool>> condition)
         {
             _stateMachine.AddPushTransition(_stateWrapper, condition);
             return this;
         }
 
-        public StateConfiguration PopTransition(Func<bool> condition)
+        public StateConfiguration PopTransition(Expression<Func<bool>> condition)
         {
             _stateMachine.AddPopTransition(_stateWrapper, condition);
             return this;

@@ -9,6 +9,8 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         private List<Action> _enterActions = new List<Action>();
         private List<Action> _exitActions = new List<Action>();
 
+        internal IState State => _state;
+
         internal StateWrapper(IState state)
         {
             _state = state;

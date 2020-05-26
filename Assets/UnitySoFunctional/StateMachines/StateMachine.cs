@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace DragonDogStudios.UnitySoFunctional.StateMachines
 {
-    public class StateMachine
+    public class StateMachine : IStateMachine
     {
         public string CurrentState => _stateStack.Count > 0 ? _stateStack.Peek().Name : _currentState.Name;
 
@@ -223,16 +223,28 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         public string ToDOT()
         {
             StringBuilder dot = new StringBuilder();
-            dot.AppendLine("digraph {");
+            
             foreach (var transition in _anyStateTransitions)
             {
-                dot.AppendLine($"Any -> {transition.To} [label=\"{transition.Expression}\"];");
+                dot.AppendLine($"Any -> \"{transition.To}\" [label=\"{transition.Expression}\"];");
             }
             foreach (var transition in _stateTransitions)
             {
-                dot.AppendLine($"{transition.From} -> {transition.To} [label=\"{transition.Expression}\"];");
+                dot.AppendLine($"\"{transition.From}\" -> \"{transition.To}\" [label=\"{transition.Expression}\"];");
             }
-            dot.AppendLine("}");
+            
+            // print sub graphs
+            foreach (var state in _states)
+            {
+                if (state.Value.State is IStateMachine stateMachine)
+                {
+                    dot.AppendLine($"subgraph \"cluster_{state.Key}\" {{");
+                    dot.AppendLine("style=filled");
+                    dot.Append(stateMachine.ToDOT());
+                    dot.AppendLine("}");
+                }
+            }
+            
             return dot.ToString();
         }
     }
