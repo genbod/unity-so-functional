@@ -8,7 +8,24 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
 {
     public class StateMachine : IStateMachine
     {
-        public string CurrentState => _stateStack.Count > 0 ? _stateStack.Peek().Name : _currentState.Name;
+        public IReadOnlyList<string> CurrentState
+        {
+            get
+            {
+                List<string> currentStates = new List<string>();
+                var currentStateString = _stateStack.Count > 0 ? _stateStack.Peek().Name : _currentState.Name;
+                currentStates.Add(currentStateString);
+
+                var currentState = _states[currentStateString].State;
+                if (currentState is IStateMachine)
+                {
+                    var stateMachine = currentState as IStateMachine;
+                    currentStates.AddRange(stateMachine.CurrentState);
+                }
+                return currentStates;
+            }
+        }
+        
 
         public event Action<string> OnStateChanged;
 
