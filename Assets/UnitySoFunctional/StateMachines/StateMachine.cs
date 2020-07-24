@@ -13,15 +13,20 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             get
             {
                 List<string> currentStates = new List<string>();
-                var currentStateString = _stateStack.Count > 0 ? _stateStack.Peek().Name : _currentState.Name;
-                currentStates.Add(currentStateString);
 
-                var currentState = _states[currentStateString].State;
-                if (currentState is IStateMachine)
+                if (_currentState != null)
                 {
-                    var stateMachine = currentState as IStateMachine;
-                    currentStates.AddRange(stateMachine.CurrentState);
+                    var currentStateString = _stateStack.Count > 0 ? _stateStack.Peek().Name : _currentState.Name;
+                    currentStates.Add(currentStateString);
+
+                    var currentState = _states[currentStateString].State;
+                    if (currentState is IStateMachine)
+                    {
+                        var stateMachine = currentState as IStateMachine;
+                        currentStates.AddRange(stateMachine.CurrentState);
+                    }
                 }
+                
                 return currentStates;
             }
         }
@@ -174,6 +179,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         {
             state?.OnExit();
             OnStateChanged?.Invoke(state?.Name+EXITED);
+            _firstTick = true;
         }
 
         private bool CheckForPopTransition(out StateTransition result)
