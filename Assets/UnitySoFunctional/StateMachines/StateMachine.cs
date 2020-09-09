@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Text;
 using UnityEngine;
 
@@ -120,27 +119,27 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             Exit(_currentState);
         }
 
-        internal void AddAnyTransition(IState to, Expression<Func<bool>> condition)
+        internal void AddAnyTransition(IState to, ITransitionCondition transitionCondition)
         {
-            var stateTransition = new StateTransition(null, to.Name, condition);
+            var stateTransition = new StateTransition(null, to.Name, transitionCondition);
             _anyStateTransitions.Add(stateTransition);
         }
 
-        internal void AddTransition(IState from, string to, Expression<Func<bool>> condition)
+        internal void AddTransition(IState from, string to, ITransitionCondition transitionCondition)
         {
-            var stateTransition = new StateTransition(from.Name, to, condition);
+            var stateTransition = new StateTransition(from.Name, to, transitionCondition);
             _stateTransitions.Add(stateTransition);
         }
 
-        internal void AddPushTransition(IState to, Expression<Func<bool>> condition)
+        internal void AddPushTransition(IState to, ITransitionCondition transitionCondition)
         {
-            var stateTransition = new StateTransition(null, to.Name, condition);
+            var stateTransition = new StateTransition(null, to.Name, transitionCondition);
             _pushTransitions.Add(stateTransition);
         }
 
-        internal void AddPopTransition(IState from, Expression<Func<bool>> condition)
+        internal void AddPopTransition(IState from, ITransitionCondition transitionCondition)
         {
-            var stateTransition = new StateTransition(from.Name, null, condition);
+            var stateTransition = new StateTransition(from.Name, null, transitionCondition);
             _popTransitions.Add(stateTransition);
         }
 
@@ -190,7 +189,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
                     _states.TryGetValue(transition.From,
                         out var fromState) &&
                     fromState == _stateStack.Peek() &&
-                    transition.Condition())
+                    transition.ConditionMatches())
                 {
                     result = transition;
                     return true;
@@ -205,7 +204,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         {
             foreach (var transition in _pushTransitions)
             {
-                if (transition.Condition())
+                if (transition.ConditionMatches())
                 {
                     result = transition;
                     return true;
@@ -220,7 +219,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         {
             foreach (var transition in _anyStateTransitions)
             {
-                if (transition.Condition())
+                if (transition.ConditionMatches())
                 {
                     result = transition;
                     return true;
@@ -232,7 +231,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
                 if (_states.TryGetValue(transition.From,
                         out var fromState) &&
                     fromState == _currentState &&
-                    transition.Condition())
+                    transition.ConditionMatches())
                 {
                     result = transition;
                     return true;

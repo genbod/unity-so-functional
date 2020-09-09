@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq.Expressions;
 
 namespace DragonDogStudios.UnitySoFunctional.StateMachines
 {
@@ -26,27 +25,27 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             return this;
         }
 
-        public StateConfiguration Transition(string state, Expression<Func<bool>> condition)
+        public StateConfiguration Transition(string state, ITransitionCondition transitionCondition)
         {
-            _stateMachine.AddTransition(_stateWrapper, state, condition);
+            _stateMachine.AddTransition(_stateWrapper, state, transitionCondition);
             return this;
         }
 
-        public StateConfiguration AnyTransition(Expression<Func<bool>> condition)
+        public StateConfiguration AnyTransition(ITransitionCondition transitionCondition)
         {
-            _stateMachine.AddAnyTransition(_stateWrapper, condition);
+            _stateMachine.AddAnyTransition(_stateWrapper, transitionCondition);
             return this;
         }
 
-        public StateConfiguration PushTransition(Expression<Func<bool>> condition)
+        public StateConfiguration PushTransition(ITransitionCondition transitionCondition)
         {
-            _stateMachine.AddPushTransition(_stateWrapper, condition);
+            _stateMachine.AddPushTransition(_stateWrapper, transitionCondition);
             return this;
         }
 
-        public StateConfiguration PopTransition(Expression<Func<bool>> condition)
+        public StateConfiguration PopTransition(ITransitionCondition transitionCondition)
         {
-            _stateMachine.AddPopTransition(_stateWrapper, condition);
+            _stateMachine.AddPopTransition(_stateWrapper, transitionCondition);
             return this;
         }
     }
