@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 
@@ -242,17 +243,19 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             return false;
         }
 
-        public string ToDOT()
+        public string ToDOT(List<string> outputList = null)
         {
-            StringBuilder dot = new StringBuilder();
-            
+            var output = outputList ?? new List<string>();
+
             foreach (var transition in _anyStateTransitions)
             {
-                dot.AppendLine($"Any -> \"{transition.To}\" [label=\"{transition.Expression}\"];");
+                var entry = ($"Any -> \"{transition.To}\" [label=\"{transition.Expression}\"];");
+                if (!output.Contains(entry)) output.Add(entry);
             }
             foreach (var transition in _stateTransitions)
             {
-                dot.AppendLine($"\"{transition.From}\" -> \"{transition.To}\" [label=\"{transition.Expression}\"];");
+                var entry = ($"\"{transition.From}\" -> \"{transition.To}\" [label=\"{transition.Expression}\"];");
+                if (!output.Contains(entry)) output.Add(entry);
             }
             
             // print sub graphs
@@ -260,14 +263,17 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             {
                 if (state.Value.State is IStateMachine stateMachine)
                 {
-                    dot.AppendLine($"subgraph \"cluster_{state.Key}\" {{");
-                    dot.AppendLine("style=filled");
-                    dot.Append(stateMachine.ToDOT());
-                    dot.AppendLine("}");
+                    var entry = ($"subgraph \"cluster_{state.Key}\" {{");
+                    if (output.Contains(entry)) continue;
+
+                    output.Add(entry);
+                    output.Add("style=filled");
+                    stateMachine.ToDOT(output);
+                    output.Add("}");
                 }
             }
             
-            return dot.ToString();
+            return string.Join("\n", output);
         }
     }
 }

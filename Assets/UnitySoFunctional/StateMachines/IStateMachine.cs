@@ -7,6 +7,6 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
     {
         IReadOnlyList<string> CurrentState { get; }
         event Action<string> OnStateChanged;
-        string ToDOT();
+        string ToDOT(List<string> output = null);
     }
 }
