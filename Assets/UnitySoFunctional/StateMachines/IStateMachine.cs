@@ -6,7 +6,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
     public interface IStateMachine
     {
         IReadOnlyList<string> CurrentState { get; }
-        event Action<string> OnStateChanged;
+        event Action<string> StateChanged;
         string ToDOT(List<string> output = null);
     }
 }

@@ -32,7 +32,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         }
         
 
-        public event Action<string> OnStateChanged;
+        public event Action<string> StateChanged;
 
         public const string ENTERED = ".entered";
         public const string EXITED = ".exited";
@@ -88,7 +88,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
                     _stateStack.Push(state);
                     Debug.Log($"Pushed state {state.Name}");
                     Enter(_stateStack.Peek());
-                    OnStateChanged?.Invoke(_stateStack.Peek().Name);
+                    StateChanged?.Invoke(_stateStack.Peek().Name);
                 }
             }
             else if (CheckForPopTransition(out transition))
@@ -111,7 +111,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             {
                 _stateStack.Peek().Tick();
             }
-            else _currentState.Tick();
+            else _currentState?.Tick();
         }
 
         public void Exit()
@@ -160,7 +160,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
 
             Enter(_currentState);
             Debug.Log($"Changed to state {state.Name}");
-            OnStateChanged?.Invoke(_currentState.Name);
+            StateChanged?.Invoke(_currentState.Name);
         }
 
         private StateConfiguration Configure(StateWrapper stateWrapper)
@@ -171,14 +171,14 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
 
         private void Enter(IState state)
         {
-            OnStateChanged?.Invoke(state.Name+ENTERED);
+            StateChanged?.Invoke(state.Name+ENTERED);
             state.OnEnter();
         }
 
         private void Exit(IState state)
         {
             state?.OnExit();
-            OnStateChanged?.Invoke(state?.Name+EXITED);
+            StateChanged?.Invoke(state?.Name+EXITED);
             _firstTick = true;
         }
 
