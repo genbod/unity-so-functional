@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace DragonDogStudios.UnitySoFunctional.StateMachines
@@ -152,8 +150,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
                 Debug.LogError($"State name: {stateName} does not exist");
                 return;
             }
-            if (_currentState == state) return;
-
+            
             if (_currentState != null) Exit(_currentState);
 
             _currentState = state;
