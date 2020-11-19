@@ -103,6 +103,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
                 SetState(transition.To);
             }
             
+            // No longer in first tick
             if (_firstTick) _firstTick = false;
 
             if (_stateStack.Count > 0)
