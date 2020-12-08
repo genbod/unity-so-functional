@@ -148,7 +148,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             StateChanged?.Invoke(state);
         }
 
-        private void SetState(string stateName)
+        protected void SetState(string stateName, bool withTransitions = true)
         {
             StateWrapper state;
             if (!_states.TryGetValue(stateName, out state))
@@ -156,11 +156,13 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
                 Debug.LogError($"State name: {stateName} does not exist");
                 return;
             }
-            
-            if (_currentState != null) Exit(_currentState);
 
+            var oldState = _currentState;
             _currentState = state;
 
+            if (!withTransitions) return;
+            if (oldState != null) Exit(oldState);
+            
             Enter(_currentState);
             Debug.Log($"Changed to state {state.Name}");
             StateChanged?.Invoke(_currentState.Name);
