@@ -113,7 +113,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             else _currentState?.Tick();
         }
 
-        public void Exit()
+        protected void Exit()
         {
             if (_stateStack.Count > 0) Exit(_stateStack.Peek());
             Exit(_currentState);
@@ -141,6 +141,11 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         {
             var stateTransition = new StateTransition(from.Name, null, transitionCondition);
             _popTransitions.Add(stateTransition);
+        }
+
+        protected void FireStateChanged(string state)
+        {
+            StateChanged?.Invoke(state);
         }
 
         private void SetState(string stateName)
