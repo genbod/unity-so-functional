@@ -28,13 +28,15 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
                 return currentStates;
             }
         }
+
+        protected IState LocalCurrentState => _currentState;
         
 
         public event Action<string> StateChanged;
 
         public const string ENTERED = ".entered";
         public const string EXITED = ".exited";
-        
+
         private Dictionary<string, StateWrapper> _states = new Dictionary<string, StateWrapper>();
         private List<StateTransition> _stateTransitions = new List<StateTransition>();
         private List<StateTransition> _anyStateTransitions = new List<StateTransition>();
@@ -148,7 +150,13 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             StateChanged?.Invoke(state);
         }
 
-        protected void SetState(string stateName, bool withTransitions = true)
+        protected void LoadSavedState(string currentState)
+        {
+            SetState(currentState, false);
+            _firstTick = false;
+        }
+
+        private void SetState(string stateName, bool withTransitions = true)
         {
             StateWrapper state;
             if (!_states.TryGetValue(stateName, out state))
@@ -160,11 +168,15 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             var oldState = _currentState;
             _currentState = state;
 
-            if (!withTransitions) return;
+            if (!withTransitions)
+            {
+                Debug.Log($"Set state to: {state.Name}");
+                return;
+            }
             if (oldState != null) Exit(oldState);
             
             Enter(_currentState);
-            Debug.Log($"Changed to state {state.Name}");
+            Debug.Log($"Changed to state: {state.Name}");
             StateChanged?.Invoke(_currentState.Name);
         }
 
