@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Sirenix.Utilities;
 using UnityEngine;
 
 namespace DragonDogStudios.UnitySoFunctional.StateMachines
@@ -29,7 +31,8 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             }
         }
 
-        protected IState LocalCurrentState => _currentState;
+        protected string LocalCurrentStateName => _currentState?.Name;
+        protected List<string> StateStackNames => _stateStack.Select(x => x.Name).Reverse().ToList();
         
 
         public event Action<string> StateChanged;
@@ -154,6 +157,19 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         {
             SetState(currentState, false);
             _firstTick = false;
+        }
+
+        protected void LoadStateStack(List<string> stackStateNames)
+        {
+            _stateStack.Clear();
+            foreach (var stateName in stackStateNames)
+            {
+                StateWrapper state;
+                if (_states.TryGetValue(stateName, out state))
+                {
+                    _stateStack.Push(state);
+                }
+            }
         }
 
         private void SetState(string stateName, bool withTransitions = true)
