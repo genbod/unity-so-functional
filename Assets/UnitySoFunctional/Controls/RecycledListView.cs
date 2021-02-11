@@ -30,7 +30,7 @@ namespace DragonDogStudios.UnitySoFunctional.Controls
 
         public void Start()
         {
-            Invoke("OnPooledItemsUpdated", .2f); // Hack because layout code needs a frame to set the viewport size
+            Invoke(nameof(OnPooledItemsUpdated), .2f); // Hack because layout code needs a frame to set the viewport size
         }
 
         public void LateUpdate()
