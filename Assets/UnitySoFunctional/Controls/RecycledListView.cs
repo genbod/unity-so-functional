@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,6 +27,11 @@ namespace DragonDogStudios.UnitySoFunctional.Controls
             _1OverLogItemHeight = 1f / _logItemHeight;
             _poolManager.PooledItemsUpdated += OnPooledItemsUpdated;
             ClearContentTransformContents();
+        }
+
+        private void OnDisable()
+        {
+            _poolManager.PooledItemsUpdated -= OnPooledItemsUpdated;
         }
 
         public void Start()
