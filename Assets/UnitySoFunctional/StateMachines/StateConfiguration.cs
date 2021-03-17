@@ -25,6 +25,12 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             return this;
         }
 
+        public StateConfiguration OnTick(Action tickAction)
+        {
+            _stateWrapper.AddTickAction(tickAction);
+            return this;
+        }
+
         public StateConfiguration Transition(string state, ITransitionCondition transitionCondition)
         {
             _stateMachine.AddTransition(_stateWrapper, state, transitionCondition);

@@ -8,6 +8,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         private IState _state;
         private List<Action> _enterActions = new List<Action>();
         private List<Action> _exitActions = new List<Action>();
+        private List<Action> _tickActions = new List<Action>();
 
         internal IState State => _state;
 
@@ -26,11 +27,20 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             _exitActions.Add(exitAction);
         }
 
+        public void AddTickAction(Action tickAction)
+        {
+            _tickActions.Add(tickAction);
+        }
+
         public string Name => _state.Name;
-        
+
         public void Tick()
         {
             _state?.Tick();
+            foreach (var tickAction in _tickActions)
+            {
+                tickAction.Invoke();
+            }
         }
 
         public void OnEnter()
