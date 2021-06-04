@@ -32,18 +32,18 @@ namespace DragonDogStudios.UnitySoFunctional.Utilities
 
         public static Option<string> GetFormattedIntAsOptional(System.Object obj)
         {
-            if (obj is int)
+            if (obj is int i)
             {
-                return Some(GetFormattedInt((int)obj));
+                return Some(GetFormattedInt(i));
             }
             else return None;
         }
 
         public static string GetFormattedInt(System.Object obj)
         {
-            if (obj is int)
+            if (obj is int i)
             {
-                return GetFormattedInt((int)obj);
+                return GetFormattedInt(i);
             }
             else return "NOT AN INT";
         }

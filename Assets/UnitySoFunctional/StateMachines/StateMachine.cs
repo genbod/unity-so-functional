@@ -19,9 +19,8 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
                     currentStates.Add(currentStateString);
 
                     var currentState = _states[currentStateString].State;
-                    if (currentState is IStateMachine)
+                    if (currentState is IStateMachine stateMachine)
                     {
-                        var stateMachine = currentState as IStateMachine;
                         currentStates.AddRange(stateMachine.CurrentState);
                     }
                 }
