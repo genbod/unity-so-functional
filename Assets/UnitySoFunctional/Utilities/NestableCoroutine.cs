@@ -101,27 +101,27 @@ namespace DragonDogStudios.UnitySoFunctional.Utilities
                 // Support nested Nestable Coroutines by returning the underlying
                 // system coroutine so that Unity will recognise it and process it.
                 // Otherwise we will continue executing on the next frame.
-                if (yielded is NestableCoroutine<T>)
+                if (yielded is NestableCoroutine<T> nestableCoroutine)
                 {
-                    yield return (yielded as NestableCoroutine<T>).coroutine;
+                    yield return nestableCoroutine.coroutine;
                 }
                 else
                 {
-                    if (yielded != null && yielded is T)
+                    if (yielded != null && yielded is T yieldedT)
                     {
-                        returnVal = F.Exceptional((T)yielded);
+                        returnVal = F.Exceptional(yieldedT);
                         yield break;
                     }
-                    else if (yielded != null && yielded is Option<T>)
+                    else if (yielded != null && yielded is Option<T> option)
                     {
-                        returnVal = ((Option<T>)yielded).Match(
+                        returnVal = option.Match(
                             () => Exceptional.Of<T>(new NoneException()),
                             (f) => F.Exceptional(f));
                         yield break;
                     }
-                    else if (yielded != null && yielded is Exceptional<T>)
+                    else if (yielded != null && yielded is Exceptional<T> exceptional)
                     {
-                        returnVal = (Exceptional<T>)yielded;
+                        returnVal = exceptional;
                         yield break;
                     }
                     else
