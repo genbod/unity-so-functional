@@ -1,58 +1,126 @@
 ﻿using System;
+using System.Collections.Generic;
+using UnityEngine.Events;
 
 namespace DragonDogStudios.UnitySoFunctional.StateMachines
 {
+    [Serializable]
+    public class TransitionConfiguration
+    {
+        private string _state;
+        private string _condition;
+
+        public string State => _state;
+        public string Condition => _condition;
+
+        public TransitionConfiguration(string transitionCondition, string state = null)
+        {
+            _state = state;
+            _condition = transitionCondition;
+        }
+    }
+    
+    [Serializable]
     public class StateConfiguration
     {
-        private StateMachine _stateMachine;
-        private StateWrapper _stateWrapper;
+        private readonly string _stateName;
+        private readonly UnityEvent _onEnter = new UnityEvent();
+        private readonly UnityEvent _onExit = new UnityEvent();
+        private readonly UnityEvent _onTick = new UnityEvent();
+        private List<TransitionConfiguration> _transitions = new List<TransitionConfiguration>();
+        private List<TransitionConfiguration> _anyTransitions = new List<TransitionConfiguration>();
+        private List<TransitionConfiguration> _pushTransition = new List<TransitionConfiguration>();
+        private List<TransitionConfiguration> _popTransition = new List<TransitionConfiguration>();
 
-        internal StateConfiguration(StateMachine stateMachine, StateWrapper state)
+        public string Name => _stateName;
+
+        public StateConfiguration(string stateName)
         {
-            _stateMachine = stateMachine;
-            _stateWrapper = state;
+            _stateName = stateName;
         }
 
-        public StateConfiguration OnEnter(Action enterAction)
+        public StateConfiguration OnEnter(UnityAction enterAction)
         {
-            _stateWrapper.AddEnterAction(enterAction);
+            _onEnter.AddListener(enterAction);
             return this;
         }
 
-        public StateConfiguration OnExit(Action exitAction)
+        public StateConfiguration OnExit(UnityAction exitAction)
         {
-            _stateWrapper.AddExitAction(exitAction);
+            _onExit.AddListener(exitAction);
             return this;
         }
 
-        public StateConfiguration OnTick(Action tickAction)
+        public StateConfiguration OnTick(UnityAction tickAction)
         {
-            _stateWrapper.AddTickAction(tickAction);
+            _onTick.AddListener(tickAction);
             return this;
         }
 
-        public StateConfiguration Transition(string state, ITransitionCondition transitionCondition)
+        public StateConfiguration Transition(string state, string transitionCondition)
         {
-            _stateMachine.AddTransition(_stateWrapper, state, transitionCondition);
+            _transitions.Add(
+                new TransitionConfiguration(transitionCondition, state));
             return this;
         }
 
-        public StateConfiguration AnyTransition(ITransitionCondition transitionCondition)
+        public StateConfiguration AnyTransition(string transitionCondition)
         {
-            _stateMachine.AddAnyTransition(_stateWrapper, transitionCondition);
+            _anyTransitions.Add(
+                new TransitionConfiguration(transitionCondition));
             return this;
         }
 
-        public StateConfiguration PushTransition(ITransitionCondition transitionCondition)
+        public StateConfiguration PushTransition(string transitionCondition)
         {
-            _stateMachine.AddPushTransition(_stateWrapper, transitionCondition);
+            _pushTransition.Add(
+                new TransitionConfiguration(transitionCondition));
             return this;
         }
 
-        public StateConfiguration PopTransition(ITransitionCondition transitionCondition)
+        public StateConfiguration PopTransition(string transitionCondition)
         {
-            _stateMachine.AddPopTransition(_stateWrapper, transitionCondition);
+            _popTransition.Add(
+                new TransitionConfiguration(transitionCondition));
             return this;
+        }
+
+        public void Build(
+            StateMachine stateMachine,
+            IState state,
+            Func<string, ITransitionCondition> transitionConditionCreator)
+        {
+            state.SetTickActions(_onTick);
+            state.SetOnEnterActions(_onEnter);
+            state.SetOnExitActions(_onExit);
+            foreach (var transition in _transitions)
+            {
+                stateMachine.AddTransition(
+                    state,
+                    transition.State,
+                    transitionConditionCreator.Invoke(transition.Condition));
+            }
+
+            foreach (var transition in _anyTransitions)
+            {
+                stateMachine.AddAnyTransition(
+                    state,
+                    transitionConditionCreator.Invoke(transition.Condition));
+            }
+
+            foreach (var transition in _pushTransition)
+            {
+                stateMachine.AddPushTransition(
+                    state,
+                    transitionConditionCreator.Invoke(transition.Condition));
+            }
+
+            foreach (var transition in _popTransition)
+            {
+                stateMachine.AddPopTransition(
+                    state,
+                    transitionConditionCreator.Invoke(transition.Condition));
+            }
         }
     }
 }

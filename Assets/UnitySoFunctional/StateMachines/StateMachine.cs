@@ -18,10 +18,13 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
                     var currentStateString = _stateStack.Count > 0 ? _stateStack.Peek().Name : _currentState.Name;
                     currentStates.Add(currentStateString);
 
-                    var currentState = _states[currentStateString].State;
-                    if (currentState is IStateMachine stateMachine)
+                    var currentState = _states[currentStateString];
+                    if (currentState is StateMachineWrapper stateMachineWrapper)
                     {
-                        currentStates.AddRange(stateMachine.CurrentState);
+                        currentStates.AddRange(
+                            stateMachineWrapper
+                            .StateMachine
+                            .CurrentState);
                     }
                 }
                 
@@ -29,16 +32,16 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             }
         }
 
-        protected string LocalCurrentStateName => _currentState?.Name;
-        protected List<string> StateStackNames => _stateStack.Select(x => x.Name).Reverse().ToList();
+        public string LocalCurrentStateName => _currentState?.Name;
+        public List<string> StateStackNames => _stateStack.Select(x => x.Name).Reverse().ToList();
         
-
         public event Action<string> StateChanged;
 
         public const string ENTERED = ".entered";
         public const string EXITED = ".exited";
 
-        private Dictionary<string, StateWrapper> _states = new Dictionary<string, StateWrapper>();
+        private Dictionary<string, IState> _states = new Dictionary<string, IState>();
+        private List<IStateMachine> _subStateMachines = new List<IStateMachine>();
         private List<StateTransition> _stateTransitions = new List<StateTransition>();
         private List<StateTransition> _anyStateTransitions = new List<StateTransition>();
         private List<StateTransition> _pushTransitions = new List<StateTransition>();
@@ -48,30 +51,53 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         private string _startState;
         private bool _firstTick = true;
 
-        public StateConfiguration Configure(string stateName)
+        public void Dispose()
+        {
+            foreach (var stateMachine in _subStateMachines)
+            {
+                stateMachine.StateChanged -= FireStateChanged;
+                stateMachine.Dispose();
+            }
+        }
+
+        public IState GetState(string stateName)
         {
             if (_states.ContainsKey(stateName))
             {
-                return Configure(_states[stateName]);
+                return _states[stateName];
             }
+
             var newState = new State(stateName);
-            return Configure(newState);
+            _states.Add(stateName, newState);
+            return newState;
         }
 
-        public StateConfiguration Configure(IState state)
+        public IState GetSubStateMachine(
+            string stateName,
+            IStateMachineFactory stateMachineFactory)
         {
-            if (_states.ContainsKey(state.Name))
+            if (_states.ContainsKey(stateName))
             {
-                return Configure(_states[state.Name]);
+                return _states[stateName];
             }
-            var stateWrapper = new StateWrapper(state);
-            _states.Add(state.Name, stateWrapper);
-            return Configure(stateWrapper);
+
+            var stateMachine = stateMachineFactory.Create(stateName);
+            RegisterStateMachine(stateMachine);
+            var stateMachineWrapper = new StateMachineWrapper(
+                stateName,
+                stateMachine);
+            _states.Add(stateName,  stateMachineWrapper);
+            return stateMachineWrapper;
         }
 
         public void SetStartState(string startState)
         {
             _startState = startState;
+        }
+
+        public void FireStateChanged(string state)
+        {
+            StateChanged?.Invoke(state);
         }
 
         public void Tick()
@@ -116,10 +142,33 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             else _currentState?.Tick();
         }
 
-        protected void Exit()
+        public void Enter()
+        {
+            // Nothing to do here but other implementations of IStateMachine do
+        }
+
+        public void Exit()
         {
             if (_stateStack.Count > 0) Exit(_stateStack.Peek());
             Exit(_currentState);
+        }
+
+        public void LoadSavedState(string currentState)
+        {
+            SetState(currentState, false);
+            _firstTick = false;
+        }
+
+        public void LoadStateStack(List<string> stackStateNames)
+        {
+            _stateStack.Clear();
+            foreach (var stateName in stackStateNames)
+            {
+                if (_states.TryGetValue(stateName, out var stateMachine))
+                {
+                    _stateStack.Push(stateMachine);
+                }
+            }
         }
 
         internal void AddAnyTransition(IState to, ITransitionCondition transitionCondition)
@@ -146,34 +195,9 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             _popTransitions.Add(stateTransition);
         }
 
-        protected void FireStateChanged(string state)
-        {
-            StateChanged?.Invoke(state);
-        }
-
-        protected void LoadSavedState(string currentState)
-        {
-            SetState(currentState, false);
-            _firstTick = false;
-        }
-
-        protected void LoadStateStack(List<string> stackStateNames)
-        {
-            _stateStack.Clear();
-            foreach (var stateName in stackStateNames)
-            {
-                StateWrapper state;
-                if (_states.TryGetValue(stateName, out state))
-                {
-                    _stateStack.Push(state);
-                }
-            }
-        }
-
         private void SetState(string stateName, bool withTransitions = true)
         {
-            StateWrapper state;
-            if (!_states.TryGetValue(stateName, out state))
+            if (!_states.TryGetValue(stateName, out var state))
             {
                 Debug.LogError($"State name: {stateName} does not exist");
                 return;
@@ -194,10 +218,10 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             StateChanged?.Invoke(_currentState.Name);
         }
 
-        private StateConfiguration Configure(StateWrapper stateWrapper)
+        private void RegisterStateMachine(IStateMachine subStateMachine)
         {
-            var stateConfiguration = new StateConfiguration(this, stateWrapper);
-            return stateConfiguration;
+            subStateMachine.StateChanged += FireStateChanged;
+            _subStateMachines.Add(subStateMachine);
         }
 
         private void Enter(IState state)
@@ -292,14 +316,14 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             // print sub graphs
             foreach (var state in _states)
             {
-                if (state.Value.State is IStateMachine stateMachine)
+                if (state.Value is StateMachineWrapper stateMachineWrapper)
                 {
                     var entry = ($"subgraph \"cluster_{state.Key}\" {{");
                     if (output.Contains(entry)) continue;
 
                     output.Add(entry);
                     output.Add("style=filled");
-                    stateMachine.ToDOT(output);
+                    stateMachineWrapper.StateMachine.ToDOT(output);
                     output.Add("}");
                 }
             }

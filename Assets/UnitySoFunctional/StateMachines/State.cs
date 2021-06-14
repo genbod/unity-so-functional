@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine.Events;
 
 namespace DragonDogStudios.UnitySoFunctional.StateMachines
 {
@@ -7,9 +8,9 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         public string Name => _name;
         
         private string _name;
-        private Action _enterAction;
-        private Action _tickAction;
-        private Action _exitAction;
+        private UnityEvent _enterAction;
+        private UnityEvent _tickAction;
+        private UnityEvent _exitAction;
 
         internal State(string stateName)
         {
@@ -29,6 +30,21 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         public void OnExit()
         {
             _exitAction?.Invoke();
+        }
+
+        public void SetTickActions(UnityEvent onTick)
+        {
+            _tickAction = onTick;
+        }
+
+        public void SetOnEnterActions(UnityEvent onEnter)
+        {
+            _enterAction = onEnter;
+        }
+
+        public void SetOnExitActions(UnityEvent onExit)
+        {
+            _exitAction = onExit;
         }
     }
 }
