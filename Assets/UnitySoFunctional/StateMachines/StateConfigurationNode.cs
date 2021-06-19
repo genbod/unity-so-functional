@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace DragonDogStudios.UnitySoFunctional.StateMachines
@@ -7,8 +8,8 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
     [Serializable]
     public class TransitionConfiguration
     {
-        private string _state;
-        private string _condition;
+        [SerializeField] private string _state;
+        [SerializeField] string _condition;
 
         public string State => _state;
         public string Condition => _condition;
@@ -21,64 +22,64 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
     }
     
     [Serializable]
-    public class StateConfiguration
+    public class StateConfigurationNode
     {
-        private readonly string _stateName;
+        [SerializeField] private List<TransitionConfiguration> _transitions = new List<TransitionConfiguration>();
+        [SerializeField] private List<TransitionConfiguration> _anyTransitions = new List<TransitionConfiguration>();
+        [SerializeField] private List<TransitionConfiguration> _pushTransition = new List<TransitionConfiguration>();
+        [SerializeField] private List<TransitionConfiguration> _popTransition = new List<TransitionConfiguration>();
+        
         private readonly UnityEvent _onEnter = new UnityEvent();
         private readonly UnityEvent _onExit = new UnityEvent();
         private readonly UnityEvent _onTick = new UnityEvent();
-        private List<TransitionConfiguration> _transitions = new List<TransitionConfiguration>();
-        private List<TransitionConfiguration> _anyTransitions = new List<TransitionConfiguration>();
-        private List<TransitionConfiguration> _pushTransition = new List<TransitionConfiguration>();
-        private List<TransitionConfiguration> _popTransition = new List<TransitionConfiguration>();
 
-        public string Name => _stateName;
+        public string Name { get; }
 
-        public StateConfiguration(string stateName)
+        public StateConfigurationNode(string stateName)
         {
-            _stateName = stateName;
+            Name = stateName;
         }
 
-        public StateConfiguration OnEnter(UnityAction enterAction)
+        public StateConfigurationNode OnEnter(UnityAction enterAction)
         {
             _onEnter.AddListener(enterAction);
             return this;
         }
 
-        public StateConfiguration OnExit(UnityAction exitAction)
+        public StateConfigurationNode OnExit(UnityAction exitAction)
         {
             _onExit.AddListener(exitAction);
             return this;
         }
 
-        public StateConfiguration OnTick(UnityAction tickAction)
+        public StateConfigurationNode OnTick(UnityAction tickAction)
         {
             _onTick.AddListener(tickAction);
             return this;
         }
 
-        public StateConfiguration Transition(string state, string transitionCondition)
+        public StateConfigurationNode Transition(string state, string transitionCondition)
         {
             _transitions.Add(
                 new TransitionConfiguration(transitionCondition, state));
             return this;
         }
 
-        public StateConfiguration AnyTransition(string transitionCondition)
+        public StateConfigurationNode AnyTransition(string transitionCondition)
         {
             _anyTransitions.Add(
                 new TransitionConfiguration(transitionCondition));
             return this;
         }
 
-        public StateConfiguration PushTransition(string transitionCondition)
+        public StateConfigurationNode PushTransition(string transitionCondition)
         {
             _pushTransition.Add(
                 new TransitionConfiguration(transitionCondition));
             return this;
         }
 
-        public StateConfiguration PopTransition(string transitionCondition)
+        public StateConfigurationNode PopTransition(string transitionCondition)
         {
             _popTransition.Add(
                 new TransitionConfiguration(transitionCondition));
