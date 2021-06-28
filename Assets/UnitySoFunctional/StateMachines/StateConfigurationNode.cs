@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -22,8 +23,9 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
     }
     
     [Serializable]
-    public class StateConfigurationNode
+    public class StateConfigurationNode : ScriptableObject
     {
+        [SerializeField] private Rect _rect = new Rect(0, 0, 200, 100);
         [SerializeField] private List<TransitionConfiguration> _transitions = new List<TransitionConfiguration>();
         [SerializeField] private List<TransitionConfiguration> _anyTransitions = new List<TransitionConfiguration>();
         [SerializeField] private List<TransitionConfiguration> _pushTransition = new List<TransitionConfiguration>();
@@ -33,12 +35,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         private readonly UnityEvent _onExit = new UnityEvent();
         private readonly UnityEvent _onTick = new UnityEvent();
 
-        public string Name { get; }
-
-        public StateConfigurationNode(string stateName)
-        {
-            Name = stateName;
-        }
+        public Rect Rect => _rect;
 
         public StateConfigurationNode OnEnter(UnityAction enterAction)
         {
@@ -123,5 +120,14 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
                     transitionConditionCreator.Invoke(transition.Condition));
             }
         }
+
+#if UNITY_EDITOR
+        public void SetPosition(Vector2 newPosition)
+        {
+            Undo.RecordObject(this, "Move State Node");
+            _rect.position = newPosition;
+            EditorUtility.SetDirty(this);
+        }
+#endif
     }
 }
