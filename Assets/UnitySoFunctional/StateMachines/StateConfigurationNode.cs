@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
@@ -23,9 +25,11 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
     }
     
     [Serializable]
-    public class StateConfigurationNode : ScriptableObject
+    public class StateConfigurationNode : SerializedScriptableObject
     {
-        [SerializeField] private Rect _rect = new Rect(0, 0, 200, 100);
+        [SerializeField, ValueDropdown("GetStateNames")]
+        private string _name;
+        [HideInInspector, SerializeField] private Rect _rect = new Rect(0, 0, 200, 50);
         [SerializeField] private List<TransitionConfiguration> _transitions = new List<TransitionConfiguration>();
         [SerializeField] private List<TransitionConfiguration> _anyTransitions = new List<TransitionConfiguration>();
         [SerializeField] private List<TransitionConfiguration> _pushTransition = new List<TransitionConfiguration>();
@@ -34,6 +38,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         private readonly UnityEvent _onEnter = new UnityEvent();
         private readonly UnityEvent _onExit = new UnityEvent();
         private readonly UnityEvent _onTick = new UnityEvent();
+        private static List<string> _stateNames;
 
         public Rect Rect => _rect;
 
@@ -122,11 +127,48 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         }
 
 #if UNITY_EDITOR
+        public void SetName(string newName)
+        {
+            _name = name = newName;
+        }
+        
         public void SetPosition(Vector2 newPosition)
         {
             Undo.RecordObject(this, "Move State Node");
             _rect.position = newPosition;
             EditorUtility.SetDirty(this);
+        }
+
+        private void OnValidate()
+        {
+            name = _name;
+        }
+
+        private static IEnumerable<string> GetStateNames()
+        {
+            if (_stateNames == null)
+            {
+                _stateNames = new List<string>();
+                _stateNames.AddRange(MakeEntry(typeof(IStateMachineNames)));
+            }
+
+            return _stateNames;
+        }
+
+        private static IEnumerable<string> MakeEntry(Type @interface)
+        {
+            var list = new List<string>();
+            var assembly = AppDomain.CurrentDomain.GetAssemblies();
+            var types = assembly.SelectMany(x => x.DefinedTypes)
+                .Where(t => t.ImplementedInterfaces.Contains(@interface))
+                .Select(t => t.AsType());
+            foreach (var type in types)
+            {
+                list.AddRange(type.GetFields()
+                    .Select(field => field.GetValue(null) as string));
+            }
+
+            return list;
         }
 #endif
     }
