@@ -29,18 +29,27 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
     {
         [SerializeField, ValueDropdown("GetStateNames")]
         private string _name;
-        [HideInInspector, SerializeField] private Rect _rect = new Rect(0, 0, 200, 50);
+
+        [HideInInspector, SerializeField] private Vector2 _pos;
         [SerializeField] private List<TransitionConfiguration> _transitions = new List<TransitionConfiguration>();
         [SerializeField] private List<TransitionConfiguration> _anyTransitions = new List<TransitionConfiguration>();
         [SerializeField] private List<TransitionConfiguration> _pushTransition = new List<TransitionConfiguration>();
         [SerializeField] private List<TransitionConfiguration> _popTransition = new List<TransitionConfiguration>();
-        
+
+        private Rect _rect = new Rect(0, 0, 200, 50);
         private readonly UnityEvent _onEnter = new UnityEvent();
         private readonly UnityEvent _onExit = new UnityEvent();
         private readonly UnityEvent _onTick = new UnityEvent();
         private static List<string> _stateNames;
 
-        public Rect Rect => _rect;
+        public Rect Rect
+        {
+            get
+            {
+                _rect.position = _pos;
+                return _rect;
+            }
+        }
 
         public StateConfigurationNode OnEnter(UnityAction enterAction)
         {
@@ -135,7 +144,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         public void SetPosition(Vector2 newPosition)
         {
             Undo.RecordObject(this, "Move State Node");
-            _rect.position = newPosition;
+            _pos = newPosition;
             EditorUtility.SetDirty(this);
         }
 
