@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
 using UnityEditor;
+using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -23,7 +24,9 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         private Rect _rect = new Rect(0, 0, 200, 50);
         private readonly UnityEvent _onEnter = new UnityEvent();
         private readonly UnityEvent _onExit = new UnityEvent();
+
         private readonly UnityEvent _onTick = new UnityEvent();
+
         private static List<string> _stateNames;
 
         public Rect Rect
@@ -61,14 +64,11 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             return this;
         }
 
-        public StateConfigurationNode Transition(string state, string transitionCondition)
+        public StateConfigurationNode Transition(string stateName, string transitionCondition)
         {
             var transitionConfiguration = TransitionConfiguration.Create(
                 transitionCondition,
-                state);
-            var leftSide = state != null ? name : "";
-            var rightSide = state != null ? state : name;
-            transitionConfiguration.name = $"{leftSide} -> {rightSide}";
+                stateName);
             _transitions.Add(transitionConfiguration);
             return this;
         }
@@ -106,7 +106,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             {
                 stateMachine.AddTransition(
                     state,
-                    transition.State,
+                    transition.ToStateName,
                     transitionConditionCreator.Invoke(transition.Condition));
             }
 
@@ -133,22 +133,26 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         }
 
 #if UNITY_EDITOR
+
         public void SetName(string newName)
         {
             _name = name = newName;
         }
-        
+
         public void SetPosition(Vector2 newPosition)
         {
             Undo.RecordObject(this, "Move State Node");
             _pos = newPosition;
             EditorUtility.SetDirty(this);
         }
-        
-        public void AddTransition(string toState, string condition)
+
+        public void AddTransition(ObjectIdentifier toStateID, string condition)
         {
             Undo.RecordObject(this, "Added Transition");
-            Transition(toState, condition);
+            _transitions.Add(
+                TransitionConfiguration.Create(
+                    condition,
+                    toStateID));
             Undo.RegisterCreatedObjectUndo(Transitions.Last(), "Created Transition");
         }
 
@@ -183,14 +187,31 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
 
             return list;
         }
-#endif
         
+        private string GetStateName(ObjectIdentifier assetID)
+        {
+            var asset = ObjectIdentifier.ToObject(assetID) as StateConfigurationNode;
+            return asset?.name;
+        }
+
+#endif
+
         public void OnBeforeSerialize()
         {
 #if UNITY_EDITOR
             if (AssetDatabase.GetAssetPath(this) == "") return;
             foreach (var transitionConfiguration in Transitions)
             {
+                // Update Name
+                if (GetStateName(transitionConfiguration.StateID) != null)
+                {
+                    transitionConfiguration.SetStateName(
+                        GetStateName(transitionConfiguration.StateID));
+                }
+                var stateName = transitionConfiguration.ToStateName;
+                var leftSide = stateName != null ? name : "";
+                var rightSide = stateName != null ? stateName : name;
+                transitionConfiguration.name = $"{leftSide} -> {rightSide}";
                 if (AssetDatabase.GetAssetPath(transitionConfiguration) == "")
                 {
                     AssetDatabase.AddObjectToAsset(transitionConfiguration, this);
