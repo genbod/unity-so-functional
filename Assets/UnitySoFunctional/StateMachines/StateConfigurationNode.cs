@@ -10,8 +10,9 @@ using UnityEngine.Events;
 namespace DragonDogStudios.UnitySoFunctional.StateMachines
 {
     [Serializable]
-    public class StateConfigurationNode : SerializedScriptableObject, ISerializationCallbackReceiver
+    public class StateConfigurationNode : SerializedScriptableObject
     {
+        [SerializeField] private string _id = Guid.NewGuid().ToString();
         [SerializeField, ValueDropdown("GetStateNames")]
         private string _name;
 
@@ -45,6 +46,8 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
                 return _transitions;
             }
         }
+
+        public Guid ID => Guid.Parse(_id);
 
         public StateConfigurationNode OnEnter(UnityAction enterAction)
         {
@@ -146,7 +149,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             EditorUtility.SetDirty(this);
         }
 
-        public void AddTransition(ObjectIdentifier toStateID, string condition)
+        public void AddTransition(Guid toStateID, string condition)
         {
             Undo.RecordObject(this, "Added Transition");
             _transitions.Add(
@@ -195,29 +198,5 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         }
 
 #endif
-
-        public void OnBeforeSerialize()
-        {
-#if UNITY_EDITOR
-            if (AssetDatabase.GetAssetPath(this) == "") return;
-            foreach (var transitionConfiguration in Transitions)
-            {
-                // Update Name
-                if (GetStateName(transitionConfiguration.StateID) != null)
-                {
-                    transitionConfiguration.SetStateName(
-                        GetStateName(transitionConfiguration.StateID));
-                }
-                var stateName = transitionConfiguration.ToStateName;
-                var leftSide = stateName != null ? name : "";
-                var rightSide = stateName != null ? stateName : name;
-                transitionConfiguration.name = $"{leftSide} -> {rightSide}";
-                if (AssetDatabase.GetAssetPath(transitionConfiguration) == "")
-                {
-                    AssetDatabase.AddObjectToAsset(transitionConfiguration, this);
-                }
-            }
-#endif
-        }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using Sirenix.OdinInspector;
-using UnityEditor;
 using UnityEditor.Build.Content;
 using UnityEngine;
 
@@ -11,7 +10,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
     {
         public static TransitionConfiguration Create(
             string transitionCondition,
-            ObjectIdentifier stateID)
+            Guid stateID)
         {
             var transitionConfiguration = CreateInstance<TransitionConfiguration>();
             transitionConfiguration._stateID = stateID;
@@ -30,11 +29,11 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         
         [SerializeField] private string _toStateName;
         [SerializeField] string _condition;
-        [SerializeField] private ObjectIdentifier _stateID;
+        [SerializeField] private Guid _stateID;
 
         public string ToStateName => _toStateName;
         public string Condition => _condition;
-        public ObjectIdentifier StateID => _stateID;
+        public Guid StateID => _stateID;
 
         public void SetStateName(string stateName)
         {
