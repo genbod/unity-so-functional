@@ -151,6 +151,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
 
         public void AddTransition(Guid toStateID, string condition)
         {
+            // TODO: Check here to see if transition already exists
             Undo.RecordObject(this, "Added Transition");
             _transitions.Add(
                 TransitionConfiguration.Create(
@@ -190,7 +191,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
 
             return list;
         }
-        
+
         private string GetStateName(ObjectIdentifier assetID)
         {
             var asset = ObjectIdentifier.ToObject(assetID) as StateConfigurationNode;
