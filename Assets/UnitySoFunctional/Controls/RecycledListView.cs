@@ -29,6 +29,11 @@ namespace DragonDogStudios.UnitySoFunctional.Controls
             ClearContentTransformContents();
         }
 
+        private void OnEnable()
+        {
+            _poolManager.PooledItemsUpdated += OnPooledItemsUpdated;
+        }
+        
         private void OnDisable()
         {
             _poolManager.PooledItemsUpdated -= OnPooledItemsUpdated;
