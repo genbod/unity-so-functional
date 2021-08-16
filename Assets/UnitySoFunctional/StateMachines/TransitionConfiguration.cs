@@ -10,10 +10,12 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
     {
         public static TransitionConfiguration Create(
             string transitionCondition,
+            Guid owningStateID,
             Guid stateID)
         {
             var transitionConfiguration = CreateInstance<TransitionConfiguration>();
-            transitionConfiguration._stateID = stateID;
+            transitionConfiguration._owningStateID = owningStateID;
+            transitionConfiguration._toStateID = stateID;
             transitionConfiguration._condition = transitionCondition;
             return transitionConfiguration;
         }
@@ -29,20 +31,22 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         
         [SerializeField] private string _toStateName;
         [SerializeField] string _condition;
-        [SerializeField] private Guid _stateID;
+        [SerializeField] private Guid _owningStateID;
+        [SerializeField] private Guid _toStateID;
         private Vector2 _startPosition;
         private Vector2 _endPosition;
         private Triangle _arrow;
 
         public string ToStateName => _toStateName;
         public string Condition => _condition;
-        public Guid StateID => _stateID;
+        public Guid ToStateID => _toStateID;
 
         public Vector2 StartPosition => _startPosition;
         public Vector2 EndPosition => _endPosition;
         public Triangle Arrow => _arrow;
+        public Guid OwningStateID => _owningStateID;
 
-        public void SetStateName(string stateName)
+        public void SetToStateName(string stateName)
         {
             _toStateName = stateName;
         }

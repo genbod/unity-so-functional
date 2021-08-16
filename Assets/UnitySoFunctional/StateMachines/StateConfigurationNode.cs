@@ -151,13 +151,25 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
 
         public void AddTransition(Guid toStateID, string condition)
         {
-            // TODO: Check here to see if transition already exists
+            // Check to see if transition already exists
+            if (_transitions.Exists(x => x.ToStateID == toStateID))
+            {
+                return;
+            }
             Undo.RecordObject(this, "Added Transition");
             _transitions.Add(
                 TransitionConfiguration.Create(
                     condition,
+                    ID,
                     toStateID));
             Undo.RegisterCreatedObjectUndo(Transitions.Last(), "Created Transition");
+        }
+
+        public void DeleteTransition(TransitionConfiguration selectedTransition)
+        {
+            Undo.RecordObject(this, "Deleted Transition");
+            _transitions.Remove(selectedTransition);
+            Undo.DestroyObjectImmediate(selectedTransition);
         }
 
         private void OnValidate()
