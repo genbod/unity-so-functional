@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using DragonDogStudios.UnitySoFunctional.Utilities;
 using Sirenix.OdinInspector;
+using UnityEditor.Build.Content;
 using UnityEngine;
 
 namespace DragonDogStudios.UnitySoFunctional.StateMachines
@@ -28,9 +31,11 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             transitionConfiguration._condition = transitionCondition;
             return transitionConfiguration;
         }
+
+        private static List<string> _triggerNames;
         
         [SerializeField] private string _toStateName;
-        [SerializeField] string _condition;
+        [SerializeField, ValueDropdown("GetTriggerNames")] string _condition;
         [SerializeField] private Guid _owningStateID;
         [SerializeField] private Guid _toStateID;
         private Vector2 _startPosition;
@@ -65,5 +70,39 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         {
             _arrow = triangle;
         }
+#if UNITY_EDITOR
+        private static IEnumerable<string> GetTriggerNames()
+        {
+            if (_triggerNames == null)
+            {
+                UpdateTriggerNames();
+            }
+
+            return _triggerNames;
+        }
+
+        [Button]
+        public static void UpdateTriggerNames()
+        {
+            _triggerNames = new List<string>();
+            _triggerNames.AddRange(MakeEntry(typeof(ITriggerNames)));
+        }
+
+        private static IEnumerable<string> MakeEntry(Type @interface)
+        {
+            var list = new List<string>();
+            var assembly = AppDomain.CurrentDomain.GetAssemblies();
+            var types = assembly.SelectMany(x => x.DefinedTypes)
+                .Where(t => t.ImplementedInterfaces.Contains(@interface))
+                .Select(t => t.AsType());
+            foreach (var type in types)
+            {
+                list.AddRange(type.GetFields()
+                    .Select(field => field.GetValue(null) as string));
+            }
+
+            return list;
+        }
+#endif
     }
 }
