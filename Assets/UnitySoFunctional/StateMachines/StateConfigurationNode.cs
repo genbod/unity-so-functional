@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DragonDogStudios.UnitySoFunctional.Utilities;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEditor.Build.Content;
@@ -12,7 +13,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
     [Serializable]
     public class StateConfigurationNode : SerializedScriptableObject
     {
-        [SerializeField] private string _id = Guid.NewGuid().ToString();
+        [HideInInspector, SerializeField] private string _id = Guid.NewGuid().ToString();
         [SerializeField, ValueDropdown("GetStateNames")]
         private string _name;
 
@@ -181,27 +182,19 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         {
             if (_stateNames == null)
             {
-                _stateNames = new List<string>();
-                _stateNames.AddRange(MakeEntry(typeof(IStateMachineNames)));
+                UpdateStateNames();
             }
 
             return _stateNames;
         }
 
-        private static IEnumerable<string> MakeEntry(Type @interface)
+        [Button]
+        private static void UpdateStateNames()
         {
-            var list = new List<string>();
-            var assembly = AppDomain.CurrentDomain.GetAssemblies();
-            var types = assembly.SelectMany(x => x.DefinedTypes)
-                .Where(t => t.ImplementedInterfaces.Contains(@interface))
-                .Select(t => t.AsType());
-            foreach (var type in types)
-            {
-                list.AddRange(type.GetFields()
-                    .Select(field => field.GetValue(null) as string));
-            }
-
-            return list;
+            _stateNames = new List<string>();
+            _stateNames.AddRange(
+                EditorHelpers
+                    .GetFieldsFromInterfaceImplementations(typeof(IStateMachineNames)));
         }
 
         private string GetStateName(ObjectIdentifier assetID)
