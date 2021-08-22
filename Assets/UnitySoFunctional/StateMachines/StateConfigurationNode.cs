@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DragonDogStudios.UnitySoFunctional.Utilities;
+using PlasticGui.Help;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEditor.Build.Content;
@@ -40,13 +42,9 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             }
         }
 
-        public IEnumerable<TransitionConfiguration> Transitions
-        {
-            get
-            {
-                return _transitions;
-            }
-        }
+        public IEnumerable<TransitionConfiguration> Transitions => _transitions;
+
+        public IEnumerable<TransitionConfiguration> AnyTransitions => _anyTransitions;
 
         public Guid ID => Guid.Parse(_id);
 
@@ -166,10 +164,33 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             Undo.RegisterCreatedObjectUndo(Transitions.Last(), "Created Transition");
         }
 
+        public void AddAnyTransition(string condition)
+        {
+            // Check to see if transition already exists
+            if (_anyTransitions.Count > 0)
+            {
+                return;
+            }
+            Undo.RecordObject(this, "Added Any Transition");
+            _anyTransitions.Add(
+                TransitionConfiguration.Create(
+                    condition,
+                    ID,
+                    null));
+            Undo.RegisterCreatedObjectUndo(AnyTransitions.Last(), "Created Any Transition");
+        }
+
         public void DeleteTransition(TransitionConfiguration selectedTransition)
         {
             Undo.RecordObject(this, "Deleted Transition");
-            _transitions.Remove(selectedTransition);
+            if (_transitions.Contains(selectedTransition))
+            {
+                _transitions.Remove(selectedTransition);
+            }
+            else if (_anyTransitions.Contains(selectedTransition))
+            {
+                _anyTransitions.Remove(selectedTransition);
+            }
             Undo.DestroyObjectImmediate(selectedTransition);
         }
 

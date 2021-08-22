@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using DragonDogStudios.UnitySoFunctional.Utilities;
 using Sirenix.OdinInspector;
-using UnityEditor.Build.Content;
 using UnityEngine;
 
 namespace DragonDogStudios.UnitySoFunctional.StateMachines
@@ -14,7 +12,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         public static TransitionConfiguration Create(
             string transitionCondition,
             Guid owningStateID,
-            Guid stateID)
+            Guid? stateID)
         {
             var transitionConfiguration = CreateInstance<TransitionConfiguration>();
             transitionConfiguration._owningStateID = owningStateID;
@@ -37,14 +35,14 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         [SerializeField] private string _toStateName;
         [SerializeField, ValueDropdown("GetTriggerNames")] string _condition;
         [HideInInspector, SerializeField] private Guid _owningStateID;
-        [HideInInspector, SerializeField] private Guid _toStateID;
+        [HideInInspector, SerializeField] private Guid? _toStateID;
         private Vector2 _startPosition;
         private Vector2 _endPosition;
         private Triangle _arrow;
 
         public string ToStateName => _toStateName;
         public string Condition => _condition;
-        public Guid ToStateID => _toStateID;
+        public Guid? ToStateID => _toStateID;
 
         public Vector2 StartPosition => _startPosition;
         public Vector2 EndPosition => _endPosition;
