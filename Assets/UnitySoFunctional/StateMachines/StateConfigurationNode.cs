@@ -180,6 +180,18 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             Undo.RegisterCreatedObjectUndo(AnyTransitions.Last(), "Created Any Transition");
         }
 
+        public void ClearTransitions()
+        {
+            foreach (var transition in new List<TransitionConfiguration>(_transitions))
+            {
+                DeleteTransition(transition);
+            }
+            foreach (var transition in new List<TransitionConfiguration>(_anyTransitions))
+            {
+                DeleteTransition(transition);
+            }
+        }
+
         public void DeleteTransition(TransitionConfiguration selectedTransition)
         {
             Undo.RecordObject(this, "Deleted Transition");
@@ -192,6 +204,80 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
                 _anyTransitions.Remove(selectedTransition);
             }
             Undo.DestroyObjectImmediate(selectedTransition);
+        }
+
+        public void UpdateTransitionNames(Func<Guid?, string> getStateName)
+        {
+            foreach (var transitionConfiguration in _transitions)
+            {
+                // Update Name
+                if (getStateName(transitionConfiguration.ToStateID) != null)
+                {
+                    transitionConfiguration.SetToStateName(
+                        getStateName(transitionConfiguration.ToStateID));
+                }
+                var stateName = transitionConfiguration.ToStateName;
+                var leftSide = stateName != null ? name : "";
+                var rightSide = stateName ?? name;
+                transitionConfiguration.name = $"{leftSide} -> {rightSide}";
+                if (AssetDatabase.GetAssetPath(transitionConfiguration) == "")
+                {
+                    AssetDatabase.AddObjectToAsset(transitionConfiguration, this);
+                }
+            }
+            foreach (var transitionConfiguration in _anyTransitions)
+            {
+                // Update Name
+                var leftSide = "Any";
+                var rightSide = name;
+                transitionConfiguration.name = $"{leftSide} -> {rightSide}";
+                if (AssetDatabase.GetAssetPath(transitionConfiguration) == "")
+                {
+                    AssetDatabase.AddObjectToAsset(transitionConfiguration, this);
+                }
+            }
+        }
+
+        public void DrawConnections(
+            Func<Guid?, StateConfigurationNode> getNode,
+            Action<TransitionConfiguration> drawConnection,
+            Vector2 anyNodeCenter)
+        {
+            var startPosition = _rect.center;
+            foreach (var transition in _transitions)
+            {
+                var transitionNode = getNode(transition.ToStateID);
+                if (transitionNode == null) continue;
+                transition.SetStartPosition(startPosition);
+                transition.SetEndPosition(transitionNode.Rect.center);
+                drawConnection(transition);
+            }
+
+            var endPosition = _rect.center;
+            foreach (var transition in _anyTransitions)
+            {
+                startPosition = new Vector2(anyNodeCenter.x, _rect.center.y);
+                transition.SetStartPosition(startPosition);
+                transition.SetEndPosition(endPosition);
+                drawConnection(transition);
+            }
+        }
+
+        public TransitionConfiguration GetTransitionAtPoint(Vector2 mousePoint)
+        {
+            foreach (var transition in _transitions)
+            {
+                if (!transition.Arrow.Contains(mousePoint)) continue;
+                return transition;
+            }
+
+            foreach (var transition in _anyTransitions)
+            {
+                if (!transition.Arrow.Contains(mousePoint)) continue;
+                return transition;
+            }
+
+            return null;
         }
 
         private void OnValidate()
