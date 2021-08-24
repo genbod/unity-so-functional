@@ -20,7 +20,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         [HideInInspector, SerializeField] private Vector2 _pos;
         [SerializeField, ReadOnly] private List<TransitionConfiguration> _transitions = new List<TransitionConfiguration>();
         [SerializeField, ShowIf("_anyTransition"), ReadOnly] private TransitionConfiguration _anyTransition;
-        [SerializeField] private List<TransitionConfiguration> _pushTransition = new List<TransitionConfiguration>();
+        [SerializeField] private TransitionConfiguration _pushTransition = new TransitionConfiguration();
         [SerializeField] private List<TransitionConfiguration> _popTransition = new List<TransitionConfiguration>();
 
         private Rect _rect = new Rect(0, 0, 200, 50);
@@ -41,8 +41,6 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         }
 
         public IEnumerable<TransitionConfiguration> Transitions => _transitions;
-
-        public TransitionConfiguration AnyTransition => _anyTransition;
 
         public Guid ID => Guid.Parse(_id);
 
@@ -75,15 +73,13 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
 
         public StateConfigurationNode SetAnyTransition(string transitionCondition)
         {
-            _anyTransition =
-                TransitionConfiguration.Create(transitionCondition);
+            _anyTransition = TransitionConfiguration.Create(transitionCondition);
             return this;
         }
 
-        public StateConfigurationNode PushTransition(string transitionCondition)
+        public StateConfigurationNode SetPushTransition(string transitionCondition)
         {
-            _pushTransition.Add(
-                TransitionConfiguration.Create(transitionCondition));
+            _pushTransition = TransitionConfiguration.Create(transitionCondition);
             return this;
         }
 
@@ -117,11 +113,11 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
                     transitionConditionCreator.Invoke(_anyTransition.Condition));
             }
 
-            foreach (var transition in _pushTransition)
+            if (_pushTransition != null)
             {
                 stateMachine.AddPushTransition(
                     state,
-                    transitionConditionCreator.Invoke(transition.Condition));
+                    transitionConditionCreator.Invoke(_pushTransition.Condition));
             }
 
             foreach (var transition in _popTransition)
