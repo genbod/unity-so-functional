@@ -19,9 +19,15 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
 
         [HideInInspector, SerializeField] private Vector2 _pos;
         [SerializeField, ReadOnly] private List<TransitionConfiguration> _transitions = new List<TransitionConfiguration>();
-        [SerializeField, ShowIf("_anyTransition"), ReadOnly] private TransitionConfiguration _anyTransition;
-        [SerializeField, ShowIf("_pushTransition"), ReadOnly] private TransitionConfiguration _pushTransition;
-        [SerializeField] private List<TransitionConfiguration> _popTransition = new List<TransitionConfiguration>();
+        
+        [SerializeField, ShowIf("_anyTransition"), ReadOnly]
+        private TransitionConfiguration _anyTransition;
+        
+        [SerializeField, ShowIf("_pushTransition"), ReadOnly]
+        private TransitionConfiguration _pushTransition;
+
+        [SerializeField, ShowIf("_popTransition"), ReadOnly]
+        private TransitionConfiguration _popTransition;
 
         private Rect _rect = new Rect(0, 0, 200, 50);
         private readonly UnityEvent _onEnter = new UnityEvent();
@@ -83,10 +89,9 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             return this;
         }
 
-        public StateConfigurationNode PopTransition(string transitionCondition)
+        public StateConfigurationNode SetPopTransition(string transitionCondition)
         {
-            _popTransition.Add(
-                TransitionConfiguration.Create(transitionCondition));
+            _popTransition = TransitionConfiguration.Create(transitionCondition);
             return this;
         }
 
@@ -120,11 +125,11 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
                     transitionConditionCreator.Invoke(_pushTransition.Condition));
             }
 
-            foreach (var transition in _popTransition)
+            if (_popTransition != null)
             {
                 stateMachine.AddPopTransition(
                     state,
-                    transitionConditionCreator.Invoke(transition.Condition));
+                    transitionConditionCreator.Invoke(_popTransition.Condition));
             }
         }
 
@@ -188,6 +193,21 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             Undo.RegisterCreatedObjectUndo(_pushTransition, "Created Push Transition");
         }
 
+        public void AddPopTransition(string condition)
+        {
+            // Check to see if transition already exists
+            if (_popTransition != null)
+            {
+                return;
+            }
+            Undo.RecordObject(this, "Set Pop Transition");
+            _popTransition = TransitionConfiguration.Create(
+                condition,
+                ID,
+                null);
+            Undo.RegisterCreatedObjectUndo(_popTransition, "Created Pop Transition");
+        }
+
         public void ClearTransitions()
         {
             foreach (var transition in new List<TransitionConfiguration>(_transitions))
@@ -196,6 +216,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             }
             DeleteTransition(_anyTransition);
             DeleteTransition(_pushTransition);
+            DeleteTransition(_popTransition);
         }
 
         public void DeleteTransition(TransitionConfiguration selectedTransition)
@@ -208,17 +229,24 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
                 foundTransition = true;
             }
             else if (_anyTransition != null
-                     &&_anyTransition == selectedTransition)
+                &&_anyTransition == selectedTransition)
             {
                 Undo.RecordObject(this, "Deleted Transition");
                 _anyTransition = null;
                 foundTransition = true;
             }
             else if (_pushTransition != null
-                     && _pushTransition == selectedTransition)
+                && _pushTransition == selectedTransition)
             {
                 Undo.RecordObject(this, "Deleted Transition");
                 _pushTransition = null;
+                foundTransition = true;
+            }
+            else if (_popTransition != null
+                && _popTransition == selectedTransition)
+            {
+                Undo.RecordObject(this, "Deleted Transition");
+                _popTransition = null;
                 foundTransition = true;
             }
 
@@ -241,33 +269,31 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
                 var stateName = transitionConfiguration.ToStateName;
                 var leftSide = stateName != null ? name : "";
                 var rightSide = stateName ?? name;
-                transitionConfiguration.name = $"{leftSide} -> {rightSide}";
-                if (AssetDatabase.GetAssetPath(transitionConfiguration) == "")
-                {
-                    AssetDatabase.AddObjectToAsset(transitionConfiguration, this);
-                }
+                SetTransitionAssetName(transitionConfiguration, leftSide, rightSide);
             }
 
             if (_anyTransition != null)
             {
-                var leftSide = "Any";
-                var rightSide = name;
-                _anyTransition.name = $"{leftSide} -> {rightSide}";
-                if (AssetDatabase.GetAssetPath(_anyTransition) == "")
-                {
-                    AssetDatabase.AddObjectToAsset(_anyTransition, this);
-                }
+                SetTransitionAssetName(_anyTransition, "Any", name);
             }
             
             if (_pushTransition != null)
             {
-                var leftSide = "Push";
-                var rightSide = name;
-                _pushTransition.name = $"{leftSide} -> {rightSide}";
-                if (AssetDatabase.GetAssetPath(_pushTransition) == "")
-                {
-                    AssetDatabase.AddObjectToAsset(_pushTransition, this);
-                }
+                SetTransitionAssetName(_pushTransition, "Push", name);
+            }
+
+            if (_popTransition != null)
+            {
+                SetTransitionAssetName(_popTransition, name, "Pop");
+            }
+        }
+
+        private void SetTransitionAssetName(TransitionConfiguration transition, string leftSide, string rightSide)
+        {
+            transition.name = $"{leftSide} -> {rightSide}";
+            if (AssetDatabase.GetAssetPath(transition) == "")
+            {
+                AssetDatabase.AddObjectToAsset(transition, this);
             }
         }
 
@@ -275,7 +301,8 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             Func<Guid?, StateConfigurationNode> getNode,
             Action<TransitionConfiguration> drawConnection,
             Vector2 anyNodeCenter,
-            Vector2 pushNodeCenter)
+            Vector2 pushNodeCenter,
+            Vector2 popNodeCenter)
         {
             var startPosition = _rect.center;
             foreach (var transition in _transitions)
@@ -286,19 +313,27 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
                 transition.SetEndPosition(transitionNode.Rect.center);
                 drawConnection(transition);
             }
+            if (_popTransition != null)
+            {
+                _popTransition.SetStartPosition(startPosition);
+                _popTransition.SetEndPosition(
+                    new Vector2(_rect.center.x, popNodeCenter.y));
+                drawConnection(_popTransition);
+            }
 
             var endPosition = _rect.center;
             if (_anyTransition != null)
             {
-                startPosition = new Vector2(anyNodeCenter.x, _rect.center.y);
-                _anyTransition.SetStartPosition(startPosition);
+                _anyTransition.SetStartPosition(
+                    new Vector2(anyNodeCenter.x, _rect.center.y));
                 _anyTransition.SetEndPosition(endPosition);
                 drawConnection(_anyTransition);
             }
+
             if (_pushTransition != null)
             {
-                startPosition = new Vector2(_rect.center.x, pushNodeCenter.y);
-                _pushTransition.SetStartPosition(startPosition);
+                _pushTransition.SetStartPosition(
+                    new Vector2(_rect.center.x, pushNodeCenter.y));
                 _pushTransition.SetEndPosition(endPosition);
                 drawConnection(_pushTransition);
             }
@@ -314,6 +349,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
 
             if (_anyTransition?.Arrow.Contains(mousePoint) == true)return _anyTransition;
             if (_pushTransition?.Arrow.Contains(mousePoint) == true) return _pushTransition;
+            if (_popTransition?.Arrow.Contains(mousePoint) == true) return _popTransition;
 
             return null;
         }
