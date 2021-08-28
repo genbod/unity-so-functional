@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace DragonDogStudios.UnitySoFunctional.Utilities
+namespace DragonDogStudios.UnitySoFunctional.StateMachines.Utils
 {
     public class Triangle
     {

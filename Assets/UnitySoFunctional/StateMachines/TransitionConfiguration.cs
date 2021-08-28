@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using DragonDogStudios.UnitySoFunctional.Utilities;
+using DragonDogStudios.UnitySoFunctional.StateMachines.Utils;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

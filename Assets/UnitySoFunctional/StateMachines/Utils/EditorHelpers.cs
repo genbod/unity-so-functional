@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DragonDogStudios.UnitySoFunctional.Utilities
+namespace DragonDogStudios.UnitySoFunctional.StateMachines.Utils
 {
     public static class EditorHelpers
     {

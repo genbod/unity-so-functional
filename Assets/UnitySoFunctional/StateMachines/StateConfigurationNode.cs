@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DragonDogStudios.UnitySoFunctional.Utilities;
+using DragonDogStudios.UnitySoFunctional.StateMachines.Utils;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEditor.Build.Content;
@@ -13,7 +13,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
     [Serializable]
     public class StateConfigurationNode : SerializedScriptableObject
     {
-        [HideInInspector, SerializeField] private string _id = Guid.NewGuid().ToString();
+        [HideInInspector, SerializeField] private SerializableGuid _id = Guid.NewGuid();
         [SerializeField, ValueDropdown("GetStateNames")]
         private string _name;
 
@@ -48,7 +48,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
 
         public IEnumerable<TransitionConfiguration> Transitions => _transitions;
 
-        public Guid ID => Guid.Parse(_id);
+        public Guid ID => _id;
 
         public StateConfigurationNode OnEnter(UnityAction enterAction)
         {
