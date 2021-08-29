@@ -50,6 +50,22 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
 
         public Guid ID => _id;
 
+        public string PrettyName
+        {
+            get
+            {
+                if (name.Length <= 20) return name;
+                var index = name.LastIndexOf('.') > 10
+                    ? name.LastIndexOf('.')
+                    : Array.FindLastIndex(name.ToCharArray(), Char.IsUpper);
+                var prettyString =
+                    name.Substring(0, index)
+                    + "\n"
+                    + name.Substring(index, name.Length - index);
+                return prettyString;
+            }
+        }
+
         public StateConfigurationNode OnEnter(UnityAction enterAction)
         {
             _onEnter.AddListener(enterAction);
