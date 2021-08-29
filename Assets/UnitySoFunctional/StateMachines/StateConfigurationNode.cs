@@ -4,9 +4,11 @@ using System.Linq;
 using DragonDogStudios.UnitySoFunctional.StateMachines.Utils;
 using Sirenix.OdinInspector;
 using UnityEditor;
-using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.Events;
+#if UNITY_EDITOR
+using UnityEditor.Build.Content;
+#endif
 
 namespace DragonDogStudios.UnitySoFunctional.StateMachines
 {
@@ -149,12 +151,12 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
             }
         }
 
-#if UNITY_EDITOR
-
         public void SetName(string newName)
         {
             _name = name = newName;
         }
+
+#if UNITY_EDITOR
 
         public void SetPosition(Vector2 newPosition)
         {
