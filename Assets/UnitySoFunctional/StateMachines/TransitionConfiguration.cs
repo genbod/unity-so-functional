@@ -33,7 +33,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         private static List<string> _triggerNames;
         
         [SerializeField, ShowIf("_toStateName"), ReadOnly] private string _toStateName;
-        [SerializeField, ValueDropdown("GetTriggerNames")] string _condition;
+        [SerializeField, ValueDropdown("GetTriggerNames", DropdownWidth = 400)] string _condition;
         [HideInInspector, SerializeField] private Guid _owningStateID;
         [HideInInspector, SerializeField] private Guid? _toStateID;
         private Vector2 _startPosition;
