@@ -31,11 +31,16 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         [SerializeField, ShowIf("_popTransition"), ReadOnly]
         private TransitionConfiguration _popTransition;
 
-        private Rect _rect = new Rect(0, 0, 200, 50);
+        [SerializeField]
         private readonly UnityEvent _onEnter = new UnityEvent();
+
+        [SerializeField]
         private readonly UnityEvent _onExit = new UnityEvent();
 
+        [SerializeField]
         private readonly UnityEvent _onTick = new UnityEvent();
+        
+        private Rect _rect = new Rect(0, 0, 200, 50);
 
         private static List<string> _stateNames;
 

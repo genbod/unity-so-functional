@@ -103,7 +103,7 @@ namespace DragonDogStudios.UnitySoFunctional.StateMachines
         public void Tick()
         {
             StateTransition transition;
-            if (_firstTick && _startState != null)
+            if (_firstTick && !String.IsNullOrEmpty(_startState))
             {
                 SetState(_startState);
             }
