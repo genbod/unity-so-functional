@@ -25,7 +25,6 @@ namespace DragonDogStudios.UnitySoFunctional.Controls
             _viewportHeight = _viewportTransform.rect.height;
             _logItemHeight = _poolManager.LogItemHeight;
             _1OverLogItemHeight = 1f / _logItemHeight;
-            _poolManager.PooledItemsUpdated += OnPooledItemsUpdated;
             ClearContentTransformContents();
         }
 
